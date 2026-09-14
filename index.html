@@ -1,0 +1,4340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trading Disciplinado Web - Opciones, Analytics & Control | By: YasmaStark</title>
+  
+  <!-- FAVICON MINIMALISTA (TD ROJO NEÓN) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23030303'/><text x='50%' y='68%' font-size='52' font-family='Montserrat, sans-serif' font-weight='900' fill='%23ff0037' text-anchor='middle'>TD</text></svg>">
+
+  <!-- Fuentes Google Fonts: Montserrat & Cinzel -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;900&family=Montserrat:wght@300;400;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Iconos FontAwesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Librería Chart.js para Gráficos -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    /* ==================== ESTILOS BASE ==================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Montserrat', sans-serif;
+    }
+
+    body {
+      background-color: #030303;
+      color: #ffffff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    #canvas-candlesticks {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+      opacity: 0.85;
+      pointer-events: none;
+    }
+
+    .overlay-vignette {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle, rgba(3, 3, 3, 0.25) 0%, rgba(3, 3, 3, 0.92) 85%);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .glow-bg {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(255, 0, 55, 0.15) 0%, rgba(0,0,0,0) 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+      pointer-events: none;
+      animation: pulseGlow 4s infinite alternate ease-in-out;
+    }
+
+    @keyframes pulseGlow {
+      0% { transform: translate(-50%, -50%) scale(0.85); opacity: 0.4; }
+      100% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.8; }
+    }
+
+    .container {
+      position: relative;
+      z-index: 3;
+      text-align: center;
+      max-width: 1650px;
+      width: 98%;
+      padding: 40px 10px;
+      margin: 0 auto;
+    }
+
+    /* ==================== ENCABEZADO MARCA ==================== */
+    .header-brand {
+      text-align: center;
+      margin-bottom: 40px;
+      position: relative;
+      z-index: 3;
+    }
+
+    .header-brand h1 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 3.2rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      color: #ffffff;
+      text-shadow: 0 0 10px rgba(255, 0, 55, 0.6);
+      margin-bottom: 6px;
+    }
+
+    .header-brand h1 span.highlight-neon {
+      color: #ff0037;
+      text-shadow: 0 0 15px #ff0037, 0 0 30px #ff0037, 0 0 50px rgba(255, 0, 55, 0.8);
+    }
+
+    .header-brand h1 span.tag-web {
+      font-size: 1.4rem;
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.6);
+      letter-spacing: 5px;
+      vertical-align: super;
+      margin-left: 5px;
+    }
+
+    .header-brand p.subtitle {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 800;
+      color: #d1d1d1;
+      text-transform: uppercase;
+      letter-spacing: 4px;
+      margin-bottom: 8px;
+      opacity: 0.9;
+    }
+
+    .header-brand .author-tag {
+      font-family: 'Cinzel', serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #ff0037;
+      letter-spacing: 6px;
+      text-transform: uppercase;
+      text-shadow: 0 0 12px rgba(255, 0, 55, 0.6);
+      margin-bottom: 12px;
+    }
+
+    /* ==================== ANIMACIÓN BIENVENIDA USUARIO ==================== */
+    .welcome-user-container {
+      margin-top: 8px;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: #ff0037;
+      text-shadow: 0 0 10px rgba(255, 0, 55, 0.6), 0 0 20px rgba(255, 0, 55, 0.4);
+      animation: epicWelcomeAnim 3s ease-in-out infinite alternate;
+    }
+
+    .welcome-user-container span {
+      color: #ffffff;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 0 20px rgba(255, 0, 55, 0.5);
+    }
+
+    @keyframes epicWelcomeAnim {
+      0% {
+        transform: scale(0.97);
+        opacity: 0.85;
+        text-shadow: 0 0 8px rgba(255, 0, 55, 0.4);
+      }
+      50% {
+        transform: scale(1.03);
+        opacity: 1;
+        text-shadow: 0 0 18px #ff0037, 0 0 30px rgba(255, 0, 55, 0.8);
+      }
+      100% {
+        transform: scale(0.97);
+        opacity: 0.85;
+        text-shadow: 0 0 8px rgba(255, 0, 55, 0.4);
+      }
+    }
+
+    .home-config-btn {
+      position: fixed;
+      top: 25px;
+      left: 25px;
+      z-index: 100;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(15, 10, 25, 0.9);
+      border: 2px solid #ff0037;
+      color: #ff0037;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.3rem;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 20px rgba(255, 0, 55, 0.5), inset 0 0 8px rgba(255, 0, 55, 0.3);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .home-config-btn:hover {
+      background: #ff0037;
+      color: #ffffff;
+      transform: scale(1.15) rotate(90deg);
+      box-shadow: 0 0 25px #ff0037, 0 0 40px rgba(255, 0, 55, 0.8);
+    }
+
+    .section-title {
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin: 30px 0 20px 0;
+      text-shadow: 0 0 10px rgba(255, 0, 55, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .section-title i { color: #ff0037; }
+
+    .divider {
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #ff0037, transparent);
+      margin: 40px 0;
+    }
+
+    .sidebar-right {
+      position: fixed;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%) translateX(100px);
+      z-index: 150;
+      background: rgba(12, 12, 12, 0.85);
+      border: 1px solid rgba(255, 0, 55, 0.4);
+      border-radius: 30px;
+      padding: 12px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 0 25px rgba(255, 0, 55, 0.25), inset 0 0 10px rgba(255, 0, 55, 0.1);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .sidebar-right.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(-50%) translateX(0);
+    }
+
+    .sidebar-btn {
+      position: relative;
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: rgba(20, 20, 20, 0.9);
+      border: 1px solid rgba(255, 0, 55, 0.3);
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      text-decoration: none;
+    }
+
+    .sidebar-btn i { transition: all 0.3s ease; color: #dddddd; }
+
+    .sidebar-btn .sidebar-svg-icon {
+      width: 26px;
+      height: 26px;
+      fill: #dddddd;
+      transition: all 0.3s ease;
+    }
+
+    .sidebar-btn:hover {
+      transform: scale(1.18);
+      border-color: #ff0037;
+      background: #ff0037;
+      box-shadow: 0 0 20px #ff0037, 0 0 35px rgba(255, 0, 55, 0.6);
+    }
+
+    .sidebar-btn:hover i, .sidebar-btn:hover .sidebar-svg-icon {
+      color: #ffffff;
+      fill: #ffffff;
+      transform: rotate(-6deg);
+    }
+
+    .sidebar-btn.active {
+      border-color: #ff0037;
+      background: rgba(255, 0, 55, 0.2);
+      box-shadow: 0 0 15px rgba(255, 0, 55, 0.6);
+    }
+
+    .sidebar-btn.active i {
+      color: #ff0037;
+      filter: drop-shadow(0 0 8px #ff0037);
+    }
+
+    .sidebar-btn.active .sidebar-svg-icon {
+      fill: #ff0037;
+      filter: drop-shadow(0 0 8px #ff0037);
+    }
+
+    .sidebar-btn::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      right: 60px;
+      top: 50%;
+      transform: translateY(-50%) translateX(10px);
+      background: rgba(10, 10, 10, 0.95);
+      border: 1px solid #ff0037;
+      color: #ffffff;
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      white-space: nowrap;
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 15px rgba(255, 0, 55, 0.4);
+    }
+
+    .sidebar-btn:hover::after {
+      opacity: 1;
+      transform: translateY(-50%) translateX(0);
+    }
+
+    .btn-action {
+      background: rgba(15, 15, 15, 0.8);
+      border: 1px solid #ff0037;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.95rem;
+    }
+
+    .btn-action:hover {
+      background: #ff0037;
+      box-shadow: 0 0 15px #ff0037;
+      transform: translateY(-2px);
+    }
+
+    .btn-action.btn-secondary { border-color: #555; background: rgba(20, 20, 20, 0.8); }
+    .btn-action.btn-secondary:hover { background: #333; box-shadow: 0 0 10px #666; }
+
+    .btn-action.btn-success {
+      border-color: #00ff88;
+      color: #00ff88;
+      background: rgba(0, 255, 136, 0.15);
+    }
+
+    .btn-action.btn-success:hover { background: #00ff88; color: #000; box-shadow: 0 0 20px #00ff88; }
+
+    .btn-action.btn-export {
+      border-color: #00ff88;
+      color: #00ff88;
+      background: rgba(0, 255, 136, 0.1);
+    }
+
+    .btn-action.btn-export:hover { background: #00ff88; color: #000; box-shadow: 0 0 15px #00ff88; }
+
+    .btn-action.btn-import {
+      border-color: #00ccff;
+      color: #00ccff;
+      background: rgba(0, 204, 255, 0.1);
+    }
+
+    .btn-action.btn-import:hover { background: #00ccff; color: #000; box-shadow: 0 0 15px #00ccff; }
+
+    .toolbar-buttons {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .table-top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: rgba(12, 12, 12, 0.92);
+      backdrop-filter: blur(15px);
+      padding: 15px 10px;
+      margin-bottom: 20px;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 0, 55, 0.3);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 15px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.8);
+    }
+
+    .month-filter-box {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(15, 15, 15, 0.85);
+      border: 1px solid #ff0037;
+      padding: 8px 18px;
+      border-radius: 30px;
+      box-shadow: 0 0 15px rgba(255, 0, 55, 0.2);
+    }
+
+    .month-filter-box label { font-size: 0.9rem; font-weight: 700; color: #ffffff; text-transform: uppercase; }
+
+    .month-select {
+      background: #000;
+      border: 1px solid rgba(255, 0, 55, 0.5);
+      color: #fff;
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-weight: 700;
+      outline: none;
+      cursor: pointer;
+    }
+
+    .autosave-icon-fixed {
+      position: fixed;
+      top: 20px;
+      right: 25px;
+      z-index: 100;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: rgba(12, 12, 12, 0.85);
+      border: 1px solid rgba(0, 255, 136, 0.4);
+      color: #00ff88;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.1rem;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+      transition: all 0.4s ease;
+      cursor: pointer;
+    }
+
+    .autosave-icon-fixed.saving {
+      color: #ffffff;
+      border-color: #ff0037;
+      background: #ff0037;
+      box-shadow: 0 0 20px #ff0037;
+      transform: scale(1.15) rotate(180deg);
+    }
+
+    #menu-view {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      animation: fadeIn 0.6s forwards;
+      min-height: 50vh;
+      justify-content: center;
+    }
+
+    .buttons-grid {
+      display: flex;
+      justify-content: center;
+      gap: 25px;
+      flex-wrap: wrap;
+      max-width: 1100px;
+    }
+
+    /* TARJETAS CON CONTENIDO PERFECTAMENTE CENTRADO */
+    .btn-card {
+      position: relative;
+      width: 210px;
+      height: 160px;
+      background: rgba(12, 12, 12, 0.75);
+      border: 2px solid rgba(255, 0, 55, 0.35);
+      border-radius: 20px;
+      backdrop-filter: blur(15px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      color: #fff;
+      cursor: pointer;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+      text-decoration: none;
+      padding: 15px;
+    }
+
+    .btn-card i {
+      font-size: 3rem;
+      margin-bottom: 12px;
+      color: #ff0037;
+      transition: all 0.4s ease;
+      filter: drop-shadow(0 0 12px rgba(255, 0, 55, 0.8));
+    }
+
+    .btn-card span {
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      text-align: center;
+      padding: 0 8px;
+    }
+
+    .investep-logo-svg {
+      width: 110px;
+      height: auto;
+      fill: #ff0037;
+      transition: all 0.4s ease;
+      filter: drop-shadow(0 0 12px rgba(255, 0, 55, 0.8));
+    }
+
+    .emby-logo-svg {
+      width: 55px;
+      height: 55px;
+      fill: #ff0037;
+      margin-bottom: 12px;
+      transition: all 0.4s ease;
+      filter: drop-shadow(0 0 12px rgba(255, 0, 55, 0.8));
+    }
+
+    .btn-card:hover {
+      transform: translateY(-12px) scale(1.05);
+      border-color: #ff0037;
+      box-shadow: 0 15px 45px rgba(255, 0, 55, 0.5), inset 0 0 20px rgba(255, 0, 55, 0.25);
+    }
+
+    .btn-card:hover i, .btn-card:hover .investep-logo-svg, .btn-card:hover .emby-logo-svg {
+      transform: scale(1.1) rotate(-3deg);
+      fill: #ffffff;
+      color: #ffffff;
+      filter: drop-shadow(0 0 25px #ff0037);
+    }
+
+    .btn-card:hover span { color: #ff0037; }
+
+    #academy-view, #webs-importantes-view, #news-view, #checklist-view, #calculator-view, #investments-view, #chart-view {
+      display: none;
+      animation: fadeIn 0.6s forwards;
+      max-width: 1650px;
+      margin: 0 auto;
+    }
+
+    #news-view, #checklist-view { max-width: 950px; }
+
+    .news-card-box, .checklist-card, .table-container, .chart-card {
+      background: rgba(12, 12, 12, 0.85);
+      border: 1px solid rgba(255, 0, 55, 0.4);
+      border-radius: 20px;
+      padding: 30px;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.8);
+      text-align: left;
+      margin-bottom: 30px;
+    }
+
+    .news-box-header {
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: #ff0037;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(255, 0, 55, 0.3);
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .news-box-header.fed-header {
+      color: #00ff88;
+      border-bottom-color: rgba(0, 255, 136, 0.3);
+    }
+
+    .news-list-items {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .news-item-container {
+      background: rgba(20, 20, 20, 0.8);
+      border-left: 4px solid #ff0037;
+      border-radius: 8px;
+      padding: 14px 18px;
+      transition: all 0.3s ease;
+    }
+
+    .news-list-items.fed-list .news-item-container { border-left-color: #00ff88; }
+
+    .news-item-row-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .news-title-group { display: flex; align-items: center; gap: 12px; }
+    .news-title-group i { color: #ff0037; font-size: 1.1rem; }
+    .news-list-items.fed-list .news-title-group i { color: #00ff88; }
+
+    .btn-news-info {
+      background: rgba(255, 0, 55, 0.15);
+      border: 1px solid #ff0037;
+      color: #ff0037;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9rem;
+      font-weight: 900;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex-shrink: 0;
+    }
+
+    .btn-news-info:hover, .btn-news-info.active {
+      background: #ff0037;
+      color: #fff;
+      box-shadow: 0 0 12px #ff0037;
+      transform: scale(1.1);
+    }
+
+    .fed-list .btn-news-info {
+      background: rgba(0, 255, 136, 0.15);
+      border-color: #00ff88;
+      color: #00ff88;
+    }
+
+    .fed-list .btn-news-info:hover, .fed-list .btn-news-info.active {
+      background: #00ff88;
+      color: #000;
+      box-shadow: 0 0 12px #00ff88;
+    }
+
+    .news-desc-panel {
+      display: none;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed rgba(255, 255, 255, 0.15);
+      font-size: 0.88rem;
+      line-height: 1.6;
+      color: #cccccc;
+      font-weight: 400;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .news-desc-panel.open { display: block; }
+    .news-desc-panel strong { color: #ff0037; font-weight: 700; }
+    .fed-list .news-desc-panel strong { color: #00ff88; }
+
+    .checklist-header-title {
+      font-size: 1.4rem;
+      font-weight: 900;
+      color: #ff0037;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 20px;
+      text-shadow: 0 0 10px rgba(255, 0, 55, 0.5);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid rgba(255, 0, 55, 0.3);
+      padding-bottom: 10px;
+    }
+
+    .trade-fields-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .trade-field { display: flex; flex-direction: column; gap: 6px; }
+    .trade-field label { font-size: 0.8rem; font-weight: 700; color: #ff0037; text-transform: uppercase; }
+
+    .trade-field input, .trade-field textarea {
+      background: #000;
+      border: 1px solid rgba(255, 0, 55, 0.4);
+      border-radius: 10px;
+      color: #fff;
+      padding: 10px 12px;
+      font-size: 0.95rem;
+      font-weight: 700;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .trade-field textarea { min-height: 90px; resize: vertical; line-height: 1.4; }
+
+    .trade-field input:focus, .trade-field textarea:focus {
+      border-color: #ff0037;
+      box-shadow: 0 0 10px rgba(255, 0, 55, 0.6);
+    }
+
+    .news-effect-box {
+      background: rgba(20, 20, 20, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+
+    .news-effect-title { font-size: 0.95rem; font-weight: 700; color: #ffffff; flex: 1; }
+    .news-toggle-buttons { display: flex; gap: 12px; }
+
+    .btn-toggle-neon {
+      background: rgba(15, 15, 15, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #888;
+      padding: 8px 20px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 900;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-toggle-neon.btn-yes:hover, .btn-toggle-neon.btn-yes.active {
+      background: rgba(0, 255, 136, 0.15) !important;
+      border-color: #00ff88 !important;
+      color: #00ff88 !important;
+      box-shadow: 0 0 15px #00ff88, 0 0 25px rgba(0, 255, 136, 0.6) !important;
+    }
+
+    .btn-toggle-neon.btn-no:hover, .btn-toggle-neon.btn-no.active {
+      background: rgba(255, 0, 55, 0.15) !important;
+      border-color: #ff0037 !important;
+      color: #ff0037 !important;
+      box-shadow: 0 0 15px #ff0037, 0 0 25px rgba(255, 0, 55, 0.8) !important;
+    }
+
+    .checklist-sub-section { margin-top: 25px; }
+
+    .checklist-sub-title {
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: #ffffff;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 1px solid rgba(255, 0, 55, 0.2);
+      padding-bottom: 6px;
+      text-align: left;
+    }
+
+    .checklist-sub-title span { color: #ff0037; }
+
+    .trend-options-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .btn-trend-card {
+      background: rgba(15, 15, 15, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      padding: 14px;
+      border-radius: 12px;
+      color: #aaa;
+      font-weight: 900;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .btn-trend-card:hover { background: rgba(30, 30, 30, 0.9); color: #fff; }
+
+    .btn-trend-card.active-alcista {
+      background: rgba(0, 255, 136, 0.15) !important;
+      border-color: #00ff88 !important;
+      color: #00ff88 !important;
+      box-shadow: 0 0 15px rgba(0, 255, 136, 0.4) !important;
+    }
+
+    .btn-trend-card.active-bajista {
+      background: rgba(255, 0, 55, 0.15) !important;
+      border-color: #ff0037 !important;
+      color: #ff0037 !important;
+      box-shadow: 0 0 15px rgba(255, 0, 55, 0.5) !important;
+    }
+
+    .btn-trend-card.active-lateral {
+      background: rgba(255, 204, 0, 0.15) !important;
+      border-color: #ffcc00 !important;
+      color: #ffcc00 !important;
+      box-shadow: 0 0 15px rgba(255, 204, 0, 0.4) !important;
+    }
+
+    .bollinger-note-box {
+      background: rgba(255, 0, 55, 0.08);
+      border-left: 3px solid #ff0037;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      color: #ddd;
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+
+    .timeframe-group-box {
+      background: rgba(20, 20, 20, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 15px;
+      margin-bottom: 12px;
+    }
+
+    .timeframe-group-title { font-size: 0.9rem; font-weight: 700; color: #ffffff; margin-bottom: 10px; }
+    .timeframe-checks-inline { display: flex; gap: 20px; flex-wrap: wrap; }
+
+    .tf-checkbox-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #ccc;
+      cursor: pointer;
+    }
+
+    .tf-checkbox-label input { accent-color: #ff0037; width: 18px; height: 18px; cursor: pointer; }
+
+    .contract-table-wrapper {
+      overflow-x: auto;
+      margin-bottom: 20px;
+      background: rgba(15, 15, 15, 0.9);
+      border: 1px solid rgba(255, 0, 55, 0.3);
+      border-radius: 12px;
+      padding: 12px;
+    }
+
+    .contract-table { width: 100%; border-collapse: collapse; min-width: 650px; }
+    
+    .contract-table th {
+      background: rgba(255, 0, 55, 0.15);
+      color: #ff0037;
+      padding: 10px 8px;
+      font-size: 0.78rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      border-bottom: 2px solid rgba(255, 0, 55, 0.4);
+      text-align: center;
+      vertical-align: bottom;
+    }
+
+    .contract-table td { 
+      padding: 12px 8px 6px 8px; 
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08); 
+      vertical-align: top; 
+      text-align: center; 
+    }
+
+    .contract-input {
+      background: #000;
+      border: 1px solid rgba(255, 0, 55, 0.4);
+      border-radius: 6px;
+      color: #fff;
+      padding: 8px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      width: 100%;
+      text-align: center;
+      outline: none;
+      margin-top: 4px;
+    }
+
+    .contract-type-checks { 
+      display: flex; 
+      gap: 12px; 
+      justify-content: center; 
+      margin-top: 6px; 
+    }
+
+    .manifesto-card {
+      background: linear-gradient(135deg, rgba(255, 0, 55, 0.15) 0%, rgba(10, 10, 10, 0.9) 100%);
+      border: 2px solid #ff0037;
+      border-radius: 15px;
+      padding: 22px;
+      margin-top: 25px;
+      box-shadow: 0 0 25px rgba(255, 0, 55, 0.3);
+      text-align: center;
+    }
+
+    .manifesto-card h4 {
+      color: #ff0037;
+      font-size: 1.1rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
+
+    .manifesto-card p {
+      font-size: 0.95rem;
+      line-height: 1.6;
+      font-weight: 700;
+      color: #ffffff;
+      text-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+    }
+
+    .calc-inputs-container {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+      max-width: 750px;
+      margin: 0 auto 30px auto;
+    }
+
+    .input-box {
+      background: rgba(15, 15, 15, 0.85);
+      border: 2px solid #ff0037;
+      padding: 22px;
+      border-radius: 20px;
+      flex: 1;
+      min-width: 280px;
+      box-shadow: 0 0 25px rgba(255, 0, 55, 0.3);
+      backdrop-filter: blur(10px);
+    }
+
+    .input-box label {
+      display: block;
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: #ffffff;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .input-wrapper span {
+      position: absolute;
+      left: 18px;
+      font-size: 1.6rem;
+      font-weight: 900;
+      color: #ff0037;
+    }
+
+    .input-box input {
+      width: 100%;
+      padding: 12px 15px 12px 45px;
+      background: #000;
+      border: 1px solid rgba(255, 0, 55, 0.5);
+      border-radius: 12px;
+      color: #fff;
+      font-size: 1.6rem;
+      font-weight: 900;
+      outline: none;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .input-box input:focus {
+      border-color: #ff0037;
+      box-shadow: 0 0 15px rgba(255, 0, 55, 0.8);
+    }
+
+    .single-result-card {
+      background: rgba(15, 15, 15, 0.9);
+      border: 2px solid #ff0037;
+      border-radius: 20px;
+      padding: 30px 20px;
+      max-width: 480px;
+      margin: 0 auto;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 0 30px rgba(255, 0, 55, 0.4);
+    }
+
+    .single-result-card .badge-percent {
+      font-size: 1.1rem;
+      font-weight: 900;
+      color: #ff0037;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .single-result-card .final-value {
+      font-size: 2.8rem;
+      font-weight: 900;
+      color: #00ff88;
+      text-shadow: 0 0 15px #00ff88, 0 0 30px rgba(0, 255, 136, 0.6);
+    }
+
+    .single-result-card .formula-detail {
+      font-size: 0.9rem;
+      color: #aaaaaa;
+      margin-top: 10px;
+      font-weight: 700;
+    }
+
+    table { width: 100%; border-collapse: collapse; min-width: 1100px; }
+
+    th {
+      position: sticky;
+      top: 73px;
+      z-index: 9;
+      background: rgba(25, 10, 20, 0.95);
+      backdrop-filter: blur(10px);
+      color: #ff0037;
+      padding: 12px 4px;
+      font-size: 0.72rem;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      border-bottom: 2px solid rgba(255, 0, 55, 0.4);
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    td {
+      padding: 6px 3px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      vertical-align: middle;
+      text-align: center;
+    }
+
+    .table-input {
+      background: #000;
+      border: 1px solid rgba(255, 0, 55, 0.4);
+      border-radius: 6px;
+      color: #fff;
+      padding: 5px 4px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      height: 32px;
+      width: 100%;
+      max-width: 105px;
+      margin: 0 auto;
+      text-align: center;
+      outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .table-input:focus {
+      border-color: #ff0037;
+      box-shadow: 0 0 10px rgba(255, 0, 55, 0.6);
+    }
+
+    .cell-capital-total-val {
+      font-size: 0.95rem;
+      font-weight: 900;
+    }
+    .cell-capital-total-val.cell-gain {
+      color: #00ff88 !important;
+      text-shadow: 0 0 8px rgba(0, 255, 136, 0.5);
+    }
+    .cell-capital-total-val.cell-loss {
+      color: #ff0037 !important;
+      text-shadow: 0 0 8px rgba(255, 0, 55, 0.6);
+    }
+    .cell-capital-total-val.cell-neutral {
+      color: #ffffff !important;
+    }
+
+    .input-rent-pct {
+      border-color: rgba(255, 204, 0, 0.5) !important;
+      color: #ffcc00 !important;
+      max-width: 55px !important;
+    }
+    .input-rent-pct:focus {
+      border-color: #ffcc00 !important;
+      box-shadow: 0 0 10px rgba(255, 204, 0, 0.6) !important;
+    }
+
+    .input-ask {
+      border-color: rgba(0, 204, 255, 0.5) !important;
+      color: #00ccff !important;
+    }
+    .input-ask:focus {
+      border-color: #00ccff !important;
+      box-shadow: 0 0 10px rgba(0, 204, 255, 0.6) !important;
+    }
+
+    .input-qty {
+      border-color: rgba(168, 85, 247, 0.5) !important;
+      color: #a855f7 !important;
+    }
+    .input-qty:focus {
+      border-color: #a855f7 !important;
+      box-shadow: 0 0 10px rgba(168, 85, 247, 0.6) !important;
+    }
+
+    .input-limite {
+      border-color: rgba(255, 150, 0, 0.5) !important;
+      color: #ff9600 !important;
+    }
+    .input-limite:focus {
+      border-color: #ff9600 !important;
+      box-shadow: 0 0 10px rgba(255, 150, 0, 0.6) !important;
+    }
+
+    .input-bid {
+      border-color: rgba(0, 255, 136, 0.5) !important;
+      color: #00ff88 !important;
+    }
+    .input-bid:focus {
+      border-color: #00ff88 !important;
+      box-shadow: 0 0 10px rgba(0, 255, 136, 0.6) !important;
+    }
+
+    .cell-color-box {
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      margin: 0 auto;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+    .cell-color-box.color-green {
+      background-color: #00ff88 !important;
+      box-shadow: 0 0 12px rgba(0, 255, 136, 0.7);
+      border-color: #00ff88;
+    }
+    .cell-color-box.color-red {
+      background-color: #ff0037 !important;
+      box-shadow: 0 0 12px rgba(255, 0, 55, 0.8);
+      border-color: #ff0037;
+    }
+    .cell-color-box.color-neutral {
+      background-color: #1a1a1a !important;
+      box-shadow: none;
+    }
+
+    .btn-table-checklist-icon {
+      background: rgba(20, 20, 20, 0.8);
+      border: 1px solid rgba(0, 255, 136, 0.4);
+      color: #888888;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .btn-table-checklist-icon:hover {
+      border-color: #00ff88;
+      color: #00ff88;
+      box-shadow: 0 0 12px rgba(0, 255, 136, 0.6);
+      transform: scale(1.1);
+    }
+
+    .btn-table-checklist-icon.has-checklist {
+      border-color: #00ff88;
+      background: rgba(0, 255, 136, 0.15);
+      color: #00ff88;
+      box-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+    }
+
+    .cell-value { font-size: 0.88rem; font-weight: 900; color: #ffffff; }
+    .cell-datetime { font-size: 0.74rem; color: #bbbbbb; font-weight: 700; line-height: 1.2; }
+    .cell-used { color: #00ff88 !important; font-weight: 900; text-shadow: 0 0 6px rgba(0, 255, 136, 0.4); }
+    
+    .cell-gain { color: #00ff88 !important; font-weight: 900; text-shadow: 0 0 6px rgba(0, 255, 136, 0.4); }
+    .cell-loss { color: #ff0037 !important; font-weight: 900; text-shadow: 0 0 6px rgba(255, 0, 55, 0.4); }
+    .cell-neutral { color: #aaaaaa !important; font-weight: 700; }
+
+    .row-actions-group {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .btn-row-action {
+      background: rgba(20, 20, 20, 0.8);
+      border: 1px solid rgba(255, 0, 55, 0.5);
+      color: #ff0037;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 0.8rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+
+    .btn-row-action:hover {
+      background: #ff0037;
+      color: #fff;
+      box-shadow: 0 0 10px #ff0037;
+      transform: scale(1.1);
+    }
+
+    .btn-calc-action {
+      border-color: rgba(0, 204, 255, 0.5);
+      color: #00ccff;
+      width: 26px;
+      height: 26px;
+      font-size: 0.75rem;
+    }
+
+    .btn-calc-action:hover {
+      background: #00ccff;
+      color: #000;
+      box-shadow: 0 0 10px #00ccff;
+    }
+
+    .btn-delete { background: transparent; border: none; color: #ff0037; cursor: pointer; font-size: 1.1rem; transition: all 0.2s ease; }
+    .btn-delete:hover { transform: scale(1.2); color: #ff4d6d; }
+
+    .summary-box {
+      display: flex;
+      justify-content: space-around;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+      padding-top: 15px;
+      border-top: 2px dashed rgba(255, 0, 55, 0.3);
+    }
+
+    .summary-item { text-align: center; }
+    .summary-item label { display: block; font-size: 0.8rem; color: #aaa; text-transform: uppercase; font-weight: 700; }
+    .summary-item span { font-size: 1.4rem; font-weight: 900; color: #fff; }
+    .summary-item span.highlight { color: #ff0037; text-shadow: 0 0 10px rgba(255, 0, 55, 0.6); }
+
+    .quick-calc-modal-box {
+      background: rgba(18, 18, 18, 0.95);
+      border: 1px dashed rgba(168, 85, 247, 0.6);
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 20px;
+    }
+    .quick-calc-title {
+      font-size: 0.95rem;
+      font-weight: 900;
+      color: #a855f7;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .quick-result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      margin-bottom: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .quick-result-val { color: #00ff88; font-size: 1.2rem; }
+
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(8px);
+      z-index: 200;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.3s forwards;
+    }
+
+    .modal-card {
+      background: rgba(15, 15, 15, 0.95);
+      border: 2px solid #a855f7;
+      border-radius: 20px;
+      width: 92%;
+      max-width: 680px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 25px 30px;
+      box-shadow: 0 0 35px rgba(168, 85, 247, 0.5);
+      text-align: left;
+      position: relative;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(168, 85, 247, 0.3);
+      padding-bottom: 12px;
+    }
+
+    .modal-header h3 { font-size: 1.3rem; color: #fff; font-weight: 900; text-transform: uppercase; }
+    .modal-header h3 span { color: #a855f7; }
+
+    .modal-autosave-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #00ff88;
+      background: rgba(0, 255, 136, 0.1);
+      border: 1px solid rgba(0, 255, 136, 0.3);
+      padding: 4px 10px;
+      border-radius: 12px;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-autosave-badge.visible { opacity: 1; }
+
+    .btn-close-modal { background: transparent; border: none; color: #888; font-size: 1.5rem; cursor: pointer; transition: color 0.2s; }
+    .btn-close-modal:hover { color: #a855f7; }
+
+    .form-group-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+    .form-field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 15px; }
+    .form-field label { font-size: 0.8rem; font-weight: 700; color: #ff0037; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .form-input {
+      background: #000;
+      border: 1px solid rgba(255, 0, 55, 0.4);
+      border-radius: 10px;
+      color: #fff;
+      padding: 10px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .form-input:focus { border-color: #ff0037; box-shadow: 0 0 10px rgba(255, 0, 55, 0.5); }
+
+    .strategy-select-wrapper { display: flex; gap: 10px; align-items: center; }
+
+    .form-select {
+      flex: 1;
+      background: #000;
+      border: 1px solid rgba(168, 85, 247, 0.4);
+      border-radius: 10px;
+      color: #fff;
+      padding: 10px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      outline: none;
+      cursor: pointer;
+      transition: border-color 0.3s;
+    }
+
+    .form-select option { background: #111; color: #fff; }
+
+    .btn-add-strategy {
+      background: rgba(255, 0, 55, 0.15);
+      border: 1px solid #ff0037;
+      color: #ff0037;
+      padding: 10px 14px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .btn-add-strategy:hover { background: #ff0037; color: #ffffff; box-shadow: 0 0 10px rgba(255, 0, 55, 0.6); }
+
+    .tags-wrapper { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .tag-btn {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 0, 55, 0.3);
+      color: #ddd;
+      padding: 8px 20px;
+      border-radius: 15px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tag-btn:hover { background: #333; }
+    .btn-tag-call { border-color: rgba(0, 255, 136, 0.4); color: #00ff88; }
+    .btn-tag-call:hover, .btn-tag-call.active { background: #00ff88 !important; color: #000000 !important; border-color: #00ff88 !important; box-shadow: 0 0 15px #00ff88, 0 0 30px rgba(0, 255, 136, 0.6) !important; }
+
+    .btn-tag-put { border-color: rgba(255, 0, 55, 0.4); color: #ff0037; }
+    .btn-tag-put:hover, .btn-tag-put.active { background: #ff0037 !important; color: #ffffff !important; border-color: #ff0037 !important; box-shadow: 0 0 15px #ff0037, 0 0 30px rgba(255, 0, 55, 0.8) !important; }
+
+    .modal-textarea {
+      width: 100%;
+      height: 100px;
+      background: #000;
+      border: 1px solid rgba(255, 0, 55, 0.4);
+      border-radius: 12px;
+      color: #fff;
+      padding: 12px;
+      font-size: 0.9rem;
+      outline: none;
+      resize: vertical;
+      transition: border-color 0.3s;
+    }
+
+    .modal-textarea:focus { border-color: #ff0037; box-shadow: 0 0 10px rgba(255, 0, 55, 0.5); }
+    .modal-footer { display: flex; justify-content: flex-end; gap: 12px; margin-top: 15px; }
+
+    .chart-container-wrapper { position: relative; height: 420px; width: 100%; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .header-brand h1 { font-size: 2.2rem; }
+      .header-brand h1 span.tag-web { font-size: 1.1rem; }
+      .buttons-grid { flex-direction: column; align-items: center; }
+      .btn-card { width: 100%; max-width: 290px; }
+      .toolbar-buttons { flex-direction: column; align-items: stretch; }
+      .btn-action { justify-content: center; }
+      .autosave-icon-fixed { top: 15px; right: 15px; width: 36px; height: 36px; font-size: 0.95rem; }
+      .home-config-btn { top: 15px; left: 15px; width: 40px; height: 40px; font-size: 1.1rem; }
+      .form-group-row { grid-template-columns: 1fr; }
+      .strategy-select-wrapper { flex-direction: column; align-items: stretch; }
+      .chart-container-wrapper { height: 280px; }
+      .calc-inputs-container { flex-direction: column; }
+      .sidebar-right { right: 8px; padding: 8px 5px; gap: 8px; }
+      .sidebar-btn { width: 38px; height: 38px; font-size: 0.95rem; }
+      .sidebar-btn::after { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Canvas Estilizado TC2000 Completamente Centrado y Fijo -->
+  <canvas id="canvas-candlesticks"></canvas>
+
+  <div class="overlay-vignette"></div>
+  <div class="glow-bg"></div>
+
+  <!-- INPUTS OCULTOS PARA IMPORTAR JSON -->
+  <input type="file" id="importGlobalFileInput" accept=".json" style="display: none;" onchange="procesarArchivoImportadoGlobal(event)">
+
+  <!-- ICONO FIJO DE AUTOGUARDADO -->
+  <div id="autosaveIcon" class="autosave-icon-fixed" title="Autoguardado activo">
+    <i class="fa-solid fa-floppy-disk"></i>
+  </div>
+
+  <!-- BOTÓN DE ENGRANAJE EN LA PANTALLA DE INICIO (ESQUINA SUPERIOR IZQUIERDA) -->
+  <button id="homeConfigBtn" class="home-config-btn" onclick="abrirModalConfig()" title="Configuración de Perfil y Salvas">
+    <i class="fa-solid fa-gear"></i>
+  </button>
+
+  <!-- BARRA NAVEGACIÓN LATERAL DERECHA -->
+  <aside id="sidebarRight" class="sidebar-right">
+    <button class="sidebar-btn" data-tooltip="Inicio" onclick="mostrarVista('menu')">
+      <i class="fa-solid fa-house"></i>
+    </button>
+    <button id="nav-btn-checklist" class="sidebar-btn" data-tooltip="Checklist" onclick="mostrarVista('checklist')">
+      <i class="fa-solid fa-list-check"></i>
+    </button>
+    <button id="nav-btn-noticias" class="sidebar-btn" data-tooltip="Noticias Importantes" onclick="mostrarVista('noticias')">
+      <i class="fa-solid fa-newspaper"></i>
+    </button>
+    <button id="nav-btn-calculadora" class="sidebar-btn" data-tooltip="Calculadora" onclick="mostrarVista('calculadora')">
+      <i class="fa-solid fa-calculator"></i>
+    </button>
+    <button id="nav-btn-inversiones" class="sidebar-btn" data-tooltip="Bitácora de Interés Compuesto" onclick="mostrarVista('inversiones')">
+      <i class="fa-solid fa-chart-line"></i>
+    </button>
+    <button id="nav-btn-grafico" class="sidebar-btn" data-tooltip="Gráfico" onclick="mostrarVista('grafico')">
+      <i class="fa-solid fa-chart-area"></i>
+    </button>
+    <button id="nav-btn-webs-importantes" class="sidebar-btn" data-tooltip="Webs Importantes" onclick="mostrarVista('webs-importantes')">
+      <i class="fa-solid fa-folder-open"></i>
+    </button>
+    <button id="nav-btn-academy" class="sidebar-btn" data-tooltip="Investep Academy" onclick="mostrarVista('academy')">
+      <svg class="sidebar-svg-icon" viewBox="0 0 450 380" xmlns="http://www.w3.org/2000/svg">
+        <path d="M 225 240 C 200 230, 160 215, 105 210 C 95 209, 85 212, 80 217 C 75 222, 70 230, 75 238 C 130 242, 185 260, 225 285 C 265 260, 320 242, 375 238 C 380 230, 375 222, 370 217 C 365 212, 355 209, 345 210 C 290 215, 250 230, 225 240 Z" />
+        <path d="M 225 260 C 195 248, 150 230, 85 225 C 75 224, 68 228, 65 235 C 62 242, 65 250, 75 256 C 130 262, 185 262, 375 256 C 385 250, 388 242, 385 235 C 382 228, 375 224, 365 225 C 300 230, 255 248, 225 260 Z" />
+        <rect x="150" y="125" width="16" height="85" rx="8" />
+        <rect x="180" y="85" width="16" height="135" rx="8" />
+        <rect x="210" y="50" width="16" height="180" rx="8" />
+        <rect x="240" y="85" width="16" height="135" rx="8" />
+        <rect x="270" y="125" width="16" height="85" rx="8" />
+      </svg>
+    </button>
+  </aside>
+
+  <!-- MODAL DE CONFIGURACIÓN DE PERFILES / ESPACIO Y SALVAS SEPARADAS -->
+  <div id="configModal" class="modal-overlay">
+    <div class="modal-card" style="max-width: 540px;">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-gear" style="color: #a855f7;"></i> Configuración y Rutas de Salvas</h3>
+        <button class="btn-close-modal" onclick="cerrarModalConfig()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="quick-calc-modal-box" style="border-color: rgba(168, 85, 247, 0.5);">
+        <!-- LISTA DESPLEGABLE DE PERFILES CREADOS EN LA PC CON BOTÓN DE ELIMINAR -->
+        <div class="form-field">
+          <label style="font-size: 0.8rem; color: #a855f7;"><i class="fa-solid fa-users"></i> Perfiles Creados en esta PC:</label>
+          <div style="display: flex; gap: 8px;">
+            <select id="pcProfilesSelect" class="form-select" onchange="seleccionarPerfilPC(this.value)" style="border-color: rgba(168, 85, 247, 0.5); font-weight: 900; flex: 1;">
+              <option value="">-- Seleccionar Perfil --</option>
+            </select>
+            <button class="btn-action btn-secondary" style="border-color: #ff0037; color: #ff0037; font-size: 0.8rem; padding: 8px 12px;" onclick="eliminarPerfilSeleccionadoPC()" title="Eliminar Perfil Seleccionado">
+              <i class="fa-solid fa-trash-can"></i> Eliminar
+            </button>
+          </div>
+        </div>
+
+        <!-- SECCIÓN CREAR NUEVO USUARIO LOCAL -->
+        <div style="margin-top: 15px; border-top: 1px dashed rgba(168, 85, 247, 0.3); padding-top: 12px;">
+          <div style="font-size: 0.8rem; font-weight: 800; color: #00ff88; margin-bottom: 6px;"><i class="fa-solid fa-user-plus"></i> Crear Nuevo Usuario Local (Solo en esta PC)</div>
+          <div style="display: flex; gap: 8px; flex-direction: column;">
+            <input type="text" id="nuevoUsuarioInput" class="form-input" placeholder="Nombre del usuario..." style="width: 100%; font-size: 0.85rem; padding: 8px;">
+            <div style="display: flex; gap: 8px; align-items: center;">
+              <label style="font-size: 0.75rem; color: #a855f7; margin: 0; white-space: nowrap;">Config. Tabla:</label>
+              <select id="nuevoUsuarioConfigSelect" class="form-select" style="font-size: 0.8rem; padding: 6px; border-color: rgba(168, 85, 247, 0.5);">
+                <option value="config1">Configuración 1</option>
+                <option value="config2">Configuración 2</option>
+              </select>
+              <button class="btn-action btn-success" style="font-size: 0.8rem; padding: 8px 14px;" onclick="crearNuevoUsuarioLocal()">
+                <i class="fa-solid fa-plus"></i> Crear
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECCIÓN DE CONFIGURACIÓN DE SALVAS -->
+      <div class="quick-calc-modal-box" style="border-color: rgba(168, 85, 247, 0.5); margin-top: 12px;">
+        <div class="quick-calc-title" style="color: #a855f7;"><i class="fa-solid fa-folder-open"></i> Gestión de Respaldos (Salvas)</div>
+        <p style="font-size: 0.78rem; color: #bbb; line-height: 1.4; margin-bottom: 15px;">
+          Selecciona la opción deseada. Tu navegador te pedirá la ubicación exacta donde quieres almacenar o cargar el archivo.
+        </p>
+
+        <!-- Botones Salvas Globales -->
+        <div style="margin-bottom: 12px;">
+          <div style="display: flex; gap: 10px;">
+            <button class="btn-action btn-export" style="flex: 1; justify-content: center; font-size:0.85rem;" onclick="exportarSalvaGlobal()">
+              <i class="fa-solid fa-file-export"></i> Salvar
+            </button>
+            <button class="btn-action btn-import" style="flex: 1; justify-content: center; font-size:0.85rem;" onclick="activarSelectorGlobal()">
+              <i class="fa-solid fa-file-import"></i> Importar Salva
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer" style="margin-top: 5px;">
+        <button class="btn-action btn-success" style="width: 100%; justify-content: center;" onclick="cerrarModalConfig()"><i class="fa-solid fa-check"></i> Aceptar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DE CÁLCULO RÁPIDO INDEPENDIENTE -->
+  <div id="quickCalcModal" class="modal-overlay">
+    <div class="modal-card" style="max-width: 520px;">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-calculator" style="color: #00ccff;"></i> Calculadora de Salto <span id="calcModalDayTitle" style="color: #00ccff;">Día</span></h3>
+        <button class="btn-close-modal" onclick="cerrarModalCalculadoraRapida()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="quick-calc-modal-box">
+        <div class="quick-calc-title"><i class="fa-solid fa-arrow-trend-up"></i> Ingrese el saldo actual en pantalla</div>
+        
+        <div class="form-field">
+          <label style="font-size: 0.8rem; color: #00ccff;">Nuevo Saldo Final Cuenta ($):</label>
+          <input type="number" id="quickModalSaldoFinal" class="form-input" step="0.01" placeholder="Ej: 10500" oninput="calcularSaltoRapido()" style="font-size: 1.2rem; font-weight: 900; text-align: center;">
+        </div>
+
+        <div class="quick-result-row">
+          <span>% Real Calculado:</span>
+          <span id="quickModalDisplayPct" class="quick-result-val">0.0%</span>
+        </div>
+
+        <button class="btn-action btn-success" style="width: 100%; justify-content: center; font-size: 0.95rem; padding: 12px;" onclick="aplicarCalculoRapidoEnTabla()">
+          <i class="fa-solid fa-check"></i> Aplicar este % a la Fila Principal
+        </button>
+      </div>
+
+      <div class="modal-footer" style="margin-top: 5px;">
+        <button class="btn-action btn-secondary" onclick="cerrarModalCalculadoraRapida()"><i class="fa-solid fa-xmark"></i> Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DE VISUALIZACIÓN DE CHECKLIST DESDE LA TABLA -->
+  <div id="tableChecklistModal" class="modal-overlay">
+    <div class="modal-card" style="max-width: 600px;">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-file-invoice" style="color: #00ff88;"></i> Checklist del <span id="tableChecklistModalDayTitle" style="color: #00ff88;">Día</span></h3>
+        <button class="btn-close-modal" onclick="cerrarModalChecklistTabla()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div id="tableChecklistModalContent" style="font-size: 0.9rem; line-height: 1.6; max-height: 65vh; overflow-y: auto; padding-right: 5px;">
+        <!-- Se inyecta dinámicamente -->
+      </div>
+
+      <div class="modal-footer" style="margin-top: 20px;">
+        <button class="btn-action btn-success" style="width: 100%; justify-content: center;" onclick="cerrarModalChecklistTabla()"><i class="fa-solid fa-check"></i> Cerrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL DE BITÁCORA / NOTAS DE TRADING -->
+  <div id="commentModal" class="modal-overlay">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-book-journal-whills"></i> Bitácora del <span id="modalDayTitle">Día</span></h3>
+        <div id="modalAutosaveStatus" class="modal-autosave-badge"><i class="fa-solid fa-check"></i> ¡Guardado!</div>
+        <button class="btn-close-modal" onclick="cerrarModalComentario()"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="form-group-row">
+        <div class="form-field">
+          <label><i class="fa-regular fa-calendar"></i> Fecha:</label>
+          <input type="date" id="noteDateField" class="form-input" onchange="autoGuardarNotaEnVivo()">
+        </div>
+        <div class="form-field">
+          <label><i class="fa-regular fa-clock"></i> Hora:</label>
+          <input type="time" id="noteTimeField" class="form-input" onchange="autoGuardarNotaEnVivo()">
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label><i class="fa-solid fa-cart-shopping"></i> Tipo de Compra:</label>
+        <div class="tags-wrapper" id="buyTypeContainer">
+          <button class="tag-btn btn-tag-call" onclick="seleccionarTipoCompra('CALL 📈', this)">CALL 📈</button>
+          <button class="tag-btn btn-tag-put" onclick="seleccionarTipoCompra('PUT 📉', this)">PUT 📉</button>
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label><i class="fa-solid fa-chess-knight"></i> Nombre de la Estrategia:</label>
+        <div class="strategy-select-wrapper">
+          <select id="strategySelectField" class="form-select" onchange="autoGuardarNotaEnVivo()">
+            <option value="">-- Selecciona una Estrategia --</option>
+            <option value="Saliendo de Bollinger con Volatilidad">Saliendo de Bollinger con Volatilidad</option>
+            <option value="Cambio de tendencia en 15 Mins">Cambio de tendencia en 15 Mins</option>
+          </select>
+          <button class="btn-add-strategy" onclick="agregarNuevaEstrategiaPrompt()">
+            <i class="fa-solid fa-plus"></i> Agregar Nueva
+          </button>
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label><i class="fa-solid fa-brain"></i> Estado Emocional / Psicología:</label>
+        <div class="tags-wrapper" style="margin-bottom: 8px;">
+          <button class="tag-btn" onclick="agregarSentimiento('Disciplina 🧘‍♂️')">+ Disciplina 🧘‍♂️</button>
+          <button class="tag-btn" onclick="agregarSentimiento('Confianza 😎')">+ Confianza 😎</button>
+          <button class="tag-btn" onclick="agregarSentimiento('Ansiedad 😰')">+ Ansiedad 😰</button>
+          <button class="tag-btn" onclick="agregarSentimiento('FOMO 🏃‍♂️')">+ FOMO 🏃‍♂️</button>
+          <button class="tag-btn" onclick="agregarSentimiento('Frustración 😤')">+ Frustración 😤</button>
+        </div>
+      </div>
+
+      <div class="form-field">
+        <label><i class="fa-regular fa-comment-dots"></i> Observaciones Adicionales:</label>
+        <textarea id="feelingCommentField" class="modal-textarea" placeholder="Describe tu plan de trading, emociones..." oninput="autoGuardarNotaEnVivo()"></textarea>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-action btn-secondary" onclick="limpiarComentarioActual()"><i class="fa-solid fa-eraser"></i> Borrar Todo</button>
+        <button class="btn-action" onclick="cerrarModalComentario()"><i class="fa-solid fa-check"></i> Listo</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="header-brand">
+      <h1>Trading <span class="highlight-neon">Disciplinado</span><span class="tag-web">WEB</span></h1>
+      <p class="subtitle">Opciones · Analytics · Control</p>
+      <div class="author-tag">By: YasmaStark</div>
+      <div class="welcome-user-container"><span id="welcomePrefixText"></span><span id="activeUserNameDisplay"></span></div>
+    </div>
+
+    <!-- MENU PRINCIPAL -->
+    <div id="menu-view">
+      <div class="buttons-grid">
+        <button class="btn-card" onclick="mostrarVista('checklist')">
+          <i class="fa-solid fa-list-check"></i>
+          <span>Checklist</span>
+        </button>
+
+        <button class="btn-card" onclick="mostrarVista('noticias')">
+          <i class="fa-solid fa-newspaper"></i>
+          <span>Noticias Importantes</span>
+        </button>
+
+        <button class="btn-card" onclick="mostrarVista('calculadora')">
+          <i class="fa-solid fa-calculator"></i>
+          <span>Calculadora</span>
+        </button>
+
+        <button class="btn-card" onclick="mostrarVista('inversiones')">
+          <i class="fa-solid fa-chart-line"></i>
+          <span>Bitácora de Interés Compuesto</span>
+        </button>
+
+        <button class="btn-card" onclick="mostrarVista('grafico')">
+          <i class="fa-solid fa-chart-area"></i>
+          <span>Gráfico</span>
+        </button>
+
+        <button class="btn-card" onclick="mostrarVista('webs-importantes')">
+          <i class="fa-solid fa-folder-open"></i>
+          <span>Webs Importantes</span>
+        </button>
+
+        <button class="btn-card" onclick="mostrarVista('academy')">
+          <svg class="investep-logo-svg" viewBox="0 0 450 380" xmlns="http://www.w3.org/2000/svg">
+            <path d="M 225 240 C 200 230, 160 215, 105 210 C 95 209, 85 212, 80 217 C 75 222, 70 230, 75 238 C 130 242, 185 282, 225 305 C 265 282, 320 262, 375 256 C 385 250, 388 242, 385 235 C 382 228, 375 224, 365 225 C 300 230, 255 248, 225 260 Z" />
+            <rect x="150" y="125" width="16" height="85" rx="8" />
+            <rect x="180" y="85" width="16" height="135" rx="8" />
+            <rect x="210" y="50" width="16" height="180" rx="8" />
+            <rect x="240" y="85" width="16" height="135" rx="8" />
+            <rect x="270" y="125" width="16" height="85" rx="8" />
+            <text x="225" y="335" text-anchor="middle" font-family="'Montserrat', sans-serif" font-weight="900" font-size="44" letter-spacing="-1">Investep</text>
+            <text x="225" y="370" text-anchor="middle" font-family="'Montserrat', sans-serif" font-weight="400" font-size="26" letter-spacing="2">Academy</text>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- VISTA WEBS IMPORTANTES SUBMENÚ -->
+    <div id="webs-importantes-view">
+      <div class="toolbar-buttons">
+        <button class="btn-action" onclick="mostrarVista('menu')">
+          <i class="fa-solid fa-house"></i> Inicio
+        </button>
+      </div>
+
+      <div class="section-title">
+        <i class="fa-solid fa-folder-open"></i> Webs Importantes
+      </div>
+
+      <!-- Brokers -->
+      <div class="checklist-sub-section" style="margin-top: 20px;">
+        <div class="checklist-sub-title"><i class="fa-solid fa-building-columns"></i> Brokers</div>
+        <div class="buttons-grid" style="justify-content: flex-start; gap: 15px; margin-top: 15px;">
+          <a href="https://client.schwab.com/Areas/Access/Login?SessionTimeOut=y&ReturnUrl=%2fclientapps%2faccounts%2fsummary%2f" target="_blank" class="btn-card" style="width: 210px; height: 140px;">
+            <i class="fa-solid fa-wallet"></i>
+            <span style="font-size: 0.85rem;">Charles Schwab</span>
+          </a>
+          <a href="https://trade.thinkorswim.com/" target="_blank" class="btn-card" style="width: 210px; height: 140px;">
+            <i class="fa-solid fa-chart-line"></i>
+            <span style="font-size: 0.85rem;">ThinkOrSwim</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Pre - market -->
+      <div class="checklist-sub-section" style="margin-top: 30px;">
+        <div class="checklist-sub-title"><i class="fa-solid fa-clock"></i> Pre - market</div>
+        <div class="buttons-grid" style="justify-content: flex-start; gap: 15px; margin-top: 15px;">
+          <a href="https://www.marketwatch.com/" target="_blank" class="btn-card" style="width: 210px; height: 140px;">
+            <i class="fa-solid fa-globe"></i>
+            <span style="font-size: 0.85rem;">MarketWatch</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Mapa de Finbiz -->
+      <div class="checklist-sub-section" style="margin-top: 30px;">
+        <div class="checklist-sub-title"><i class="fa-solid fa-map"></i> Mapa de Finbiz</div>
+        <div class="buttons-grid" style="justify-content: flex-start; gap: 15px; margin-top: 15px;">
+          <a href="https://finviz.com/map" target="_blank" class="btn-card" style="width: 210px; height: 140px;">
+            <i class="fa-solid fa-map-location-dot"></i>
+            <span style="font-size: 0.85rem;">Finviz Map</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- FED -->
+      <div class="checklist-sub-section" style="margin-top: 30px;">
+        <div class="checklist-sub-title"><i class="fa-solid fa-landmark"></i> FED</div>
+        <div class="buttons-grid" style="justify-content: flex-start; gap: 15px; margin-top: 15px;">
+          <a href="https://www.federalreserve.gov/newsevents/calendar.html" target="_blank" class="btn-card" style="width: 210px; height: 140px;">
+            <i class="fa-solid fa-calendar-days"></i>
+            <span style="font-size: 0.85rem;">Federal Reserve Calendar</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Noticias -->
+      <div class="checklist-sub-section" style="margin-top: 30px; margin-bottom: 40px;">
+        <div class="checklist-sub-title"><i class="fa-solid fa-newspaper"></i> Noticias</div>
+        <div class="buttons-grid" style="justify-content: flex-start; gap: 15px; margin-top: 15px;">
+          <a href="https://finance.yahoo.com/?guccounter=1" target="_blank" class="btn-card" style="width: 210px; height: 140px;">
+            <i class="fa-solid fa-bullhorn"></i>
+            <span style="font-size: 0.85rem;">Yahoo Finance</span>
+          </a>
+          <a href="https://www.optionslam.com/" target="_blank" class="btn-card" style="width: 210px; height: 140px;">
+            <i class="fa-solid fa-bolt"></i>
+            <span style="font-size: 0.85rem;">Options Slam</span>
+          </a>
+          <a href="https://www.cnbc.com/" target="_blank" class="btn-card" style="width: 210px; height: 140px;">
+            <i class="fa-solid fa-tv"></i>
+            <span style="font-size: 0.85rem;">CNBC</span>
+          </a>
+          <a href="https://www.wsj.com/" target="_blank" class="btn-card" style="width: 210px; height: 140px;">
+            <i class="fa-solid fa-newspaper"></i>
+            <span style="font-size: 0.85rem;">WSJ</span>
+          </a>
+          <a href="https://www.bloomberg.com/" target="_blank" class="btn-card" style="width: 210px; height: 140px;">
+            <i class="fa-solid fa-chart-pie"></i>
+            <span style="font-size: 0.85rem;">Bloomberg</span>
+          </a>
+          <a href="https://www.nyse.com/index" target="_blank" class="btn-card" style="width: 210px; height: 140px;">
+            <i class="fa-solid fa-building"></i>
+            <span style="font-size: 0.85rem;">NYSE</span>
+          </a>
+          <a href="https://www.investing.com/economic-calendar" target="_blank" class="btn-card" style="width: 210px; height: 140px;">
+            <i class="fa-solid fa-calendar-check"></i>
+            <span style="font-size: 0.85rem;">Investing Calendar</span>
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- VISTA ACADEMY SUBMENÚ -->
+    <div id="academy-view">
+      <div class="toolbar-buttons">
+        <button class="btn-action" onclick="mostrarVista('menu')">
+          <i class="fa-solid fa-house"></i> Inicio
+        </button>
+      </div>
+
+      <div class="section-title">
+        <i class="fa-solid fa-graduation-cap"></i> Investep Academy
+      </div>
+
+      <div class="buttons-grid" style="margin-top: 25px;">
+        <a href="http://localhost:8096/web/index.html#!/videos?serverId=537c33e77d6843d29faa7105adf44514&parentId=9287&tab=folders" target="_blank" class="btn-card">
+          <svg class="emby-logo-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
+          </svg>
+          <span>Formación (Emby)</span>
+        </a>
+
+        <a href="https://comunidad-sai.mykajabi.com/library" target="_blank" class="btn-card">
+          <svg class="investep-logo-svg" viewBox="0 0 450 380" xmlns="http://www.w3.org/2000/svg" style="width: 85px; margin-bottom: 5px;">
+            <path d="M 225 240 C 200 230, 160 215, 105 210 C 95 209, 85 212, 80 217 C 75 222, 70 230, 75 238 C 130 242, 185 282, 225 305 C 265 282, 320 262, 375 256 C 385 250, 388 242, 385 235 C 382 228, 375 224, 365 225 C 300 230, 255 248, 225 260 Z" />
+            <rect x="150" y="125" width="16" height="85" rx="8" />
+            <rect x="180" y="85" width="16" height="135" rx="8" />
+            <rect x="210" y="50" width="16" height="180" rx="8" />
+            <rect x="240" y="85" width="16" height="135" rx="8" />
+            <rect x="270" y="125" width="16" height="85" rx="8" />
+            <text x="225" y="335" text-anchor="middle" font-family="'Montserrat', sans-serif" font-weight="900" font-size="44" letter-spacing="-1">Investep</text>
+            <text x="225" y="370" text-anchor="middle" font-family="'Montserrat', sans-serif" font-weight="400" font-size="26" letter-spacing="2">Academy</text>
+          </svg>
+          <span style="font-size: 0.8rem;">Website Oficial</span>
+        </a>
+
+        <a href="https://www.youtube.com/@InvestepTestimonios" target="_blank" class="btn-card">
+          <i class="fa-solid fa-users-rectangle"></i>
+          <span style="font-size: 0.8rem;">Investep Academy Testimonios</span>
+        </a>
+
+        <a href="https://www.youtube.com/@YoelSardinasVlogs" target="_blank" class="btn-card">
+          <i class="fa-solid fa-video"></i>
+          <span style="font-size: 0.8rem;">Yoel Sardiñas Vlogs</span>
+        </a>
+
+        <a href="https://www.youtube.com/@ConversacionesenlasAlturas" target="_blank" class="btn-card">
+          <i class="fa-solid fa-rocket"></i>
+          <span style="font-size: 0.78rem;">Conversaciones en las Alturas</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- VISTA NOTICIAS -->
+    <div id="news-view">
+      <div class="toolbar-buttons">
+        <button class="btn-action" onclick="mostrarVista('menu')">
+          <i class="fa-solid fa-house"></i> Inicio
+        </button>
+      </div>
+
+      <div class="section-title">
+        <i class="fa-solid fa-newspaper"></i> Noticias Importantes
+      </div>
+
+      <!-- SECCIÓN 1: NOTICIAS GENERALES DEL MERCADO -->
+      <div class="news-card-box">
+        <div class="news-box-header">
+          <i class="fa-solid fa-circle-exclamation"></i> Noticias Importantes del Mercado
+        </div>
+        <ul class="news-list-items">
+
+          <li class="news-item-container">
+            <div class="news-item-row-header">
+              <div class="news-title-group"><i class="fa-solid fa-circle-right"></i> Nuevas peticiones de subsidio por desempleo</div>
+              <button class="btn-news-info" onclick="toggleNewsDesc(this)">?</button>
+            </div>
+            <div class="news-desc-panel">
+              <strong>¿Qué mide?:</strong> Número de personas que solicitan subsidio por desempleo estatal por primera vez en la semana.<br>
+              <strong>Impacto Positivo (+):</strong> Datos bajos indican un mercado laboral fuerte y estable, respaldando el crecimiento económico.<br>
+              <strong>Impacto Negativo (-):</strong> Un aumento drástico alerta sobre despidos masivos y posibles síntomas de recesión.<br>
+              <strong>Precedente histórico:</strong> En marzo de 2020 alcanzaron récords históricos de 6 millones en una semana, provocando desplomes bursátiles inmediatos.
+            </div>
+          </li>
+
+          <li class="news-item-container">
+            <div class="news-item-row-header">
+              <div class="news-title-group"><i class="fa-solid fa-circle-right"></i> Inflación / IPC (Índice de Precios al Consumidor)</div>
+              <button class="btn-news-info" onclick="toggleNewsDesc(this)">?</button>
+            </div>
+            <div class="news-desc-panel">
+              <strong>¿Qué mide?:</strong> La variación de precios en la canasta básica de bienes y servicios del consumidor.<br>
+              <strong>Impacto Positivo (+):</strong> Si el IPC cae (desinflación), baja la presión sobre los tipos de interés y sube la bolsa.<br>
+              <strong>Impacto Negativo (-):</strong> Si el IPC sube inesperadamente, obliga a la FED a endurecer los tipos, causando caídas fuertes.<br>
+              <strong>Precedente histórico:</strong> En 2022, inflaciones superiores al 9% provocaron caídas diarias de 2% al 4% en los índices en cada día de publicación.
+            </div>
+          </li>
+
+          <li class="news-item-container">
+            <div class="news-item-row-header">
+              <div class="news-title-group"><i class="fa-solid fa-circle-right"></i> PMI de servicios (Índice de Gestores de Compras)</div>
+              <button class="btn-news-info" onclick="toggleNewsDesc(this)">?</button>
+            </div>
+            <div class="news-desc-panel">
+              <strong>¿Qué mide?:</strong> Nivel de actividad económica en el sector servicios (+70% de la economía de EE. UU.). (&gt;50 expansión / &lt;50 contracción).<br>
+              <strong>Impacto Positivo (+):</strong> Lecturas superiores a 50 confirman crecimiento saludable en la demanda comercial.<br>
+              <strong>Impacto Negativo (-):</strong> Caídas por debajo de 50 indican contracción del sector y peligro de recesión.<br>
+              <strong>Precedente histórico:</strong> Caídas por debajo de 50 en períodos de incertidumbre provocan ventas masivas en acciones de consumo y bancos.
+            </div>
+          </li>
+
+          <li class="news-item-container">
+            <div class="news-item-row-header">
+              <div class="news-title-group"><i class="fa-solid fa-circle-right"></i> PIB (Producto Interno Bruto)</div>
+              <button class="btn-news-info" onclick="toggleNewsDesc(this)">?</button>
+            </div>
+            <div class="news-desc-panel">
+              <strong>¿Qué mide?:</strong> El valor monetario total de todos los bienes y servicios producidos en el país trimestralmente.<br>
+              <strong>Impacto Positivo (+):</strong> Un PIB fuerte demuestra expansión sustaineda y estimula la compra institucional de acciones.<br>
+              <strong>Impacto Negativo (-):</strong> Dos trimestres consecutivos en negativo confirman una Recesión Económica Técnica.<br>
+              <strong>Precedente histórico:</strong> Confirmaciones de PIB negativo en 2008 y 2020 dieron paso a caídas prolongadas (Bear Markets).
+            </div>
+          </li>
+
+          <li class="news-item-container">
+            <div class="news-item-row-header">
+              <div class="news-title-group"><i class="fa-solid fa-circle-right"></i> Ventas minoristas y subyacentes</div>
+              <button class="btn-news-info" onclick="toggleNewsDesc(this)">?</button>
+            </div>
+            <div class="news-desc-panel">
+              <strong>¿Qué mide?:</strong> El gasto total del consumidor en establecimientos minoristas y tiendas online.<br>
+              <strong>Impacto Positivo (+):</strong> Ventas fuertes demuestran la buena salud financiera del consumidor estadounidense.<br>
+              <strong>Impacto Negativo (-):</strong> Caídas en las ventas sugieren un consumidor ahogado, afectando los ingresos corporativos.<br>
+              <strong>Precedente histórico:</strong> Reportes débiles tras la época navideña desencadenan ventas en cadenas como Target, Walmart y Amazon.
+            </div>
+          </li>
+
+          <li class="news-item-container">
+            <div class="news-item-row-header">
+              <div class="news-title-group"><i class="fa-solid fa-circle-right"></i> Encuesta JOLTS de ofertas de empleo</div>
+              <button class="btn-news-info" onclick="toggleNewsDesc(this)">?</button>
+            </div>
+            <div class="news-desc-panel">
+              <strong>¿Qué mide?:</strong> La cantidad de puestos de trabajo vacantes que las empresas están buscando cubrir.<br>
+              <strong>Impacto Positivo (+):</strong> Un número moderado refleja un mercado laboral equilibrado y sostenible.<br>
+              <strong>Impacto Negativo (-):</strong> Si caen bruscamente indican congelación de contrataciones por desaceleración económica.<br>
+              <strong>Precedente histórico:</strong> Durante 2022-2023, ofertas extremadamente altas alarmaban a la FED sobre presiones salariales inflacionarias.
+            </div>
+          </li>
+
+          <li class="news-item-container">
+            <div class="news-item-row-header">
+              <div class="news-title-group"><i class="fa-solid fa-circle-right"></i> Nóminas no agrícolas (NFP - Non-Farm Payrolls)</div>
+              <button class="btn-news-info" onclick="toggleNewsDesc(this)">?</button>
+            </div>
+            <div class="news-desc-panel">
+              <strong>¿Qué mide?:</strong> Empleos creados o destruidos durante el último mes (excluyendo el sector agrícola).<br>
+              <strong>Impacto Positivo (+):</strong> Creación constante de empleo confirma la solidez de la economía.<br>
+              <strong>Impacto Negativo (-):</strong> Cifras por debajo de lo estimado causan pánico sobre un frenazo económico.<br>
+              <strong>Precedente histórico:</strong> Es el dato de mayor volatilidad mensual a las 8:30 AM EST, generando giros bruscos en el S&P 500 y opciones.
+            </div>
+          </li>
+
+          <li class="news-item-container">
+            <div class="news-item-row-header">
+              <div class="news-title-group"><i class="fa-solid fa-circle-right"></i> Tasa de desempleo</div>
+              <button class="btn-news-info" onclick="toggleNewsDesc(this)">?</button>
+            </div>
+            <div class="news-desc-panel">
+              <strong>¿Qué mide?:</strong> El porcentaje de la población activa que está desempleada y buscando trabajo.<br>
+              <strong>Impacto Positivo (+):</strong> Tasas bajas y estables (3.5% - 4.0%) aseguran flujo de dinero e inversión constante.<br>
+              <strong>Impacto Negativo (-):</strong> Un repunte por encima del 4.5% enciende señales de alarma por recesión.<br>
+              <strong>Precedente histórico:</strong> Según la "Regla de Sahm", aumentos acelerados del desempleo preceden históricamente correcciones de más del 10% en bolsa.
+            </div>
+          </li>
+
+          <li class="news-item-container">
+            <div class="news-item-row-header">
+              <div class="news-title-group"><i class="fa-solid fa-circle-right"></i> IPP (Índice de Precios al Productor)</div>
+              <button class="btn-news-info" onclick="toggleNewsDesc(this)">?</button>
+            </div>
+            <div class="news-desc-panel">
+              <strong>¿Qué mide?:</strong> La variación en los precios de venta recibidos por los fabricantes y productores.<br>
+              <strong>Impacto Positivo (+):</strong> Un IPP bajo reduce costos de producción, mejorando márgenes y anticipando menor IPC futuro.<br>
+              <strong>Impacto Negativo (-):</strong> Aumentos en el IPP se trasmiten semanas después al consumidor en forma de inflación.<br>
+              <strong>Precedente histórico:</strong> Sirve como indicador adelantado del IPC; sorpresas al alza generan caídas anticipadas en los índices.
+            </div>
+          </li>
+
+          <li class="news-item-container">
+            <div class="news-item-row-header">
+              <div class="news-title-group"><i class="fa-solid fa-circle-right"></i> Noticias de la Empresa (Earnings / Resultados)</div>
+              <button class="btn-news-info" onclick="toggleNewsDesc(this)">?</button>
+            </div>
+            <div class="news-desc-panel">
+              <strong>¿Qué mide?:</strong> Reportes trimestrales de ganancias, ingresos y proyecciones futuras (Guidance) de empresas públicas.<br>
+              <strong>Impacto Positivo (+):</strong> Superar ingresos y dar proyecciones optimistas dispara el precio de la acción.<br>
+              <strong>Impacto Negativo (-):</strong> No alcanzar las metas fijadas por Wall Street genera caídas masivas en la acción.<br>
+              <strong>Precedente histórico:</strong> Ocasiona aperturas con saltos de precio (Gaps) de 5% a 15% en acciones líderes como Apple, NVDA o Meta.
+            </div>
+          </li>
+
+        </ul>
+      </div>
+
+      <!-- SECCIÓN 2: EVENTOS Y NOTICIAS DE LA FED -->
+      <div class="news-card-box">
+        <div class="news-box-header fed-header">
+          <i class="fa-solid fa-building-columns"></i> Eventos y Declaraciones de la FED
+        </div>
+        <ul class="news-list-items fed-list">
+
+          <li class="news-item-container">
+            <div class="news-item-row-header">
+              <div class="news-title-group"><i class="fa-solid fa-check"></i> Declaraciones del presidente de la Fed (Jerome Powell)</div>
+              <button class="btn-news-info" onclick="toggleNewsDesc(this)">?</button>
+            </div>
+            <div class="news-desc-panel">
+              <strong>¿Qué mide?:</strong> Ruedas de prensa y discursos en vivo del máximo responsable de la política monetaria en EE. UU.<br>
+              <strong>Impacto Positivo (+):</strong> Tono "Dovish" (suave/flexibilización): Promesa de mantener o bajar tasas dispara el mercado.<br>
+              <strong>Impacto Negativo (-):</strong> Tono "Hawkish" (agresivo): Advertencias de mantener tipos altos produce caídas en directo.<br>
+              <strong>Precedente histórico:</strong> Genera la mayor volatilidad intradía; el S&P 500 suele oscilar drásticamente durante los 45 minutos que dura su rueda de prensa.
+            </div>
+          </li>
+
+          <li class="news-item-container">
+            <div class="news-item-row-header">
+              <div class="news-title-group"><i class="fa-solid fa-check"></i> Decisiones de tipo de interés (FOMC)</div>
+              <button class="btn-news-info" onclick="toggleNewsDesc(this)">?</button>
+            </div>
+            <div class="news-desc-panel">
+              <strong>¿Qué mide?:</strong> La tasa oficial a la que los bancos se prestan dinero entre sí (costo base del crédito nacional).<br>
+              <strong>Impacto Positivo (+):</strong> Recortes de tasa abaratan el crédito, estimulan la economía y disparan las acciones.<br>
+              <strong>Impacto Negativo (-):</strong> Subidas de tasa encarecen el crédito, congelan el consumo y hacen caer la bolsa.<br>
+              <strong>Precedente histórico:</strong> El ciclo de subidas de tipos más rápido en 40 años realizado durante 2022 causó un Bear Market prolongado en Wall Street.
+            </div>
+          </li>
+
+          <li class="news-item-container">
+            <div class="news-item-row-header">
+              <div class="news-title-group"><i class="fa-solid fa-check"></i> Minutas de la Fed (FOMC Minutes)</div>
+              <button class="btn-news-info" onclick="toggleNewsDesc(this)">?</button>
+            </div>
+            <div class="news-desc-panel">
+              <strong>¿Qué mide?:</strong> Publicación detallada de las discusiones y discrepancias internas mantenidas en la última reunión del comité.<br>
+              <strong>Impacto Positivo (+):</strong> Mostrar que miembros votantes abogan por recortes de tipos impulsa las compras a las 2:00 PM EST.<br>
+              <strong>Impacto Negativo (-):</strong> Revelar preocupaciones por inflation persistent provoca correcciones en los índices.<br>
+              <strong>Precedente histórico:</strong> Sirve a los grandes fondos de inversión para medir qué tan dividido o unido está el comité directivo de la FED.
+            </div>
+          </li>
+
+          <li class="news-item-container">
+            <div class="news-item-row-header">
+              <div class="news-title-group"><i class="fa-solid fa-check"></i> Comparecencias de miembros del FOMC</div>
+              <button class="btn-news-info" onclick="toggleNewsDesc(this)">?</button>
+            </div>
+            <div class="news-desc-panel">
+              <strong>¿Qué mide?:</strong> Discursos públicos semanales de los presidentes de los bancos regionales de la Reserva Federal.<br>
+              <strong>Impacto Positivo (+):</strong> Comentarios alineados con la estabilidad económica y fin de ajustes monetarios dan tranquilidad.<br>
+              <strong>Impacto Negativo (-):</strong> Declaraciones sorpresivas pidiendo tipos más altos generan pequeñas caídas fuera de hora.<br>
+              <strong>Precedente histórico:</strong> Wall Street utiliza cada discurso para ajustar las probabilidades en tiempo real de la herramienta FedWatch.
+            </div>
+          </li>
+
+        </ul>
+      </div>
+    </div>
+
+    <!-- VISTA CHECKLIST COMPLETA -->
+    <div id="checklist-view">
+      <div class="toolbar-buttons">
+        <button class="btn-action" onclick="mostrarVista('menu')"><i class="fa-solid fa-house"></i> Inicio</button>
+        <button class="btn-action btn-success" onclick="guardarChecklistEnBitacora()"><i class="fa-solid fa-floppy-disk"></i> Listo / Guardar en Bitácora del Día</button>
+        <button class="btn-action btn-secondary" onclick="resetearChecklist()"><i class="fa-solid fa-rotate"></i> Resetear Formulario</button>
+      </div>
+
+      <div class="checklist-card">
+        <div class="checklist-header-title">
+          <i class="fa-solid fa-magnifying-glass-chart"></i> My Checklist - Análisis Panorama Completo
+        </div>
+
+        <div class="trade-fields-grid">
+          <div class="trade-field">
+            <label for="chkTicker"><i class="fa-solid fa-tag"></i> Ticker:</label>
+            <input type="text" id="chkTicker" placeholder="Ej: SPY, QQQ, AAPL" oninput="guardarChecklistState()">
+          </div>
+          <div class="trade-field">
+            <label for="chkPriceRange"><i class="fa-solid fa-arrows-left-right"></i> Rango Óptimo de Precio:</label>
+            <input type="text" id="chkPriceRange" placeholder="Ej: $450.00 - $452.50" oninput="guardarChecklistState()">
+          </div>
+          <div class="trade-field">
+            <label for="chkDate"><i class="fa-regular fa-calendar"></i> Fecha:</label>
+            <input type="date" id="chkDate" onchange="guardarChecklistState()">
+          </div>
+          <div class="trade-field">
+            <label for="chkTargetPrice"><i class="fa-solid fa-bullseye"></i> Target Price:</label>
+            <input type="text" id="chkTargetPrice" placeholder="Ej: $460.00" oninput="guardarChecklistState()">
+          </div>
+        </div>
+
+        <div class="news-effect-box">
+          <div class="news-effect-title"><i class="fa-solid fa-newspaper"></i> ¿Efecto noticioso, Earning o FED?</div>
+          <div class="news-toggle-buttons">
+            <button id="btnNewsYes" class="btn-toggle-neon btn-yes" onclick="setNeonToggle('newsEffect', true)"><i class="fa-solid fa-check"></i> SÍ</button>
+            <button id="btnNewsNo" class="btn-toggle-neon btn-no" onclick="setNeonToggle('newsEffect', false)"><i class="fa-solid fa-xmark"></i> NO</button>
+          </div>
+        </div>
+
+        <div class="checklist-sub-section">
+          <div class="checklist-sub-title">1. Panorama General del Mercado</div>
+          <div class="trend-options-grid">
+            <button id="btnTrendAlcista" class="btn-trend-card" onclick="setMarketTrend('alcista')"><i class="fa-solid fa-arrow-trend-up"></i> Alcista</button>
+            <button id="btnTrendBajista" class="btn-trend-card" onclick="setMarketTrend('bajista')"><i class="fa-solid fa-arrow-trend-down"></i> Bajista</button>
+            <button id="btnTrendLateral" class="btn-trend-card" onclick="setMarketTrend('lateral')"><i class="fa-solid fa-arrows-left-right"></i> Lateral</button>
+          </div>
+        </div>
+
+        <div class="checklist-sub-section">
+          <div class="checklist-sub-title">2. Bollinger Bands <span>(50% del Análisis)</span></div>
+          <div class="bollinger-note-box">
+            <i class="fa-solid fa-lightbulb"></i> Regla Clave: *"Después de un período de gran volatilidad, viene uno de baja volatilidad."*
+          </div>
+
+          <div class="news-effect-box">
+            <div class="news-effect-title">¿Ya marcaste tu PM (Punto Medio) en temporalidad DIA?</div>
+            <div class="news-toggle-buttons">
+              <button id="btnPmDiaYes" class="btn-toggle-neon btn-yes" onclick="setNeonToggle('pmDia', true)"><i class="fa-solid fa-check"></i> SÍ</button>
+              <button id="btnPmDiaNo" class="btn-toggle-neon btn-no" onclick="setNeonToggle('pmDia', false)"><i class="fa-solid fa-xmark"></i> NO</button>
+            </div>
+          </div>
+
+          <div class="news-effect-box">
+            <div class="news-effect-title">¿El precio está aperturando afuera de las Bandas de Bollinger?</div>
+            <div class="news-toggle-buttons">
+              <button id="btnBandsOpenYes" class="btn-toggle-neon btn-yes" onclick="setNeonToggle('bandsOpen', true)"><i class="fa-solid fa-check"></i> SÍ</button>
+              <button id="btnBandsOpenNo" class="btn-toggle-neon btn-no" onclick="setNeonToggle('bandsOpen', false)"><i class="fa-solid fa-xmark"></i> NO</button>
+            </div>
+          </div>
+
+          <div class="timeframe-group-box">
+            <div class="timeframe-group-title">¿Punto Medio es soporte o resistencia?</div>
+            <div class="timeframe-checks-inline">
+              <label class="tf-checkbox-label"><input type="checkbox" id="chkPmSrDia" onchange="guardarChecklistState()"> DIA</label>
+              <label class="tf-checkbox-label"><input type="checkbox" id="chkPmSrHora" onchange="guardarChecklistState()"> HORA</label>
+              <label class="tf-checkbox-label"><input type="checkbox" id="chkPmSr15m" onchange="guardarChecklistState()"> 15M</label>
+            </div>
+          </div>
+
+          <div class="timeframe-group-box">
+            <div class="timeframe-group-title">¿PM es continuidad de movimiento?</div>
+            <div class="timeframe-checks-inline">
+              <label class="tf-checkbox-label"><input type="checkbox" id="chkPmContDia" onchange="guardarChecklistState()"> DIA</label>
+              <label class="tf-checkbox-label"><input type="checkbox" id="chkPmContHora" onchange="guardarChecklistState()"> HORA</label>
+              <label class="tf-checkbox-label"><input type="checkbox" id="chkPmCont15m" onchange="guardarChecklistState()"> 15M</label>
+            </div>
+          </div>
+
+          <div class="timeframe-group-box">
+            <div class="timeframe-group-title">¿Punto medio se encuentra lateralizado?</div>
+            <div class="timeframe-checks-inline">
+              <label class="tf-checkbox-label"><input type="checkbox" id="chkPmLatDia" onchange="guardarChecklistState()"> DIA</label>
+              <label class="tf-checkbox-label"><input type="checkbox" id="chkPmLatHora" onchange="guardarChecklistState()"> HORA</label>
+              <label class="tf-checkbox-label"><input type="checkbox" id="chkPmLat15m" onchange="guardarChecklistState()"> 15M</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="checklist-sub-section">
+          <div class="checklist-sub-title">3. Medias Móviles <span>(25% del Análisis)</span> & Tendencia</div>
+          <div class="trade-fields-grid">
+            <div class="trade-field">
+              <label for="chkTrendDia">Tendencia en DIA:</label>
+              <input type="text" id="chkTrendDia" placeholder="Escribir tendencia..." oninput="guardarChecklistState()">
+            </div>
+            <div class="trade-field">
+              <label for="chkTrendHora">Tendencia en HORA:</label>
+              <input type="text" id="chkTrendHora" placeholder="Escribir tendencia..." oninput="guardarChecklistState()">
+            </div>
+            <div class="trade-field">
+              <label for="chkResistances">Resistencias (Techos):</label>
+              <input type="text" id="chkResistances" placeholder="Escribir resistencias..." oninput="guardarChecklistState()">
+            </div>
+            <div class="trade-field">
+              <label for="chkSupports">Soportes (Pisos):</label>
+              <input type="text" id="chkSupports" placeholder="Escribir soportes..." oninput="guardarChecklistState()">
+            </div>
+          </div>
+
+          <div class="news-effect-box">
+            <div class="news-effect-title">¿En tus medias móviles en Diario y en Hora, tienes resistencias / soportes?</div>
+            <div class="news-toggle-buttons">
+              <button id="btnMaSrYes" class="btn-toggle-neon btn-yes" onclick="setNeonToggle('maSr', true)"><i class="fa-solid fa-check"></i> SÍ</button>
+              <button id="btnMaSrNo" class="btn-toggle-neon btn-no" onclick="setNeonToggle('maSr', false)"><i class="fa-solid fa-xmark"></i> NO</button>
+            </div>
+          </div>
+
+          <div class="news-effect-box">
+            <div class="news-effect-title">¿Marcaste tus H lines (Líneas Horizontales) para identificar Techos y Pisos?</div>
+            <div class="news-toggle-buttons">
+              <button id="btnHLinesYes" class="btn-toggle-neon btn-yes" onclick="setNeonToggle('hLines', true)"><i class="fa-solid fa-check"></i> SÍ</button>
+              <button id="btnHLinesNo" class="btn-toggle-neon btn-no" onclick="setNeonToggle('hLines', false)"><i class="fa-solid fa-xmark"></i> NO</button>
+            </div>
+          </div>
+
+          <div class="news-effect-box">
+            <div class="news-effect-title">¿El precio está aperturando con un salto fuerte (GAP) de mercado?</div>
+            <div class="news-toggle-buttons">
+              <button id="btnGapYes" class="btn-toggle-neon btn-yes" onclick="setNeonToggle('gapOpen', true)"><i class="fa-solid fa-check"></i> SÍ</button>
+              <button id="btnGapNo" class="btn-toggle-neon btn-no" onclick="setNeonToggle('gapOpen', false)"><i class="fa-solid fa-xmark"></i> NO</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="checklist-sub-section">
+          <div class="checklist-sub-title">4. Salto (GAP)</div>
+
+          <div class="news-effect-box">
+            <div class="news-effect-title">¿El salto se mantiene en efecto?</div>
+            <div class="news-toggle-buttons">
+              <button id="btnGapMaintainsYes" class="btn-toggle-neon btn-yes" onclick="setNeonToggle('gapMaintains', true)"><i class="fa-solid fa-check"></i> SÍ</button>
+              <button id="btnGapMaintainsNo" class="btn-toggle-neon btn-no" onclick="setNeonToggle('gapMaintains', false)"><i class="fa-solid fa-xmark"></i> NO</button>
+            </div>
+          </div>
+
+          <div class="timeframe-group-box">
+            <div class="timeframe-group-title">¿El salto va a favor o en contra de tu movimiento?</div>
+            <div class="timeframe-checks-inline">
+              <label class="tf-checkbox-label"><input type="checkbox" id="chkGapFavor" onchange="guardarChecklistState()"> A Favor</label>
+              <label class="tf-checkbox-label"><input type="checkbox" id="chkGapContra" onchange="guardarChecklistState()"> En Contra</label>
+            </div>
+          </div>
+
+          <div class="trade-fields-grid" style="grid-template-columns: 1fr;">
+            <div class="trade-field">
+              <label for="chkProbableMove">¿Con estos datos, qué movimiento consideras que es el más probable ahora?</label>
+              <textarea id="chkProbableMove" placeholder="Describe a detalle el análisis del movimiento proyectado..." oninput="guardarChecklistState()"></textarea>
+            </div>
+            <div class="trade-field">
+              <label for="chkCompanyRange">Rango de movimiento aproximado de la empresa:</label>
+              <textarea id="chkCompanyRange" placeholder="Detalla el rango esperado de movimiento del activo..." oninput="guardarChecklistState()"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="checklist-sub-section">
+          <div class="checklist-sub-title">5. Detalles del Contrato</div>
+
+          <div class="contract-table-wrapper">
+            <table class="contract-table">
+              <thead>
+                <tr>
+                  <th>Ticker</th>
+                  <th>Vencimiento</th>
+                  <th>Strike</th>
+                  <th>Tipo</th>
+                  <th>ASK ($)</th>
+                  <th>BID ($)</th>
+                  <th>Contratos</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><input type="text" id="tblTicker" class="contract-input" placeholder="SPY" oninput="guardarChecklistState()"></td>
+                  <td><input type="text" id="tblExp" class="contract-input" placeholder="DD/MM/YY" oninput="guardarChecklistState()"></td>
+                  <td><input type="text" id="tblStrike" class="contract-input" placeholder="450" oninput="guardarChecklistState()"></td>
+                  <td>
+                    <div class="contract-type-checks">
+                      <label class="tf-checkbox-label"><input type="checkbox" id="chkTypeCall" onchange="guardarChecklistState()"> Call</label>
+                      <label class="tf-checkbox-label"><input type="checkbox" id="chkTypePut" onchange="guardarChecklistState()"> Put</label>
+                    </div>
+                  </td>
+                  <td><input type="text" id="tblAsk" class="contract-input" placeholder="0.00" oninput="guardarChecklistState()"></td>
+                  <td><input type="text" id="tblBid" class="contract-input" placeholder="0.00" oninput="guardarChecklistState()"></td>
+                  <td><input type="text" id="tblContracts" class="contract-input" placeholder="1" oninput="guardarChecklistState()"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="trade-fields-grid">
+            <div class="trade-field">
+              <label for="chkReinforcement">Refuerzo:</label>
+              <input type="text" id="chkReinforcement" placeholder="Detalles de refuerzo..." oninput="guardarChecklistState()">
+            </div>
+            <div class="trade-field">
+              <label for="chkRiskMgmt">Gestión de Riesgo:</label>
+              <input type="text" id="chkRiskMgmt" placeholder="" oninput="guardarChecklistState()">
+            </div>
+            <div class="trade-field" style="grid-column: 1 / -1;">
+              <label for="chkProfitObtained">ESTADO FINAL / RESULTADO:</label>
+              <input type="text" id="chkProfitObtained" placeholder="Ej: Meta cumplida / Positivo" oninput="guardarChecklistState()">
+            </div>
+          </div>
+
+          <div class="timeframe-group-box" style="margin-top: 15px;">
+            <div class="timeframe-group-title">¿CUMPLÍ CON MI PLAN HOY?</div>
+            <div class="timeframe-checks-inline">
+              <label class="tf-checkbox-label"><input type="checkbox" id="chkPlanYes" onchange="guardarChecklistState()"> SÍ</label>
+              <label class="tf-checkbox-label"><input type="checkbox" id="chkPlanNo" onchange="guardarChecklistState()"> NO</label>
+            </div>
+          </div>
+
+          <div class="trade-field" style="margin-top: 15px;">
+            <label for="chkTradingGoal">RECORDANDO MI META DE TRADING:</label>
+            <textarea id="chkTradingGoal" placeholder="Escribe aquí tu meta personal..." oninput="guardarChecklistState()"></textarea>
+          </div>
+
+          <div class="manifesto-card">
+            <h4><i class="fa-solid fa-crown"></i> Manifiesto de Abundancia</h4>
+            <p>
+              "La riqueza de DIOS está circulando en mi VIDA. Su riqueza FLUYE hacia mí en avalanchas de ABUNDANCIA. Todas mis necesidades, DESEOS y METAS se CUMPLEN al instante con inteligencia INFINITA porque soy uno con DIOS y Él lo es TODO!"
+            </p>
+          </div>
+
+          <div style="margin-top: 25px; text-align: center;">
+            <button class="btn-action btn-success" style="padding: 14px 30px; font-size: 1.1rem;" onclick="guardarChecklistEnBitacora()">
+              <i class="fa-solid fa-check"></i> Listo / Guardar en Bitácora del Día
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VISTA CALCULADORA -->
+    <div id="calculator-view">
+      <div class="toolbar-buttons">
+        <button class="btn-action" onclick="mostrarVista('menu')"><i class="fa-solid fa-house"></i> Inicio</button>
+      </div>
+
+      <div class="section-title">
+        <i class="fa-solid fa-shield-halved"></i> Gestión de Riesgo de la Cuenta
+      </div>
+
+      <div class="calc-inputs-container">
+        <div class="input-box">
+          <label for="accountInput">MONTO INICIAL ($)</label>
+          <div class="input-wrapper">
+            <span>$</span>
+            <input type="number" id="accountInput" step="1" placeholder="0.00" oninput="calcularGestionRiesgoManual()">
+          </div>
+        </div>
+
+        <div class="input-box">
+          <label for="riskPercentInput">Uso de la Cuenta (%)</label>
+          <div class="input-wrapper">
+            <span style="left: auto; right: 18px;">%</span>
+            <input type="number" id="riskPercentInput" step="0.1" placeholder="Ej: 20" style="padding-left: 15px; padding-right: 45px;" oninput="calcularGestionRiesgoManual()">
+          </div>
+        </div>
+      </div>
+
+      <div class="single-result-card">
+        <div class="badge-percent" id="displayRiskBadge">Esperando datos...</div>
+        <div class="final-value" id="displayRiskCapital">$0.00</div>
+        <div class="formula-detail" id="displayRiskRemaining">Ingresa el Monto Inicial y el Porcentaje de Uso</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section-title">
+        <i class="fa-solid fa-file-contract"></i> Compra de Contratos (Valor del ASK)
+      </div>
+
+      <div class="calc-inputs-container">
+        <div class="input-box">
+          <label for="askInput">Valor del ASK ($)</label>
+          <div class="input-wrapper">
+            <span>$</span>
+            <input type="number" id="askInput" step="0.01" placeholder="0.00" oninput="calcularOpcionesManual()">
+          </div>
+        </div>
+
+        <div class="input-box">
+          <label for="customPercentInput">Porcentaje (%)</label>
+          <div class="input-wrapper">
+            <span style="left: auto; right: 18px;">%</span>
+            <input type="number" id="customPercentInput" step="0.1" placeholder="Ej: 15" style="padding-left: 15px; padding-right: 45px;" oninput="calcularOpcionesManual()">
+          </div>
+        </div>
+      </div>
+
+      <div class="single-result-card">
+        <div class="badge-percent" id="displayPercentBadge">Esperando datos...</div>
+        <div class="final-value" id="displayFinalValue">$0.00</div>
+        <div class="formula-detail" id="displayFormulaDetail">Ingresa el Valor del ASK y el Porcentaje deseado</div>
+      </div>
+
+      <div style="margin-top: 30px; text-align: center;">
+        <button class="btn-action btn-success" onclick="guardarAskEnTablaInversiones()" style="padding: 14px 35px; font-size: 1.1rem; box-shadow: 0 0 20px rgba(0, 255, 136, 0.4);">
+          <i class="fa-solid fa-floppy-disk"></i> Guardar Entrada en Bitácora
+        </button>
+      </div>
+    </div>
+
+    <!-- VISTA INVERSIONES -->
+    <div id="investments-view">
+      <div class="toolbar-buttons">
+        <button class="btn-action" onclick="mostrarVista('menu')">
+          <i class="fa-solid fa-house"></i> Inicio
+        </button>
+        <button class="btn-action" onclick="mostrarVista('grafico')">
+          <i class="fa-solid fa-chart-area"></i> Ver Gráfico
+        </button>
+        <button class="btn-action btn-secondary" onclick="limpiarTabla()">
+          <i class="fa-solid fa-trash-can"></i> Limpiar Tabla
+        </button>
+      </div>
+
+      <div class="section-title">
+        <i class="fa-solid fa-chart-line"></i> Tabla de Interés Compuesto
+      </div>
+
+      <div class="table-container">
+        <!-- BARRA SUPERIOR FIJA / STICKY CON EL FILTRO DE MESES, DÍAS, DINERO TOTAL Y CAPITAL FINAL -->
+        <div class="table-top-bar">
+          <div class="month-filter-box" style="margin-bottom: 0;">
+            <label for="monthFilter"><i class="fa-solid fa-calendar-days"></i> Filtrar por Mes:</label>
+            <select id="monthFilter" class="month-select" onchange="filtrarPorMes()">
+              <option value="all">Todos los registros</option>
+            </select>
+          </div>
+          <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+            <div class="summary-item" style="display: flex; align-items: center; gap: 12px; background: rgba(0, 0, 0, 0.5); padding: 8px 18px; border-radius: 30px; border: 1px solid rgba(255, 0, 55, 0.3);">
+              <label style="margin: 0; font-size: 0.85rem; color: #aaa;">Días Mostrados:</label>
+              <span id="totalDays" style="font-size: 1.2rem; font-weight: 900; color: #fff;">0</span>
+            </div>
+            <div class="summary-item" style="display: flex; align-items: center; gap: 12px; background: rgba(0, 0, 0, 0.5); padding: 8px 18px; border-radius: 30px; border: 1px solid rgba(0, 204, 255, 0.4);">
+              <label style="margin: 0; font-size: 0.85rem; color: #aaa;">Dinero Obtenido:</label>
+              <span id="totalMoneyEarned" style="font-size: 1.2rem; font-weight: 900; color: #00ff88; text-shadow: 0 0 10px rgba(0, 255, 136, 0.6);">$0.00</span>
+            </div>
+            <div class="summary-item" style="display: flex; align-items: center; gap: 12px; background: rgba(0, 0, 0, 0.5); padding: 8px 18px; border-radius: 30px; border: 1px solid rgba(0, 255, 136, 0.4);">
+              <label style="margin: 0; font-size: 0.85rem; color: #aaa;">Capital Final:</label>
+              <span id="finalCapital" style="font-size: 1.2rem; font-weight: 900; color: #ff0037; text-shadow: 0 0 10px rgba(255, 0, 55, 0.6);">$0.00</span>
+            </div>
+          </div>
+        </div>
+
+        <table>
+          <thead id="investmentsTableHead">
+          </thead>
+          <tbody id="investmentsTableBody">
+          </tbody>
+        </table>
+
+        <div style="margin-top: 20px; text-align: left;">
+          <button class="btn-action" onclick="agregarFilaInversionConUltimoCapital()">
+            <i class="fa-solid fa-plus"></i> Agregar Fila
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- VISTA GRÁFICO -->
+    <div id="chart-view">
+      <div class="toolbar-buttons">
+        <button class="btn-action" onclick="mostrarVista('menu')">
+          <i class="fa-solid fa-house"></i> Inicio
+        </button>
+        <button class="btn-action" onclick="mostrarVista('inversiones')">
+          <i class="fa-solid fa-table"></i> Ir a la Tabla
+        </button>
+      </div>
+
+      <div class="section-title">
+        <i class="fa-solid fa-chart-area"></i> Curva de Crecimiento del Capital
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-container-wrapper">
+          <canvas id="equityChart"></canvas>
+        </div>
+
+        <div class="summary-box">
+          <div class="summary-item">
+            <label>Peak Máximo Alcanzado</label>
+            <span id="chartMaxCapital" class="cell-gain">$0.00</span>
+          </div>
+          <div class="summary-item">
+            <label>Capital Actual</label>
+            <span id="chartCurrentCapital" class="highlight">$0.00</span>
+          </div>
+          <div class="summary-item">
+            <label>Rendimiento Global (%)</label>
+            <span id="chartTotalReturn">0.00%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let chartInstance = null;
+    let filaSeleccionadaParaNota = null;
+    let filaSeleccionadaParaCalculadora = null;
+    let noteAutosaveTimer = null;
+    let selectedBuyType = "";
+    let calculatedQuickPct = null;
+    let globalAutosaveDebounce = null;
+
+    let configActiva = localStorage.getItem('yasma_active_config') || 'config1';
+
+    let neonToggleState = {
+      newsEffect: null, pmDia: null, bandsOpen: null, maSr: null, hLines: null, gapOpen: null, gapMaintains: null
+    };
+
+    let marketTrendValue = "";
+
+    const estrategiasBase = [
+      "Saliendo de Bollinger con Volatilidad",
+      "Cambio de tendencia en 15 Mins"
+    ];
+
+    function dispararAutosaveVisual() {
+      const icon = document.getElementById('autosaveIcon');
+      if (icon) {
+        icon.classList.add('saving');
+        setTimeout(() => icon.classList.remove('saving'), 800);
+      }
+    }
+
+    function activarAutoguardadoGlobalListener() {
+      document.addEventListener('input', (e) => {
+        if (e.target.matches('input, textarea, select')) {
+          programarAutoguardado();
+        }
+      });
+      document.addEventListener('change', (e) => {
+        if (e.target.matches('input, select, input[type="checkbox"]')) {
+          programarAutoguardado();
+        }
+      });
+    }
+
+    function programarAutoguardado() {
+      clearTimeout(globalAutosaveDebounce);
+      globalAutosaveDebounce = setTimeout(() => {
+        guardarDatosInversiones(false);
+        guardarChecklistState();
+        dispararAutosaveVisual();
+      }, 600);
+    }
+
+    function obtenerListaPerfilesPC() {
+      let lista = [];
+      try {
+        const stored = localStorage.getItem('yasma_pc_profiles_list');
+        if (stored) {
+          lista = JSON.parse(stored);
+        }
+      } catch(e) {}
+      
+      const activoActual = localStorage.getItem('yasma_created_user_name') || '';
+      if (activoActual && !lista.some(p => p.name === activoActual)) {
+        lista.push({ name: activoActual, config: configActiva });
+      }
+      return lista;
+    }
+
+    function guardarListaPerfilesPC(lista) {
+      localStorage.setItem('yasma_pc_profiles_list', JSON.stringify(lista));
+    }
+
+    function actualizarSelectPerfilesPC() {
+      const select = document.getElementById('pcProfilesSelect');
+      if (!select) return;
+
+      const lista = obtenerListaPerfilesPC();
+      const activoActual = localStorage.getItem('yasma_created_user_name') || '';
+
+      select.innerHTML = '<option value="">-- Seleccionar Perfil --</option>';
+      lista.forEach(item => {
+        const nombre = typeof item === 'object' ? item.name : item;
+        const opt = document.createElement('option');
+        opt.value = nombre;
+        opt.textContent = nombre;
+        if (nombre === activoActual) {
+          opt.selected = true;
+        }
+        select.appendChild(opt);
+      });
+    }
+
+    function seleccionarPerfilPC(nombrePerfil) {
+      if (!nombrePerfil) return;
+      localStorage.setItem('yasma_created_user_name', nombrePerfil);
+      
+      const lista = obtenerListaPerfilesPC();
+      const encontrado = lista.find(p => (typeof p === 'object' ? p.name : p) === nombrePerfil);
+      if (encontrado && typeof encontrado === 'object' && encontrado.config) {
+        configActiva = encontrado.config;
+        localStorage.setItem('yasma_active_config', configActiva);
+      }
+
+      actualizarBadgeConfigUI();
+      cargarDatosInversiones(false);
+      cargarOpcionesEstrategias();
+      cargarChecklistState();
+    }
+
+    function eliminarPerfilSeleccionadoPC() {
+      const select = document.getElementById('pcProfilesSelect');
+      if (!select) return;
+      const perfilAEliminar = select.value;
+      if (!perfilAEliminar) {
+        alert('Por favor, selecciona un perfil de la lista para eliminar.');
+        return;
+      }
+
+      if (confirm(`¿Estás seguro de que deseas eliminar el perfil "${perfilAEliminar}" de esta PC?`)) {
+        let lista = obtenerListaPerfilesPC();
+        lista = lista.filter(p => (typeof p === 'object' ? p.name : p) !== perfilAEliminar);
+        guardarListaPerfilesPC(lista);
+
+        const activoActual = localStorage.getItem('yasma_created_user_name') || '';
+        if (activoActual === perfilAEliminar) {
+          localStorage.removeItem('yasma_created_user_name');
+        }
+
+        actualizarBadgeConfigUI();
+        alert(`¡Perfil "${perfilAEliminar}" eliminado correctamente!`);
+      }
+    }
+
+    function actualizarBadgeConfigUI() {
+      actualizarSelectPerfilesPC();
+      actualizarCabeceraTablaSegunPerfil();
+      actualizarNombreUsuarioHeader();
+    }
+
+    function crearNuevoUsuarioLocal() {
+      const input = document.getElementById('nuevoUsuarioInput');
+      const configSelect = document.getElementById('nuevoUsuarioConfigSelect');
+      const nombre = input.value.trim();
+      const configAsociada = configSelect ? configSelect.value : 'config1';
+
+      if (!nombre) {
+        alert('Por favor, ingresa un nombre para el nuevo usuario.');
+        return;
+      }
+      
+      let lista = obtenerListaPerfilesPC();
+      lista = lista.filter(p => (typeof p === 'object' ? p.name : p) !== nombre);
+      lista.push({ name: nombre, config: configAsociada });
+      guardarListaPerfilesPC(lista);
+
+      localStorage.setItem('yasma_created_user_name', nombre);
+      configActiva = configAsociada;
+      localStorage.setItem('yasma_active_config', configActiva);
+
+      input.value = '';
+      actualizarBadgeConfigUI();
+      cargarDatosInversiones(false);
+      cargarOpcionesEstrategias();
+      cargarChecklistState();
+
+      alert(`¡Usuario "${nombre}" creado correctamente con la configuración ${configAsociada === 'config2' ? 'Configuración 2' : 'Configuración 1'}!`);
+    }
+
+    function actualizarNombreUsuarioHeader() {
+      const prefixSpan = document.getElementById('welcomePrefixText');
+      const nameDisplay = document.getElementById('activeUserNameDisplay');
+      if (!prefixSpan || !nameDisplay) return;
+
+      const createdUser = localStorage.getItem('yasma_created_user_name') || '';
+
+      if (createdUser) {
+        prefixSpan.textContent = 'Welcome: ';
+        nameDisplay.textContent = createdUser;
+      } else {
+        prefixSpan.textContent = '';
+        nameDisplay.textContent = '';
+      }
+    }
+
+    function actualizarCabeceraTablaSegunPerfil() {
+      const thead = document.getElementById('investmentsTableHead');
+      if (!thead) return;
+
+      if (configActiva === 'config2') {
+        thead.innerHTML = `
+          <tr>
+            <th style="width: 4%;">CHK</th>
+            <th style="width: 5%;">DIA</th>
+            <th style="width: 13%;">Fecha / Hora</th>
+            <th style="width: 12%;">$ TOTAL</th>
+            <th style="width: 10%;">% a usar</th>
+            <th style="width: 12%;">Monto sugerido</th>
+            <th style="width: 9%;">ASK</th>
+            <th style="width: 8%;">QTY</th>
+            <th style="width: 10%;">LIMITE</th>
+            <th style="width: 9%;">BID</th>
+            <th style="width: 11%;">% de Ganancia</th>
+            <th style="width: 13%;">CAPITAL TOTAL ($)</th>
+            <th style="width: 8%;">Color</th>
+            <th style="width: 4%;"></th>
+          </tr>
+        `;
+      } else {
+        thead.innerHTML = `
+          <tr>
+            <th style="width: 6%;">COLOR</th>
+            <th style="width: 4%;">CHK</th>
+            <th style="width: 5%;"># DIA</th>
+            <th style="width: 12%;">Fecha / Hora</th>
+            <th style="width: 13%;">MONTO INICIAL ($)</th>
+            <th style="width: 7%;">% USO</th>
+            <th style="width: 12%;">MONTO SUGERIDO ($)</th>
+            <th style="width: 13%;">Monto Real Empleado ($)</th>
+            <th style="width: 9%;">% RENT / $</th>
+            <th style="width: 12%;">GANANCIA / Pérdida $</th>
+            <th style="width: 13%;">CAPITAL TOTAL ($)</th>
+            <th style="width: 5%;">Acciones</th>
+            <th style="width: 4%;"></th>
+          </tr>
+        `;
+      }
+    }
+
+    function abrirModalConfig() {
+      actualizarBadgeConfigUI();
+      document.getElementById('configModal').style.display = 'flex';
+    }
+
+    function cerrarModalConfig() {
+      document.getElementById('configModal').style.display = 'none';
+    }
+
+    function actualizarSidebarActiva(vista) {
+      const sidebar = document.getElementById('sidebarRight');
+      const navBtns = sidebar.querySelectorAll('.sidebar-btn');
+      
+      navBtns.forEach(btn => btn.classList.remove('active'));
+
+      if (vista === 'menu') {
+        sidebar.classList.remove('visible');
+      } else {
+        sidebar.classList.add('visible');
+        const activeBtn = document.getElementById(`nav-btn-${vista}`);
+        if (activeBtn) activeBtn.classList.add('active');
+      }
+    }
+
+    function mostrarVista(vista) {
+      document.getElementById('menu-view').style.display = 'none';
+      document.getElementById('checklist-view').style.display = 'none';
+      document.getElementById('news-view').style.display = 'none';
+      document.getElementById('calculator-view').style.display = 'none';
+      document.getElementById('investments-view').style.display = 'none';
+      document.getElementById('chart-view').style.display = 'none';
+      document.getElementById('academy-view').style.display = 'none';
+      document.getElementById('webs-importantes-view').style.display = 'none';
+
+      actualizarSidebarActiva(vista);
+      actualizarBadgeConfigUI();
+
+      if (vista === 'checklist') {
+        document.getElementById('checklist-view').style.display = 'block';
+        cargarChecklistState();
+      } else if (vista === 'noticias') {
+        document.getElementById('news-view').style.display = 'block';
+      } else if (vista === 'calculadora') {
+        document.getElementById('calculator-view').style.display = 'block';
+        document.getElementById('accountInput').focus();
+        calcularOpcionesManual();
+        calcularGestionRiesgoManual();
+      } else if (vista === 'inversiones') {
+        document.getElementById('investments-view').style.display = 'block';
+        if (document.querySelectorAll('#investmentsTableBody tr').length === 0) {
+          cargarDatosInversiones(false);
+        }
+      } else if (vista === 'grafico') {
+        document.getElementById('chart-view').style.display = 'block';
+        if (document.querySelectorAll('#investmentsTableBody tr').length === 0) {
+          cargarDatosInversiones(false);
+        }
+        renderizarGrafico();
+      } else if (vista === 'academy') {
+        document.getElementById('academy-view').style.display = 'block';
+      } else if (vista === 'webs-importantes') {
+        document.getElementById('webs-importantes-view').style.display = 'block';
+      } else {
+        document.getElementById('menu-view').style.display = 'flex';
+      }
+    }
+
+    function toggleNewsDesc(btn) {
+      const container = btn.closest('.news-item-container');
+      const panel = container.querySelector('.news-desc-panel');
+      panel.classList.toggle('open');
+      btn.classList.toggle('active');
+    }
+
+    function setNeonToggle(key, value) {
+      neonToggleState[key] = value;
+      actualizarTodosLosBotonesNeon();
+      guardarChecklistState();
+    }
+
+    function actualizarTodosLosBotonesNeon() {
+      const mapping = {
+        newsEffect: ['btnNewsYes', 'btnNewsNo'],
+        pmDia: ['btnPmDiaYes', 'btnPmDiaNo'],
+        bandsOpen: ['btnBandsOpenYes', 'btnBandsOpenNo'],
+        maSr: ['btnMaSrYes', 'btnMaSrNo'],
+        hLines: ['btnHLinesYes', 'btnHLinesNo'],
+        gapOpen: ['btnGapYes', 'btnGapNo'],
+        gapMaintains: ['btnGapMaintainsYes', 'btnGapMaintainsNo']
+      };
+
+      for (let key in mapping) {
+        const [yesId, noId] = mapping[key];
+        const btnYes = document.getElementById(yesId);
+        const btnNo = document.getElementById(noId);
+
+        if (btnYes && btnNo) {
+          btnYes.classList.remove('active');
+          btnNo.classList.remove('active');
+
+          if (neonToggleState[key] === true) btnYes.classList.add('active');
+          if (neonToggleState[key] === false) btnNo.classList.add('active');
+        }
+      }
+    }
+
+    function setMarketTrend(trend) {
+      marketTrendValue = trend;
+      actualizarBotonesMarketTrend();
+      guardarChecklistState();
+    }
+
+    function actualizarBotonesMarketTrend() {
+      const btnAlc = document.getElementById('btnTrendAlcista');
+      const btnBaj = document.getElementById('btnTrendBajista');
+      const btnLat = document.getElementById('btnTrendLateral');
+
+      btnAlc.classList.remove('active-alcista');
+      btnBaj.classList.remove('active-bajista');
+      btnLat.classList.remove('active-lateral');
+
+      if (marketTrendValue === 'alcista') btnAlc.classList.add('active-alcista');
+      if (marketTrendValue === 'bajista') btnBaj.classList.add('active-bajista');
+      if (marketTrendValue === 'lateral') btnLat.classList.add('active-lateral');
+    }
+
+    function obtenerEstadoChecklistObjeto() {
+      return {
+        ticker: document.getElementById('chkTicker').value,
+        priceRange: document.getElementById('chkPriceRange').value,
+        date: document.getElementById('chkDate').value,
+        targetPrice: document.getElementById('chkTargetPrice').value,
+        marketTrend: marketTrendValue,
+        neonToggles: neonToggleState,
+
+        pmSrDia: document.getElementById('chkPmSrDia').checked,
+        pmSrHora: document.getElementById('chkPmSrHora').checked,
+        pmSr15m: document.getElementById('chkPmSr15m').checked,
+        pmContDia: document.getElementById('chkPmContDia').checked,
+        pmContHora: document.getElementById('chkPmContHora').checked,
+        pmCont15m: document.getElementById('chkPmCont15m').checked,
+        pmLatDia: document.getElementById('chkPmLatDia').checked,
+        pmLatHora: document.getElementById('chkPmLatHora').checked,
+        pmLat15m: document.getElementById('chkPmLat15m').checked,
+
+        trendDia: document.getElementById('chkTrendDia').value,
+        trendHora: document.getElementById('chkTrendHora').value,
+        resistances: document.getElementById('chkResistances').value,
+        supports: document.getElementById('chkSupports').value,
+
+        gapFavor: document.getElementById('chkGapFavor').checked,
+        gapContra: document.getElementById('chkGapContra').checked,
+        probableMove: document.getElementById('chkProbableMove').value,
+        companyRange: document.getElementById('chkCompanyRange').value,
+
+        tblTicker: document.getElementById('tblTicker').value,
+        tblExp: document.getElementById('tblExp').value,
+        tblStrike: document.getElementById('tblStrike').value,
+        typeCall: document.getElementById('chkTypeCall').checked,
+        typePut: document.getElementById('chkTypePut').checked,
+        tblAsk: document.getElementById('tblAsk').value,
+        tblBid: document.getElementById('tblBid').value,
+        tblContracts: document.getElementById('tblContracts').value,
+
+        reinforcement: document.getElementById('chkReinforcement').value,
+        riskMgmt: document.getElementById('chkRiskMgmt').value,
+        profitObtained: document.getElementById('chkProfitObtained').value,
+        planYes: document.getElementById('chkPlanYes').checked,
+        planNo: document.getElementById('chkPlanNo').checked,
+        tradingGoal: document.getElementById('chkTradingGoal').value
+      };
+    }
+
+    function guardarChecklistState() {
+      const state = obtenerEstadoChecklistObjeto();
+      const keyName = `yasma_checklist_analysis_data_${configActiva}`;
+      localStorage.setItem(keyName, JSON.stringify(state));
+    }
+
+    function guardarChecklistEnBitacora() {
+      guardarChecklistState();
+      const state = obtenerEstadoChecklistObjeto();
+      const fechaSeleccionada = state.date || new Date().toISOString().split('T')[0];
+
+      if (document.querySelectorAll('#investmentsTableBody tr').length === 0) {
+        cargarDatosInversiones(false);
+      }
+
+      const rows = document.querySelectorAll('#investmentsTableBody tr');
+      let filaCoincidente = null;
+
+      rows.forEach(row => {
+        const isoTs = row.getAttribute('data-timestamp');
+        if (isoTs) {
+          const rowDate = isoTs.split('T')[0];
+          if (rowDate === fechaSeleccionada) {
+            filaCoincidente = row;
+          }
+        }
+      });
+
+      if (!filaCoincidente && rows.length > 0) {
+        filaCoincidente = rows[rows.length - 1];
+      }
+
+      if (!filaCoincidente) {
+        alert('No hay filas disponibles en la tabla de interés compuesto. Por favor, agrega al menos una fila primero.');
+        return;
+      }
+
+      filaCoincidente.setAttribute('data-checklist-obj', JSON.stringify(state));
+      
+      const btnChecklistIcon = filaCoincidente.querySelector('.btn-table-checklist-icon');
+      if (btnChecklistIcon) btnChecklistIcon.classList.add('has-checklist');
+
+      guardarDatosInversiones(false);
+
+      alert(`¡Checklist guardado con éxito en el icono de la columna CHK (${fechaSeleccionada})!`);
+      mostrarVista('inversiones');
+    }
+
+    function abrirModalChecklistTabla(btn) {
+      const row = btn.closest('tr');
+      const dayIndexCell = configActiva === 'config2' ? row.children[1] : row.children[2];
+      const dayNum = dayIndexCell ? dayIndexCell.textContent : '1';
+      document.getElementById('tableChecklistModalDayTitle').textContent = `Día ${dayNum}`;
+
+      const rawChecklist = row.getAttribute('data-checklist-obj') || '';
+      let chk = null;
+      try {
+        if (rawChecklist) chk = JSON.parse(rawChecklist);
+      } catch (e) {}
+
+      const container = document.getElementById('tableChecklistModalContent');
+
+      if (chk) {
+        const fmtBool = val => val === true ? '<span class="badge-check">SÍ ✓</span>' : (val === false ? '<span class="badge-uncheck">NO ✗</span>' : '-');
+        
+        container.innerHTML = `
+          <div style="font-weight:900; color:#00ff88; text-transform:uppercase; margin-bottom:12px; border-bottom:1px solid rgba(0,255,136,0.3); padding-bottom:6px;">
+            <i class="fa-solid fa-magnifying-glass-chart"></i> Resumen del Análisis de Checklist
+          </div>
+          <div class="viewer-item-row"><label>Ticker:</label><span>${chk.ticker || '-'}</span></div>
+          <div class="viewer-item-row"><label>Rango Precio:</label><span>${chk.priceRange || '-'}</span></div>
+          <div class="viewer-item-row"><label>Target Price:</label><span>${chk.targetPrice || '-'}</span></div>
+          <div class="viewer-item-row"><label>Tendencia General:</label><span>${(chk.marketTrend || '-').toUpperCase()}</span></div>
+          <div class="viewer-item-row"><label>Efecto Noticia / FED:</label><span>${fmtBool(chk.neonToggles?.newsEffect)}</span></div>
+          <div class="viewer-item-row"><label>PM Marcado en DIA:</label><span>${fmtBool(chk.neonToggles?.pmDia)}</span></div>
+          <div class="viewer-item-row"><label>Apertura Fuera Bollinger:</label><span>${fmtBool(chk.neonToggles?.bandsOpen)}</span></div>
+          <div class="viewer-item-row"><label>Apertura con GAP:</label><span>${fmtBool(chk.neonToggles?.gapOpen)}</span></div>
+          <div class="viewer-item-row"><label>Tendencia Día / Hora:</label><span>${chk.trendDia || '-'} / ${chk.trendHora || '-'}</span></div>
+          <div class="viewer-item-row"><label>Resistencias / Soportes:</label><span>${chk.resistances || '-'} / ${chk.supports || '-'}</span></div>
+          <div class="viewer-item-row"><label>Contrato Operado:</label><span>${chk.tblTicker || '-'} ${chk.tblStrike || ''} ${chk.typeCall ? 'CALL' : (chk.typePut ? 'PUT' : '')} (ASK: $${chk.tblAsk || '0'})</span></div>
+          <div class="viewer-item-row"><label>Movimiento Probable:</label><span>${chk.probableMove || '-'}</span></div>
+          <div class="viewer-item-row"><label>Resultado Final:</label><span>${chk.profitObtained || '-'}</span></div>
+          <div class="viewer-item-row"><label>¿Cumplí el Plan?:</label><span>${chk.planYes ? '<span class="badge-check">SÍ ✓</span>' : (chk.planNo ? '<span class="badge-uncheck">NO ✗</span>' : '-')}</span></div>
+        `;
+      } else {
+        container.innerHTML = `
+          <div style="text-align: center; padding: 30px; color: #888; font-weight: 700;">
+            <i class="fa-solid fa-triangle-exclamation" style="font-size: 2rem; color: #ff0037; margin-bottom: 12px; display: block;"></i>
+            No hay ningún Checklist guardado para este día.<br>
+            <span style="font-size: 0.8rem; color: #aaa; font-weight: 400;">Completa tu análisis en la sección de Checklist y pulsa el botón de guardar.</span>
+          </div>
+        `;
+      }
+
+      document.getElementById('tableChecklistModal').style.display = 'flex';
+    }
+
+    function cerrarModalChecklistTabla() {
+      document.getElementById('tableChecklistModal').style.display = 'none';
+    }
+
+    function cargarChecklistState() {
+      const keyName = `yasma_checklist_analysis_data_${configActiva}`;
+      const saved = localStorage.getItem(keyName);
+      const now = new Date().toISOString().split('T')[0];
+
+      if (saved) {
+        const state = JSON.parse(saved);
+        document.getElementById('chkTicker').value = state.ticker || '';
+        document.getElementById('chkPriceRange').value = state.priceRange || '';
+        document.getElementById('chkDate').value = state.date || now;
+        document.getElementById('chkTargetPrice').value = state.targetPrice || '';
+        
+        marketTrendValue = state.marketTrend || '';
+        if (state.neonToggles) neonToggleState = state.neonToggles;
+
+        document.getElementById('chkPmSrDia').checked = !!state.pmSrDia;
+        document.getElementById('chkPmSrHora').checked = !!state.pmSrHora;
+        document.getElementById('chkPmSr15m').checked = !!state.pmSr15m;
+        document.getElementById('chkPmContDia').checked = !!state.pmContDia;
+        document.getElementById('chkPmContHora').checked = !!state.pmContHora;
+        document.getElementById('chkPmCont15m').checked = !!state.pmCont15m;
+        document.getElementById('chkPmLatDia').checked = !!state.pmLatDia;
+        document.getElementById('chkPmLatHora').checked = !!state.pmLatHora;
+        document.getElementById('chkPmLat15m').checked = !!state.pmLat15m;
+
+        document.getElementById('chkTrendDia').value = state.trendDia || '';
+        document.getElementById('chkTrendHora').value = state.trendHora || '';
+        document.getElementById('chkResistances').value = state.resistances || '';
+        document.getElementById('chkSupports').value = state.supports || '';
+
+        document.getElementById('chkGapFavor').checked = !!state.gapFavor;
+        document.getElementById('chkGapContra').checked = !!state.gapContra;
+        document.getElementById('chkProbableMove').value = state.probableMove || '';
+        document.getElementById('chkCompanyRange').value = state.companyRange || '';
+
+        document.getElementById('tblTicker').value = state.tblTicker || '';
+        document.getElementById('tblExp').value = state.tblExp || '';
+        document.getElementById('tblStrike').value = state.tblStrike || '';
+        document.getElementById('chkTypeCall').checked = !!state.typeCall;
+        document.getElementById('chkTypePut').checked = !!state.typePut;
+        document.getElementById('tblAsk').value = state.tblAsk || '';
+        document.getElementById('tblBid').value = state.tblBid || '';
+        document.getElementById('tblContracts').value = state.tblContracts || '';
+
+        document.getElementById('chkReinforcement').value = state.reinforcement || '';
+        document.getElementById('chkRiskMgmt').value = state.riskMgmt || '';
+        document.getElementById('chkProfitObtained').value = state.profitObtained || '';
+        document.getElementById('chkPlanYes').checked = !!state.planYes;
+        document.getElementById('chkPlanNo').checked = !!state.planNo;
+        document.getElementById('chkTradingGoal').value = state.tradingGoal || '';
+      } else {
+        document.getElementById('chkDate').value = now;
+        marketTrendValue = '';
+        neonToggleState = { newsEffect: null, pmDia: null, bandsOpen: null, maSr: null, hLines: null, gapOpen: null, gapMaintains: null };
+      }
+
+      actualizarTodosLosBotonesNeon();
+      actualizarBotonesMarketTrend();
+    }
+
+    function resetearChecklist() {
+      document.getElementById('chkTicker').value = '';
+      document.getElementById('chkPriceRange').value = '';
+      document.getElementById('chkDate').value = new Date().toISOString().split('T')[0];
+      document.getElementById('chkTargetPrice').value = '';
+      marketTrendValue = '';
+
+      neonToggleState = { newsEffect: null, pmDia: null, bandsOpen: null, maSr: null, hLines: null, gapOpen: null, gapMaintains: null };
+
+      document.querySelectorAll('#checklist-view input[type="checkbox"]').forEach(chk => chk.checked = false);
+      document.querySelectorAll('#checklist-view input[type="text"]').forEach(txt => txt.value = '');
+      document.querySelectorAll('#checklist-view textarea').forEach(ta => ta.value = '');
+
+      actualizarTodosLosBotonesNeon();
+      actualizarBotonesMarketTrend();
+      guardarChecklistState();
+    }
+
+    function obtenerEstrategiasGuardadas() {
+      const keyName = `yasma_custom_strategies_${configActiva}`;
+      const guardadas = localStorage.getItem(keyName);
+      if (guardadas) return JSON.parse(guardadas);
+      return estrategiasBase;
+    }
+
+    function cargarOpcionesEstrategias(valorASeleccionar = "") {
+      const select = document.getElementById('strategySelectField');
+      const lista = obtenerEstrategiasGuardadas();
+
+      select.innerHTML = '<option value="">-- Selecciona una Estrategia --</option>';
+      lista.forEach(est => {
+        const opt = document.createElement('option');
+        opt.value = est;
+        opt.textContent = est;
+        select.appendChild(opt);
+      });
+
+      if (valorASeleccionar) select.value = valorASeleccionar;
+    }
+
+    function agregarNuevaEstrategiaPrompt() {
+      const nuevaEstrategia = prompt("Escribe el nombre de la nueva estrategia:");
+      if (nuevaEstrategia && nuevaEstrategia.trim() !== "") {
+        const nombreLimpio = nuevaEstrategia.trim();
+        let lista = obtenerEstrategiasGuardadas();
+
+        if (!lista.includes(nombreLimpio)) {
+          lista.push(nombreLimpio);
+          const keyName = `yasma_custom_strategies_${configActiva}`;
+          localStorage.setItem(keyName, JSON.stringify(lista));
+        }
+
+        cargarOpcionesEstrategias(nombreLimpio);
+        autoGuardarNotaEnVivo();
+      }
+    }
+
+    function calcularOpcionesManual() {
+      const askValue = parseFloat(document.getElementById('askInput').value);
+      const customPercent = parseFloat(document.getElementById('customPercentInput').value);
+
+      const badgeElem = document.getElementById('displayPercentBadge');
+      const finalValElem = document.getElementById('displayFinalValue');
+      const detailElem = document.getElementById('displayFormulaDetail');
+
+      if (!isNaN(askValue) && askValue > 0 && !isNaN(customPercent)) {
+        const valorCalculado = Math.ceil((askValue * (1 + (customPercent / 100))) + 2.00);
+        badgeElem.textContent = `ASK: +${customPercent}%`;
+        finalValElem.textContent = '$' + valorCalculado.toFixed(2);
+        detailElem.textContent = `Calculado: Ceil([$${askValue.toFixed(2)} + ${customPercent}%] + $2.00)`;
+      } else {
+        badgeElem.textContent = 'Esperando datos...';
+        finalValElem.textContent = '$0.00';
+        detailElem.textContent = 'Ingresa el Valor del ASK y el Porcentaje deseado';
+      }
+    }
+
+    function calcularGestionRiesgoManual() {
+      const accountValue = parseFloat(document.getElementById('accountInput').value);
+      const riskPercent = parseFloat(document.getElementById('riskPercentInput').value);
+
+      const badgeElem = document.getElementById('displayRiskBadge');
+      const capitalElem = document.getElementById('displayRiskCapital');
+      const detailElem = document.getElementById('displayRiskRemaining');
+
+      if (!isNaN(accountValue) && accountValue > 0 && !isNaN(riskPercent)) {
+        const capitalUso = accountValue * (riskPercent / 100);
+        const capitalRestante = accountValue - capitalUso;
+
+        badgeElem.textContent = `Capital a emplear (${riskPercent}%)`;
+        capitalElem.textContent = '$' + capitalUso.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        detailElem.textContent = 'Saldo Restante en Cuenta: $' + capitalRestante.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      } else {
+        badgeElem.textContent = 'Esperando datos...';
+        capitalElem.textContent = '$0.00';
+        detailElem.textContent = 'Ingresa el Monto Inicial y el Porcentaje de Uso';
+      }
+    }
+
+    function guardarAskEnTablaInversiones() {
+      const accountStr = document.getElementById('accountInput').value;
+      const riskPercentStr = document.getElementById('riskPercentInput').value;
+
+      if (!accountStr && !riskPercentStr) {
+        alert('Por favor, completa al menos uno de los campos en la calculadora antes de guardar.');
+        return;
+      }
+
+      if (document.querySelectorAll('#investmentsTableBody tr').length === 0) {
+        cargarDatosInversiones(false);
+      }
+
+      const checklistKey = `yasma_checklist_analysis_data_${configActiva}`;
+      const savedChecklist = localStorage.getItem(checklistKey);
+      let fechaObjetivo = new Date().toISOString().split('T')[0];
+      
+      if (savedChecklist) {
+        try {
+          const chkState = JSON.parse(savedChecklist);
+          if (chkState.date) {
+            fechaObjetivo = chkState.date;
+          }
+        } catch (e) {}
+      }
+
+      const rows = document.querySelectorAll('#investmentsTableBody tr');
+      let filaCoincidente = null;
+
+      rows.forEach(row => {
+        const isoTs = row.getAttribute('data-timestamp');
+        if (isoTs) {
+          const rowDate = isoTs.split('T')[0];
+          if (rowDate === fechaObjetivo) {
+            filaCoincidente = row;
+          }
+        }
+      });
+
+      if (!filaCoincidente && rows.length > 0) {
+        filaCoincidente = rows[rows.length - 1];
+      }
+
+      if (!filaCoincidente) {
+        alert('No hay filas disponibles en la tabla de interés compuesto. Por favor, agrega al menos una fila primero.');
+        return;
+      }
+
+      const inputMonto = filaCoincidente.querySelector('.input-monto-inicial');
+      const inputPct = filaCoincidente.querySelector('.input-pct-uso');
+
+      if (inputMonto && accountStr) inputMonto.value = accountStr;
+      if (inputPct && riskPercentStr) inputPct.value = riskPercentStr;
+
+      if (!filaCoincidente.getAttribute('data-timestamp')) {
+        const ahora = new Date();
+        filaCoincidente.setAttribute('data-timestamp', ahora.toISOString());
+        const fechaStr = ahora.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        const horaStr = ahora.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+        filaCoincidente.querySelector('.cell-datetime').innerHTML = `${fechaStr}<br><span style="color:#888;">${horaStr}</span>`;
+      }
+
+      recalcularTabla();
+      guardarDatosInversiones(false);
+      actualizarSelectorMeses();
+
+      alert(`¡Entrada guardada en la fila correspondiente (${fechaObjetivo})!`);
+      mostrarVista('inversiones');
+    }
+
+    function agregarFilaInversionConUltimoCapital() {
+      const rows = document.querySelectorAll('#investmentsTableBody tr');
+      let ultimoCapitalSugerido = '';
+
+      if (rows.length > 0) {
+        const ultimaFila = rows[rows.length - 1];
+        if (configActiva === 'config2') {
+          const inputCapTotal = ultimaFila.querySelector('.input-capital-total');
+          if (inputCapTotal && inputCapTotal.value.trim() !== '') {
+            ultimoCapitalSugerido = inputCapTotal.value.trim();
+          }
+        } else {
+          const cellCap = ultimaFila.querySelector('.cell-capital-result');
+          if (cellCap) {
+            const valNum = parseFloat(cellCap.getAttribute('data-capital-num')) || 0;
+            if (valNum > 0) {
+              ultimoCapitalSugerido = valNum.toFixed(2);
+            }
+          }
+        }
+      }
+
+      if (configActiva === 'config2') {
+        agregarFilaInversion(ultimoCapitalSugerido, '', '', '', '', '', '', null, '', '');
+      } else {
+        agregarFilaInversion(ultimoCapitalSugerido, '', '', '', '', null, '', null, '', '');
+      }
+    }
+
+    function agregarFilaInversion(val1 = '', val2 = '', val3 = '', val4 = '', val5 = '', val6 = '', val7 = '', fechaGuardada = null, comentarioData = '', checklistData = '') {
+      const tbody = document.getElementById('investmentsTableBody');
+      const rows = tbody.querySelectorAll('tr');
+
+      let fechaHtml = `<span style="color:#666;">-- / --</span>`;
+      let isoDate = fechaGuardada || "";
+
+      if (fechaGuardada) {
+        const d = new Date(fechaGuardada);
+        const fechaStr = d.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        const horaStr = d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+        fechaHtml = `${fechaStr}<br><span style="color:#888;">${horaStr}</span>`;
+      }
+
+      const dayIndex = rows.length + 1;
+      const tr = document.createElement('tr');
+      if (isoDate) tr.setAttribute('data-timestamp', isoDate);
+      
+      let noteObjStr = typeof comentarioData === 'object' ? JSON.stringify(comentarioData) : comentarioData;
+      tr.setAttribute('data-note-obj', noteObjStr);
+
+      let checklistObjStr = typeof checklistData === 'object' ? JSON.stringify(checklistData) : checklistData;
+      tr.setAttribute('data-checklist-obj', checklistObjStr);
+
+      let hasChecklist = checklistObjStr && checklistObjStr.trim() !== '';
+      const hasChecklistClass = hasChecklist ? 'has-checklist' : '';
+      const hasNoteClass = (comentarioData && (typeof comentarioData === 'object' ? Object.keys(comentarioData).length > 0 : comentarioData.trim() !== '')) ? 'has-note' : '';
+
+      if (configActiva === 'config2') {
+        // En config2, val1 es monto inicial ($ TOTAL), val7 es capital total manual
+        const totalVal = val1;
+        const pctAusar = val2;
+        const askVal = val3;
+        const qtyVal = val4;
+        const limiteVal = val5;
+        const bidVal = val6;
+        const capitalTotalManual = val7;
+
+        tr.innerHTML = `
+          <td>
+            <button class="btn-table-checklist-icon ${hasChecklistClass}" onclick="abrirModalChecklistTabla(this)" title="Ver Checklist del Día">
+              <i class="fa-solid fa-file-invoice"></i>
+            </button>
+          </td>
+          <td class="cell-value">${dayIndex}</td>
+          <td class="cell-datetime">${fechaHtml}</td>
+          <td><input type="number" class="table-input input-monto-inicial" step="0.01" placeholder="0.00" value="${totalVal}" oninput="manejarEntradaValor(this)"></td>
+          <td><input type="number" class="table-input input-pct-uso" step="0.1" placeholder="Ej: 20" value="${pctAusar}" oninput="manejarEntradaValor(this)"></td>
+          <td class="cell-value cell-used monto-sugerido-val">$0.00</td>
+          <td><input type="number" class="table-input input-ask" step="0.01" placeholder="0.00" value="${askVal}" oninput="manejarEntradaValor(this)"></td>
+          <td><input type="number" class="table-input input-qty" step="1" placeholder="0" value="${qtyVal}" oninput="manejarEntradaValor(this)"></td>
+          <td><input type="number" class="table-input input-limite" step="0.01" placeholder="0.00" value="${limiteVal}" oninput="manejarEntradaValor(this)"></td>
+          <td><input type="number" class="table-input input-bid" step="0.01" placeholder="0.00" value="${bidVal}" oninput="manejarEntradaValor(this)"></td>
+          <td>
+            <div style="display: flex; gap: 3px; align-items: center; justify-content: center;">
+              <input type="text" class="table-input input-rent-pct" placeholder="%" value="" oninput="manejarEntradaValor(this)">
+              <button class="btn-row-action btn-calc-action" onclick="abrirModalCalculadoraRapida(this)" title="Calculadora Rápida de Salto">
+                <i class="fa-solid fa-calculator"></i>
+              </button>
+            </div>
+          </td>
+          <td><input type="number" class="table-input input-capital-total" step="0.01" placeholder="0.00" value="${capitalTotalManual}" oninput="manejarEntradaValor(this)" style="border-color: rgba(0, 255, 136, 0.5); color: #00ff88; max-width: 100px;"></td>
+          <td><div class="cell-color-box color-neutral"></div></td>
+          <td><button class="btn-delete" onclick="eliminarFila(this)" title="Eliminar fila"><i class="fa-solid fa-xmark"></i></button></td>
+        `;
+      } else {
+        const montoInicial = val1;
+        const pctUso = val2;
+        const montoReal = val3;
+        const pctRent = val4;
+
+        tr.innerHTML = `
+          <td><div class="cell-color-box color-neutral"></div></td>
+          <td>
+            <button class="btn-table-checklist-icon ${hasChecklistClass}" onclick="abrirModalChecklistTabla(this)" title="Ver Checklist del Día">
+              <i class="fa-solid fa-file-invoice"></i>
+            </button>
+          </td>
+          <td><span class="cell-value">${dayIndex}</span></td>
+          <td class="cell-datetime">${fechaHtml}</td>
+          <td><input type="number" class="table-input input-monto-inicial" step="0.01" placeholder="0.00" value="${montoInicial}" oninput="manejarEntradaValor(this)"></td>
+          <td><input type="number" class="table-input input-pct-uso" step="0.1" placeholder="Ej: 10" value="${pctUso}" oninput="manejarEntradaValor(this)"></td>
+          <td class="cell-value cell-used monto-sugerido-val">$0.00</td>
+          <td><input type="number" class="table-input input-monto-real" step="0.01" placeholder="0.00" value="${montoReal}" oninput="manejarEntradaValor(this)"></td>
+          <td>
+            <div style="display: flex; gap: 3px; align-items: center; justify-content: center;">
+              <input type="text" class="table-input input-rent-pct" placeholder="Ej: 35" value="${pctRent}" oninput="manejarEntradaValor(this)" style="max-width: 55px;">
+              <button class="btn-row-action btn-calc-action" onclick="abrirModalCalculadoraRapida(this)" title="Calculadora Rápida de Salto">
+                <i class="fa-solid fa-calculator"></i>
+              </button>
+            </div>
+          </td>
+          <td class="cell-value cell-profit-usd cell-neutral">$0.00</td>
+          <td class="cell-capital-total-val cell-capital-result cell-neutral" data-capital-num="0">$0.00</td>
+          <td>
+            <div class="row-actions-group">
+              <button class="btn-row-action btn-note-action ${hasNoteClass}" onclick="abrirModalComentario(this)" title="Abrir Bitácora del Día">
+                <i class="fa-regular fa-comment-dots"></i>
+              </button>
+            </div>
+          </td>
+          <td><button class="btn-delete" onclick="eliminarFila(this)" title="Eliminar fila"><i class="fa-solid fa-xmark"></i></button></td>
+        `;
+      }
+
+      tbody.appendChild(tr);
+      recalcularTabla();
+      actualizarSelectorMeses();
+
+      tr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function abrirModalCalculadoraRapida(btn) {
+      filaSeleccionadaParaCalculadora = btn.closest('tr');
+      const dayIndexCell = configActiva === 'config2' ? filaSeleccionadaParaCalculadora.querySelectorAll('td')[1] : filaSeleccionadaParaCalculadora.querySelectorAll('td')[2];
+      const dayNum = dayIndexCell ? dayIndexCell.textContent : '1';
+      document.getElementById('calcModalDayTitle').textContent = `Día ${dayNum}`;
+
+      document.getElementById('quickModalSaldoFinal').value = '';
+      document.getElementById('quickModalDisplayPct').textContent = '0.0%';
+      calculatedQuickPct = null;
+
+      document.getElementById('quickCalcModal').style.display = 'flex';
+      setTimeout(() => document.getElementById('quickModalSaldoFinal').focus(), 100);
+    }
+
+    function cerrarModalCalculadoraRapida() {
+      document.getElementById('quickCalcModal').style.display = 'none';
+      filaSeleccionadaParaCalculadora = null;
+    }
+
+    function calcularSaltoRapido() {
+      if (!filaSeleccionadaParaCalculadora) return;
+      const montoInicial = parseFloat(filaSeleccionadaParaCalculadora.querySelector('.input-monto-inicial').value) || 0;
+      let refReal = 0;
+
+      if (configActiva === 'config2') {
+        const ask = parseFloat(filaSeleccionadaParaCalculadora.querySelector('.input-ask').value) || 0;
+        const qty = parseFloat(filaSeleccionadaParaCalculadora.querySelector('.input-qty').value) || 0;
+        refReal = ask * qty * 100;
+        if (refReal <= 0) refReal = parseFloat(filaSeleccionadaParaCalculadora.querySelector('.monto-sugerido-val').textContent.replace('$', '').replace(/,/g, '')) || 0;
+      } else {
+        refReal = parseFloat(filaSeleccionadaParaCalculadora.querySelector('.input-monto-real').value) || 0;
+      }
+
+      const saldoFinalInput = parseFloat(document.getElementById('quickModalSaldoFinal').value);
+
+      if (!isNaN(saldoFinalInput) && refReal > 0) {
+        const diffDollar = saldoFinalInput - montoInicial;
+        const pctCalculado = (diffDollar / refReal) * 100;
+        calculatedQuickPct = pctCalculado;
+        document.getElementById('quickModalDisplayPct').textContent = pctCalculado.toFixed(1) + '%';
+      } else {
+        document.getElementById('quickModalDisplayPct').textContent = '0.0%';
+        calculatedQuickPct = null;
+      }
+    }
+
+    function aplicarCalculoRapidoEnTabla() {
+      if (calculatedQuickPct !== null && filaSeleccionadaParaCalculadora) {
+        const inputRent = filaSeleccionadaParaCalculadora.querySelector('.input-rent-pct');
+        inputRent.value = calculatedQuickPct.toFixed(1);
+        recalcularTabla();
+        cerrarModalCalculadoraRapida();
+      } else {
+        alert('Por favor, ingresa un saldo final válido primero.');
+      }
+    }
+
+    function abrirModalComentario(btn) {
+      filaSeleccionadaParaNota = btn.closest('tr');
+      const dayIndexCell = configActiva === 'config2' ? filaSeleccionadaParaNota.querySelectorAll('td')[1] : filaSeleccionadaParaNota.querySelectorAll('td')[2];
+      const dayNum = dayIndexCell ? dayIndexCell.textContent : '1';
+      document.getElementById('modalDayTitle').textContent = `Día ${dayNum}`;
+
+      const rawData = filaSeleccionadaParaNota.getAttribute('data-note-obj') || '';
+      let noteData = {};
+
+      try {
+        if (rawData) noteData = JSON.parse(rawData);
+      } catch(e) {
+        noteData = { feelingComment: rawData };
+      }
+
+      const isoTs = filaSeleccionadaParaNota.getAttribute('data-timestamp');
+      const now = isoTs ? new Date(isoTs) : new Date();
+      const defaultDate = now.toISOString().split('T')[0];
+      const defaultTime = now.toTimeString().split(' ')[0].substring(0, 5);
+
+      document.getElementById('noteDateField').value = noteData.date || defaultDate;
+      document.getElementById('noteTimeField').value = noteData.time || defaultTime;
+      
+      cargarOpcionesEstrategias(noteData.strategy || '');
+      document.getElementById('feelingCommentField').value = noteData.feelingComment || '';
+
+      selectedBuyType = noteData.buyType || '';
+      actualizarBotonesTipoCompra();
+
+      document.getElementById('commentModal').style.display = 'flex';
+    }
+
+    function cerrarModalComentario() {
+      autoGuardarNotaEnVivo(true);
+      document.getElementById('commentModal').style.display = 'none';
+      filaSeleccionadaParaNota = null;
+    }
+
+    function seleccionarTipoCompra(tipo, btn) {
+      if (selectedBuyType === tipo) {
+        selectedBuyType = "";
+      } else {
+        selectedBuyType = tipo;
+      }
+      actualizarBotonesTipoCompra();
+      autoGuardarNotaEnVivo();
+    }
+
+    function actualizarBotonesTipoCompra() {
+      const btns = document.querySelectorAll('#buyTypeContainer .tag-btn');
+      btns.forEach(b => {
+        if (b.textContent.trim() === selectedBuyType) {
+          b.classList.add('active');
+        } else {
+          b.classList.remove('active');
+        }
+      });
+    }
+
+    function agregarSentimiento(emo) {
+      const field = document.getElementById('feelingCommentField');
+      if (field.value.trim() !== '') {
+        field.value += ` | ${emo}`;
+      } else {
+        field.value = emo;
+      }
+      autoGuardarNotaEnVivo();
+    }
+
+    function autoGuardarNotaEnVivo(inmediato = false) {
+      if (!filaSeleccionadaParaNota) return;
+
+      const noteObject = {
+        date: document.getElementById('noteDateField').value,
+        time: document.getElementById('noteTimeField').value,
+        buyType: selectedBuyType,
+        strategy: document.getElementById('strategySelectField').value,
+        feelingComment: document.getElementById('feelingCommentField').value
+      };
+
+      filaSeleccionadaParaNota.setAttribute('data-note-obj', JSON.stringify(noteObject));
+
+      const hasContent = noteObject.buyType || noteObject.strategy || noteObject.feelingComment;
+      const btnIcon = filaSeleccionadaParaNota.querySelector('.btn-note-action');
+
+      if (hasContent && btnIcon) {
+        btnIcon.classList.add('has-note');
+      } else if (btnIcon) {
+        btnIcon.classList.remove('has-note');
+      }
+
+      guardarDatosInversiones(false);
+
+      const badge = document.getElementById('modalAutosaveStatus');
+      if (badge) badge.classList.add('visible');
+
+      clearTimeout(noteAutosaveTimer);
+      noteAutosaveTimer = setTimeout(() => {
+        if (badge) badge.classList.remove('visible');
+      }, 1200);
+    }
+
+    function limpiarComentarioActual() {
+      document.getElementById('noteDateField').value = '';
+      document.getElementById('noteTimeField').value = '';
+      document.getElementById('strategySelectField').value = '';
+      document.getElementById('feelingCommentField').value = '';
+      selectedBuyType = '';
+      actualizarBotonesTipoCompra();
+
+      autoGuardarNotaEnVivo(true);
+    }
+
+    function manejarEntradaValor(input) {
+      const row = input.closest('tr');
+      if (!row.getAttribute('data-timestamp')) {
+        const ahora = new Date();
+        const fechaStr = ahora.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
+        const horaStr = ahora.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
+        
+        row.setAttribute('data-timestamp', ahora.toISOString());
+        row.querySelector('.cell-datetime').innerHTML = `${fechaStr}<br><span style="color:#888;">${horaStr}</span>`;
+        actualizarSelectorMeses();
+      }
+      recalcularTabla();
+    }
+
+    function eliminarFila(btn) {
+      const row = btn.closest('tr');
+      row.remove();
+      actualizarIndicesDias();
+      recalcularTabla();
+      actualizarSelectorMeses();
+      guardarDatosInversiones(false);
+    }
+
+    function actualizarIndicesDias() {
+      const rows = document.querySelectorAll('#investmentsTableBody tr');
+      rows.forEach((row, index) => {
+        const idxCell = configActiva === 'config2' ? row.children[1] : row.children[2];
+        if (idxCell) idxCell.textContent = index + 1;
+      });
+    }
+
+    function recalcularTabla() {
+      const rows = document.querySelectorAll('#investmentsTableBody tr');
+      let ultimoCapitalTotal = 0;
+      let acumuladoDineroObtenido = 0;
+
+      const mesFiltroSelected = document.getElementById('monthFilter').value;
+      let filasMostradasCount = 0;
+
+      rows.forEach((row, index) => {
+        const inputMontoInicial = row.querySelector('.input-monto-inicial');
+        const inputPctUso = row.querySelector('.input-pct-uso');
+        const cellMontoSugerido = row.querySelector('.monto-sugerido-val');
+        const inputRentPct = row.querySelector('.input-rent-pct');
+
+        const montoInicial = parseFloat(inputMontoInicial.value) || 0;
+        const pctUso = parseFloat(inputPctUso.value) || 0;
+
+        let montoSugerido = 0;
+        let diffDollar = 0;
+        let capitalCalculado = 0;
+
+        if (configActiva === 'config2') {
+          montoSugerido = montoInicial * (pctUso / 100);
+          cellMontoSugerido.textContent = '$' + montoSugerido.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+          const inputCapTotal = row.querySelector('.input-capital-total');
+          capitalCalculado = parseFloat(inputCapTotal.value) || 0;
+          diffDollar = capitalCalculado - montoInicial;
+
+          const colorBox = row.querySelector('.cell-color-box');
+          if (colorBox) {
+            colorBox.className = 'cell-color-box';
+            if (inputCapTotal.value.trim() === '') {
+              colorBox.classList.add('color-neutral');
+              inputCapTotal.className = 'table-input input-capital-total cell-neutral';
+            } else if (capitalCalculado > montoInicial) {
+              colorBox.classList.add('color-green');
+              inputCapTotal.className = 'table-input input-capital-total cell-gain';
+            } else if (capitalCalculado < montoInicial) {
+              colorBox.classList.add('color-red');
+              inputCapTotal.className = 'table-input input-capital-total cell-loss';
+            } else {
+              colorBox.classList.add('color-neutral');
+              inputCapTotal.className = 'table-input input-capital-total cell-neutral';
+            }
+          }
+
+          if (capitalCalculado > 0) {
+            ultimoCapitalTotal = capitalCalculado;
+          }
+        } else {
+          const cellProfitUsd = row.querySelector('.cell-profit-usd');
+          const cellCapitalResult = row.querySelector('.cell-capital-result');
+
+          montoSugerido = montoInicial * (pctUso / 100);
+          cellMontoSugerido.textContent = '$' + montoSugerido.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+          const inputMontoReal = row.querySelector('.input-monto-real');
+          const montoReal = parseFloat(inputMontoReal.value) || 0;
+          const rentRawStr = inputRentPct.value.trim();
+
+          if (rentRawStr !== '') {
+            if (rentRawStr.includes('$')) {
+              diffDollar = parseFloat(rentRawStr.replace('$', '')) || 0;
+            } else {
+              const rentValNum = parseFloat(rentRawStr);
+              if (!isNaN(rentValNum)) {
+                diffDollar = montoReal * (rentValNum / 100);
+              }
+            }
+          }
+
+          capitalCalculado = montoInicial + diffDollar;
+
+          if (inputRentPct.value.trim() === '') {
+            cellProfitUsd.textContent = '$0.00';
+            cellProfitUsd.className = 'cell-value cell-profit-usd cell-neutral';
+          } else {
+            const sign = diffDollar > 0 ? '+' : '';
+            cellProfitUsd.textContent = sign + '$' + diffDollar.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            cellProfitUsd.className = diffDollar > 0 ? 'cell-value cell-profit-usd cell-gain' : (diffDollar < 0 ? 'cell-value cell-profit-usd cell-loss' : 'cell-value cell-profit-usd cell-neutral');
+          }
+
+          const colorBox = row.querySelector('.cell-color-box');
+          if (colorBox) {
+            colorBox.className = 'cell-color-box';
+            if (inputRentPct.value.trim() === '') {
+              colorBox.classList.add('color-neutral');
+            } else if (diffDollar > 0) {
+              colorBox.classList.add('color-green');
+            } else if (diffDollar < 0) {
+              colorBox.classList.add('color-red');
+            } else {
+              colorBox.classList.add('color-neutral');
+            }
+          }
+
+          if (capitalCalculado > 0) {
+            cellCapitalResult.textContent = '$' + capitalCalculado.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            cellCapitalResult.setAttribute('data-capital-num', capitalCalculado);
+            
+            if (capitalCalculado > montoInicial) {
+              cellCapitalResult.className = 'cell-capital-total-val cell-capital-result cell-gain';
+            } else if (capitalCalculado < montoInicial) {
+              cellCapitalResult.className = 'cell-capital-total-val cell-capital-result cell-loss';
+            } else {
+              cellCapitalResult.className = 'cell-capital-total-val cell-capital-result cell-neutral';
+            }
+
+            ultimoCapitalTotal = capitalCalculado;
+          } else {
+            cellCapitalResult.textContent = '$0.00';
+            cellCapitalResult.setAttribute('data-capital-num', 0);
+            cellCapitalResult.className = 'cell-capital-total-val cell-capital-result cell-neutral';
+          }
+        }
+
+        acumuladoDineroObtenido += diffDollar;
+
+        const isoTs = row.getAttribute('data-timestamp');
+        let mesClave = 'all';
+
+        if (isoTs) {
+          const d = new Date(isoTs);
+          mesClave = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+        }
+
+        if (mesFiltroSelected === 'all' || mesFiltroSelected === mesClave) {
+          row.style.display = '';
+          filasMostradasCount++;
+        } else {
+          row.style.display = 'none';
+        }
+      });
+
+      document.getElementById('totalDays').textContent = filasMostradasCount;
+      
+      const totalMoneyElem = document.getElementById('totalMoneyEarned');
+      const signTotal = acumuladoDineroObtenido >= 0 ? '+' : '';
+      totalMoneyElem.textContent = signTotal + '$' + acumuladoDineroObtenido.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      totalMoneyElem.style.color = acumuladoDineroObtenido >= 0 ? '#00ff88' : '#ff0037';
+      totalMoneyElem.style.textShadow = acumuladoDineroObtenido >= 0 ? '0 0 10px rgba(0, 255, 136, 0.6)' : '0 0 10px rgba(255, 0, 55, 0.6)';
+
+      document.getElementById('finalCapital').textContent = '$' + ultimoCapitalTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+      if (document.getElementById('chart-view').style.display === 'block') {
+        renderizarGrafico();
+      }
+    }
+
+    function actualizarSelectorMeses() {
+      const select = document.getElementById('monthFilter');
+      const currentValue = select.value;
+      const rows = document.querySelectorAll('#investmentsTableBody tr');
+      const mesesSet = new Set();
+
+      rows.forEach(row => {
+        const isoTs = row.getAttribute('data-timestamp');
+        if (isoTs) {
+          const d = new Date(isoTs);
+          const clave = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+          const nombreMes = d.toLocaleDateString('es-ES', { month: 'long', year: 'numeric' });
+          mesesSet.add(JSON.stringify({ clave, nombreMes: nombreMes.charAt(0).toUpperCase() + nombreMes.slice(1) }));
+        }
+      });
+
+      select.innerHTML = '<option value="all">Todos los registros</option>';
+      mesesSet.forEach(itemStr => {
+        const item = JSON.parse(itemStr);
+        const opt = document.createElement('option');
+        opt.value = item.clave;
+        opt.textContent = item.nombreMes;
+        select.appendChild(opt);
+      });
+
+      select.value = currentValue || 'all';
+    }
+
+    function filtrarPorMes() { 
+      recalcularTabla(); 
+    }
+
+    function renderizarGrafico() {
+      const rows = document.querySelectorAll('#investmentsTableBody tr');
+      const labels = ['Inicio'];
+      const dataCapital = [];
+
+      let inicialGlobal = 0;
+
+      rows.forEach((row, index) => {
+        let capitalRow = 0;
+        if (configActiva === 'config2') {
+          const inputCap = row.querySelector('.input-capital-total');
+          capitalRow = parseFloat(inputCap ? inputCap.value : 0) || parseFloat(row.querySelector('.input-monto-inicial').value) || 0;
+        } else {
+          const cellCap = row.querySelector('.cell-capital-result');
+          capitalRow = parseFloat(cellCap.getAttribute('data-capital-num')) || parseFloat(row.querySelector('.input-monto-inicial').value) || 0;
+        }
+
+        const isoTs = row.getAttribute('data-timestamp');
+        
+        let fechaLabel = `Día ${index + 1}`;
+        if (isoTs) {
+          const d = new Date(isoTs);
+          fechaLabel = `${d.getDate()}/${d.getMonth()+1}`;
+        }
+
+        if (index === 0) {
+          inicialGlobal = parseFloat(row.querySelector('.input-monto-inicial').value) || capitalRow;
+          dataCapital.push(capitalRow);
+        }
+
+        labels.push(`Día ${index + 1} (${fechaLabel})`);
+        dataCapital.push(capitalRow);
+      });
+
+      const ctxChart = document.getElementById('equityChart').getContext('2d');
+      const gradient = ctxChart.createLinearGradient(0, 0, 0, 400);
+      gradient.addColorStop(0, 'rgba(255, 0, 55, 0.45)');
+      gradient.addColorStop(1, 'rgba(255, 0, 55, 0.0)');
+
+      if (chartInstance) chartInstance.destroy();
+
+      chartInstance = new Chart(ctxChart, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'CAPITAL TOTAL ($)',
+            data: dataCapital,
+            borderColor: '#ff0037',
+            borderWidth: 3,
+            pointBackgroundColor: '#ffffff',
+            pointBorderColor: '#ff0037',
+            pointRadius: 5,
+            pointHoverRadius: 8,
+            fill: true,
+            backgroundColor: gradient,
+            tension: 0.3
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: 'rgba(10, 10, 10, 0.9)',
+              titleFont: { family: 'Montserrat', size: 13, weight: 'bold' },
+              bodyFont: { family: 'Montserrat', size: 14, weight: 'bold' },
+              borderColor: '#ff0037',
+              borderWidth: 1,
+              displayColors: false,
+              callbacks: {
+                label: function(context) {
+                  return `Capital: $${context.raw.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              grid: { color: 'rgba(255, 255, 255, 0.05)' },
+              ticks: { color: '#aaaaaa', font: { family: 'Montserrat', weight: 'bold' } }
+            },
+            y: {
+              grid: { color: 'rgba(255, 255, 255, 0.08)' },
+              ticks: {
+                color: '#aaaaaa',
+                font: { family: 'Montserrat', weight: 'bold' },
+                callback: function(value) { return '$' + value; }
+              }
+            }
+          }
+        }
+      });
+
+      const actual = dataCapital.length > 0 ? dataCapital[dataCapital.length - 1] : 0;
+      const peak = dataCapital.length > 0 ? Math.max(...dataCapital) : 0;
+      let retorno = 0;
+
+      if (inicialGlobal > 0) {
+        retorno = ((actual - inicialGlobal) / inicialGlobal) * 100;
+      }
+
+      document.getElementById('chartMaxCapital').textContent = '$' + peak.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      document.getElementById('chartCurrentCapital').textContent = '$' + actual.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      
+      const elemReturn = document.getElementById('chartTotalReturn');
+      elemReturn.textContent = (retorno >= 0 ? '+' : '') + retorno.toFixed(2) + '%';
+      elemReturn.className = retorno >= 0 ? 'cell-gain' : 'cell-loss';
+    }
+
+    function guardarDatosInversiones(esManual = false) {
+      const rows = document.querySelectorAll('#investmentsTableBody tr');
+      const data = [];
+
+      rows.forEach(row => {
+        const val1 = row.querySelector('.input-monto-inicial').value;
+        const val2 = row.querySelector('.input-pct-uso').value;
+        let val3 = '', val4 = '', val5 = '', val6 = '', val7 = '';
+
+        if (configActiva === 'config2') {
+          val3 = row.querySelector('.input-ask') ? row.querySelector('.input-ask').value : '';
+          val4 = row.querySelector('.input-qty') ? row.querySelector('.input-qty').value : '';
+          val5 = row.querySelector('.input-limite') ? row.querySelector('.input-limite').value : '';
+          val6 = row.querySelector('.input-bid') ? row.querySelector('.input-bid').value : '';
+          val7 = row.querySelector('.input-capital-total') ? row.querySelector('.input-capital-total').value : '';
+        } else {
+          val3 = row.querySelector('.input-monto-real') ? row.querySelector('.input-monto-real').value : '';
+          val4 = row.querySelector('.input-rent-pct') ? row.querySelector('.input-rent-pct').value : '';
+        }
+
+        const comentario = row.getAttribute('data-note-obj') || '';
+        const checklistObj = row.getAttribute('data-checklist-obj') || '';
+        const fechaHora = row.getAttribute('data-timestamp') || "";
+        data.push({ val1, val2, val3, val4, val5, val6, val7, comentario, checklistObj, fechaHora });
+      });
+
+      const keyName = `yasma_investments_data_${configActiva}`;
+      localStorage.setItem(keyName, JSON.stringify(data));
+    }
+
+    function cargarDatosInversiones(esManual = false) {
+      const keyName = `yasma_investments_data_${configActiva}`;
+      const savedData = localStorage.getItem(keyName);
+      
+      const tbody = document.getElementById('investmentsTableBody');
+      tbody.innerHTML = '';
+
+      if (!savedData) {
+        agregarFilaInversion();
+        return;
+      }
+
+      const data = JSON.parse(savedData);
+      if (data.length === 0) {
+        agregarFilaInversion();
+      } else {
+        data.forEach(item => {
+          if (item.val1 !== undefined) {
+            agregarFilaInversion(
+              item.val1 || '', 
+              item.val2 || '', 
+              item.val3 || '', 
+              item.val4 || '', 
+              item.val5 || '', 
+              item.val6 || '', 
+              item.val7 || '', 
+              item.fechaHora, 
+              item.comentario || '',
+              item.checklistObj || ''
+            );
+          } else {
+            agregarFilaInversion(
+              item.montoInicial || item.monto || '', 
+              item.pctUso || '', 
+              item.montoReal || '', 
+              item.pctRent || '', 
+              '', '', '',
+              item.fechaHora,
+              item.comentario || '',
+              item.checklistObj || ''
+            );
+          }
+        });
+      }
+      actualizarSelectorMeses();
+    }
+
+    // ==========================================
+    // SISTEMA DE SALVAS GLOBALES UNIFICADAS
+    // ==========================================
+    function obtenerNombreEspacioActual() {
+      if (configActiva === 'config1') return 'Configuracion_1';
+      if (configActiva === 'config2') return 'Configuracion_2';
+      return 'Configuracion_Custom';
+    }
+
+    function exportarSalvaGlobal() {
+      const rows = document.querySelectorAll('#investmentsTableBody tr');
+      const tablaData = [];
+
+      rows.forEach(row => {
+        const val1 = row.querySelector('.input-monto-inicial').value;
+        const val2 = row.querySelector('.input-pct-uso').value;
+        let val3 = '', val4 = '', val5 = '', val6 = '', val7 = '';
+
+        if (configActiva === 'config2') {
+          val3 = row.querySelector('.input-ask') ? row.querySelector('.input-ask').value : '';
+          val4 = row.querySelector('.input-qty') ? row.querySelector('.input-qty').value : '';
+          val5 = row.querySelector('.input-limite') ? row.querySelector('.input-limite').value : '';
+          val6 = row.querySelector('.input-bid') ? row.querySelector('.input-bid').value : '';
+          val7 = row.querySelector('.input-capital-total') ? row.querySelector('.input-capital-total').value : '';
+        } else {
+          val3 = row.querySelector('.input-monto-real') ? row.querySelector('.input-monto-real').value : '';
+          val4 = row.querySelector('.input-rent-pct') ? row.querySelector('.input-rent-pct').value : '';
+        }
+
+        const comentario = row.getAttribute('data-note-obj') || '';
+        const checklistObj = row.getAttribute('data-checklist-obj') || '';
+        const fechaHora = row.getAttribute('data-timestamp') || "";
+        tablaData.push({ val1, val2, val3, val4, val5, val6, val7, comentario, checklistObj, fechaHora });
+      });
+
+      const estrategiasData = obtenerEstrategiasGuardadas();
+      const checklistKey1 = `yasma_checklist_analysis_data_config1`;
+      const checklistKey2 = `yasma_checklist_analysis_data_config2`;
+      const invKey1 = `yasma_investments_data_config1`;
+      const invKey2 = `yasma_investments_data_config2`;
+      const stratKey1 = `yasma_custom_strategies_config1`;
+      const stratKey2 = `yasma_custom_strategies_config2`;
+
+      const nombreEspacio = obtenerNombreEspacioActual();
+      const createdUserName = localStorage.getItem('yasma_created_user_name') || '';
+
+      const backupPackage = {
+        tipoSalva: "GLOBAL_TOTAL",
+        version: "6.0",
+        configuracionActiva: configActiva,
+        nombreEspacio: nombreEspacio,
+        createdUserName: createdUserName,
+        pcProfilesList: obtenerListaPerfilesPC(),
+        fechaExportacion: new Date().toISOString(),
+        configsData: {
+          config1: {
+            investmentsData: JSON.parse(localStorage.getItem(invKey1) || '[]'),
+            customStrategies: JSON.parse(localStorage.getItem(stratKey1) || 'null'),
+            checklistAnalysisData: localStorage.getItem(checklistKey1)
+          },
+          config2: {
+            investmentsData: JSON.parse(localStorage.getItem(invKey2) || '[]'),
+            customStrategies: JSON.parse(localStorage.getItem(stratKey2) || 'null'),
+            checklistAnalysisData: localStorage.getItem(checklistKey2)
+          }
+        }
+      };
+
+      const jsonString = JSON.stringify(backupPackage, null, 2);
+      const blob = new Blob([jsonString], { type: "application/json" });
+      const urlObj = URL.createObjectURL(blob);
+      
+      const ahora = new Date();
+      const timeStampStr = `${ahora.getFullYear()}-${String(ahora.getMonth() + 1).padStart(2, '0')}-${String(ahora.getDate()).padStart(2, '0')}_${String(ahora.getHours()).padStart(2, '0')}-${String(ahora.getMinutes()).padStart(2, '0')}-${String(ahora.getSeconds()).padStart(2, '0')}`;
+      
+      const filePrefix = createdUserName ? createdUserName.replace(/\s+/g, '_') : nombreEspacio;
+      const a = document.createElement('a');
+      a.href = urlObj;
+      a.download = `Respaldo_Global_${filePrefix}_${timeStampStr}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(urlObj);
+    }
+
+    function activarSelectorGlobal() {
+      document.getElementById('importGlobalFileInput').click();
+    }
+
+    function procesarArchivoImportadoGlobal(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const importedObj = JSON.parse(e.target.result);
+          if (confirm(`¿Deseas restaurar esta salva general con todas sus funciones y personalizaciones?`)) {
+            if (importedObj.configuracionActiva) {
+              configActiva = importedObj.configuracionActiva;
+              localStorage.setItem('yasma_active_config', configActiva);
+            }
+
+            if (importedObj.createdUserName) {
+              localStorage.setItem('yasma_created_user_name', importedObj.createdUserName);
+            }
+
+            if (importedObj.pcProfilesList && Array.isArray(importedObj.pcProfilesList)) {
+              guardarListaPerfilesPC(importedObj.pcProfilesList);
+            }
+
+            if (importedObj.configsData) {
+              for (let cfgName in importedObj.configsData) {
+                const cfgObj = importedObj.configsData[cfgName];
+                if (cfgObj.investmentsData) {
+                  localStorage.setItem(`yasma_investments_data_${cfgName}`, JSON.stringify(cfgObj.investmentsData));
+                }
+                if (cfgObj.customStrategies) {
+                  localStorage.setItem(`yasma_custom_strategies_${cfgName}`, JSON.stringify(cfgObj.customStrategies));
+                }
+                if (cfgObj.checklistAnalysisData) {
+                  localStorage.setItem(`yasma_checklist_analysis_data_${cfgName}`, cfgObj.checklistAnalysisData);
+                }
+              }
+            } else if (importedObj.investmentsData) {
+              const targetConfig = importedObj.configuracion || configActiva;
+              localStorage.setItem(`yasma_investments_data_${targetConfig}`, JSON.stringify(importedObj.investmentsData));
+              if (importedObj.customStrategies) {
+                localStorage.setItem(`yasma_custom_strategies_${targetConfig}`, JSON.stringify(importedObj.customStrategies));
+              }
+              if (importedObj.checklistAnalysisData) {
+                localStorage.setItem(`yasma_checklist_analysis_data_${targetConfig}`, importedObj.checklistAnalysisData);
+              }
+            }
+
+            actualizarBadgeConfigUI();
+            cargarDatosInversiones(false);
+            cargarOpcionesEstrategias();
+            cargarChecklistState();
+            
+            alert(`¡Salva global restaurada con éxito con todas sus funciones!`);
+          }
+        } catch (err) {
+          alert('Error al procesar archivo JSON global: ' + err.message);
+        }
+      };
+      reader.readAsText(file);
+      event.target.value = '';
+    }
+
+    function limpiarTabla() {
+      const nombreConfigStr = obtenerNombreEspacioActual();
+      if (confirm(`¿Deseas vaciar por completo la tabla para "${nombreConfigStr}"?`)) {
+        document.getElementById('investmentsTableBody').innerHTML = '';
+        const invKey = `yasma_investments_data_${configActiva}`;
+        localStorage.removeItem(invKey);
+        agregarFilaInversion();
+        actualizarSelectorMeses();
+        if (document.getElementById('chart-view').style.display === 'block') {
+          renderizarGrafico();
+        }
+      }
+    }
+
+    actualizarBadgeConfigUI();
+    cargarOpcionesEstrategias();
+    cargarDatosInversiones(false);
+    cargarChecklistState();
+    activarAutoguardadoGlobalListener();
+
+    /* ==========================================================================
+       ANIMACIÓN DEL CANVAS - CURVAS BEZIER SUAVES Y COMPORTAMIENTO REAL DE MERCADO
+       ========================================================================== */
+    const canvas = document.getElementById('canvas-candlesticks');
+    const ctx = canvas.getContext('2d');
+    let width, height;
+    let candles = [];
+    const candleWidth = 14;
+    const candleGap = 12;
+    let shiftOffset = 0;
+    let centerOffsetY = 0;
+
+    function resizeCanvas() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+      centerOffsetY = height / 2;
+      initMarketData();
+    }
+
+    function generarPuntosMercado(nIndex) {
+      const t = nIndex;
+      const baseTrend = Math.sin(t * 0.015) * 140 + Math.cos(t * 0.007) * 90;
+      
+      const cNoise = Math.sin(t * 0.25) * 35 + Math.cos(t * 0.12) * 20;
+      const close = centerOffsetY + baseTrend + cNoise;
+      const open = close + (Math.sin(t * 0.8) * 40 - 5);
+      const high = Math.min(open, close) - (Math.abs(Math.sin(t * 1.2)) * 20 + 5);
+      const low = Math.max(open, close) + (Math.abs(Math.cos(t * 0.9)) * 20 + 5);
+
+      const ma20 = centerOffsetY + baseTrend + (Math.sin(t * 0.18) * 25);
+      const ma40 = centerOffsetY + baseTrend + (Math.cos(t * 0.11) * 38) + (Math.sin(t * 0.04) * 20);
+      const ma100 = centerOffsetY + (Math.sin(t * 0.02) * 160) + (Math.cos(t * 0.035) * 60) + 40;
+      const ma200 = centerOffsetY + (Math.cos(t * 0.012) * 190) + (Math.sin(t * 0.008) * 80) - 30;
+
+      const spread = Math.abs(Math.sin(t * 0.05)) * 45 + 55;
+      const bb_upper = ma20 - spread;
+      const bb_lower = ma20 + spread;
+
+      return { open, close, high, low, ma20, ma40, ma100, ma200, bb_upper, bb_lower, index: t };
+    }
+
+    function initMarketData() {
+      candles = [];
+      const totalCandles = Math.ceil(width / (candleWidth + candleGap)) + 40;
+      for (let i = 0; i < totalCandles; i++) {
+        candles.push(generarPuntosMercado(i));
+      }
+    }
+
+    function drawSmoothCurve(key, color, lineWidth, dashed = false) {
+      if (candles.length < 2) return;
+
+      ctx.beginPath();
+      ctx.lineWidth = lineWidth;
+      ctx.strokeStyle = color;
+      if (dashed) ctx.setLineDash([6, 4]);
+      else ctx.setLineDash([]);
+
+      let firstX = 0 * (candleWidth + candleGap) - shiftOffset + candleWidth / 2;
+      let firstY = candles[0][key];
+
+      ctx.moveTo(firstX, firstY);
+
+      for (let i = 0; i < candles.length - 1; i++) {
+        let xCurrent = i * (candleWidth + candleGap) - shiftOffset + candleWidth / 2;
+        let yCurrent = candles[i][key];
+        
+        let xNext = (i + 1) * (candleWidth + candleGap) - shiftOffset + candleWidth / 2;
+        let yNext = candles[i + 1][key];
+
+        let xc = (xCurrent + xNext) / 2;
+        let yc = (yCurrent + yNext) / 2;
+
+        ctx.quadraticCurveTo(xCurrent, yCurrent, xc, yc);
+      }
+
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    function drawSmoothBollingerGlow() {
+      if (candles.length < 2) return;
+
+      ctx.beginPath();
+      let firstX = 0 * (candleWidth + candleGap) - shiftOffset + candleWidth / 2;
+      ctx.moveTo(firstX, candles[0].bb_upper);
+
+      for (let i = 0; i < candles.length - 1; i++) {
+        let x1 = i * (candleWidth + candleGap) - shiftOffset + candleWidth / 2;
+        let y1 = candles[i].bb_upper;
+        let x2 = (i + 1) * (candleWidth + candleGap) - shiftOffset + candleWidth / 2;
+        let y2 = candles[i + 1].bb_upper;
+        ctx.quadraticCurveTo(x1, y1, (x1 + x2) / 2, (y1 + y2) / 2);
+      }
+
+      let lastI = candles.length - 1;
+      let lastX = lastI * (candleWidth + candleGap) - shiftOffset + candleWidth / 2;
+      ctx.lineTo(lastX, candles[lastI].bb_lower);
+
+      for (let i = candles.length - 1; i > 0; i--) {
+        let x1 = i * (candleWidth + candleGap) - shiftOffset + candleWidth / 2;
+        let y1 = candles[i].bb_lower;
+        let x2 = (i - 1) * (candleWidth + candleGap) - shiftOffset + candleWidth / 2;
+        let y2 = candles[i - 1].bb_lower;
+        ctx.quadraticCurveTo(x1, y1, (x1 + x2) / 2, (y1 + y2) / 2);
+      }
+
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(255, 0, 55, 0.03)';
+      ctx.fill();
+    }
+
+    function renderCanvasFrame() {
+      ctx.clearRect(0, 0, width, height);
+
+      drawSmoothBollingerGlow();
+
+      drawSmoothCurve('bb_upper', 'rgba(255, 0, 55, 0.45)', 1.5, true);
+      drawSmoothCurve('bb_lower', 'rgba(255, 0, 55, 0.45)', 1.5, true);
+
+      drawSmoothCurve('ma200', '#a100ff', 2.8);
+      drawSmoothCurve('ma100', '#00ff88', 2.5);
+      drawSmoothCurve('ma40', '#ff0037', 2.3);
+      drawSmoothCurve('ma20', '#ffcc00', 2.5);
+
+      for (let i = 0; i < candles.length; i++) {
+        let x = i * (candleWidth + candleGap) - shiftOffset;
+        let c = candles[i];
+        const isBullish = c.close < c.open;
+        const color = isBullish ? '#ff0037' : '#260009';
+
+        ctx.strokeStyle = isBullish ? '#ff0037' : '#ff1a4b';
+        ctx.fillStyle = color;
+        ctx.lineWidth = 2;
+
+        ctx.beginPath();
+        ctx.moveTo(x + candleWidth / 2, c.high);
+        ctx.lineTo(x + candleWidth / 2, c.low);
+        ctx.stroke();
+
+        const topY = Math.min(c.open, c.close);
+        const bodyHeight = Math.max(Math.abs(c.close - c.open), 5);
+        ctx.fillRect(x, topY, candleWidth, bodyHeight);
+        ctx.strokeRect(x, topY, candleWidth, bodyHeight);
+      }
+    }
+
+    function animateSmoothLoop() {
+      shiftOffset += 0.95;
+
+      if (shiftOffset >= (candleWidth + candleGap)) {
+        shiftOffset = 0;
+        candles.shift();
+
+        if (candles.length > 0) {
+          const nextIdx = candles[candles.length - 1].index + 1;
+          candles.push(generarPuntosMercado(nextIdx));
+        }
+      }
+
+      renderCanvasFrame();
+      requestAnimationFrame(animateSmoothLoop);
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    animateSmoothLoop();
+  </script>
+</body>
+</html>
