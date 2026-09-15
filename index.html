@@ -1063,6 +1063,7 @@
       text-align: center;
     }
 
+    /* TAMAÑO UNIFORME PARA TODAS LAS CASILLAS DE LA TABLA */
     .table-input {
       background: #000;
       border: 1px solid rgba(255, 0, 55, 0.4);
@@ -1072,8 +1073,7 @@
       font-size: 0.82rem;
       font-weight: 700;
       height: 32px;
-      width: 100%;
-      max-width: 105px;
+      width: 95px;
       margin: 0 auto;
       text-align: center;
       outline: none;
@@ -1101,10 +1101,23 @@
       color: #ffffff !important;
     }
 
+    /* ESTILOS NUEVOS PARA CAPITAL FINAL DINÁMICO EN LA BARRA SUPERIOR */
+    #finalCapital.capital-neon-green {
+      color: #00ff88 !important;
+      text-shadow: 0 0 12px rgba(0, 255, 136, 0.8), 0 0 25px rgba(0, 255, 136, 0.5) !important;
+    }
+    #finalCapital.capital-neon-red {
+      color: #ff0037 !important;
+      text-shadow: 0 0 12px rgba(255, 0, 55, 0.8), 0 0 25px rgba(255, 0, 55, 0.5) !important;
+    }
+    #finalCapital.capital-neon-neutral {
+      color: #ffffff !important;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.6) !important;
+    }
+
     .input-rent-pct {
       border-color: rgba(255, 204, 0, 0.5) !important;
       color: #ffcc00 !important;
-      max-width: 55px !important;
     }
     .input-rent-pct:focus {
       border-color: #ffcc00 !important;
@@ -2496,7 +2509,7 @@
             </div>
             <div class="summary-item" style="display: flex; align-items: center; gap: 12px; background: rgba(0, 0, 0, 0.5); padding: 8px 18px; border-radius: 30px; border: 1px solid rgba(0, 255, 136, 0.4);">
               <label style="margin: 0; font-size: 0.85rem; color: #aaa;">Capital Final:</label>
-              <span id="finalCapital" style="font-size: 1.2rem; font-weight: 900; color: #ff0037; text-shadow: 0 0 10px rgba(255, 0, 55, 0.6);">$0.00</span>
+              <span id="finalCapital" class="capital-neon-neutral" style="font-size: 1.2rem; font-weight: 900;">$0.00</span>
             </div>
           </div>
         </div>
@@ -2563,6 +2576,7 @@
     let selectedBuyType = "";
     let calculatedQuickPct = null;
     let globalAutosaveDebounce = null;
+    let ultimoCapitalTotalAnterior = null;
 
     let configActiva = localStorage.getItem('yasma_active_config') || 'config1';
 
@@ -3376,7 +3390,7 @@
               </button>
             </div>
           </td>
-          <td><input type="number" class="table-input input-capital-total" step="0.01" placeholder="0.00" value="${capitalTotalManual}" oninput="manejarEntradaValor(this)" style="border-color: rgba(0, 255, 136, 0.5); color: #00ff88; max-width: 100px;"></td>
+          <td><input type="number" class="table-input input-capital-total" step="0.01" placeholder="0.00" value="${capitalTotalManual}" oninput="manejarEntradaValor(this)" style="border-color: rgba(0, 255, 136, 0.5); color: #00ff88;"></td>
           <td><div class="cell-color-box color-neutral"></div></td>
           <td><button class="btn-delete" onclick="eliminarFila(this)" title="Eliminar fila"><i class="fa-solid fa-xmark"></i></button></td>
         `;
@@ -3401,7 +3415,7 @@
           <td><input type="number" class="table-input input-monto-real" step="0.01" placeholder="0.00" value="${montoReal}" oninput="manejarEntradaValor(this)"></td>
           <td>
             <div style="display: flex; gap: 3px; align-items: center; justify-content: center;">
-              <input type="text" class="table-input input-rent-pct" placeholder="Ej: 35" value="${pctRent}" oninput="manejarEntradaValor(this)" style="max-width: 55px;">
+              <input type="text" class="table-input input-rent-pct" placeholder="Ej: 35" value="${pctRent}" oninput="manejarEntradaValor(this)">
               <button class="btn-row-action btn-calc-action" onclick="abrirModalCalculadoraRapida(this)" title="Calculadora Rápida de Salto">
                 <i class="fa-solid fa-calculator"></i>
               </button>
@@ -3771,7 +3785,22 @@
       totalMoneyElem.style.color = acumuladoDineroObtenido >= 0 ? '#00ff88' : '#ff0037';
       totalMoneyElem.style.textShadow = acumuladoDineroObtenido >= 0 ? '0 0 10px rgba(0, 255, 136, 0.6)' : '0 0 10px rgba(255, 0, 55, 0.6)';
 
-      document.getElementById('finalCapital').textContent = '$' + ultimoCapitalTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+      const finalCapElem = document.getElementById('finalCapital');
+      finalCapElem.textContent = '$' + ultimoCapitalTotal.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+
+      finalCapElem.classList.remove('capital-neon-green', 'capital-neon-red', 'capital-neon-neutral');
+      if (ultimoCapitalTotalAnterior !== null) {
+        if (ultimoCapitalTotal > ultimoCapitalTotalAnterior) {
+          finalCapElem.classList.add('capital-neon-green');
+        } else if (ultimoCapitalTotal < ultimoCapitalTotalAnterior) {
+          finalCapElem.classList.add('capital-neon-red');
+        } else {
+          finalCapElem.classList.add('capital-neon-neutral');
+        }
+      } else {
+        finalCapElem.classList.add('capital-neon-neutral');
+      }
+      ultimoCapitalTotalAnterior = ultimoCapitalTotal;
 
       if (document.getElementById('chart-view').style.display === 'block') {
         renderizarGrafico();
