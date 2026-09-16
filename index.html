@@ -475,8 +475,9 @@
       cursor: pointer;
     }
 
+    /* Icono de autoguardado oculto por completo */
     .autosave-icon-fixed {
-      display: none; /* Oculto según solicitud */
+      display: none !important;
     }
 
     #menu-view {
@@ -1048,16 +1049,6 @@
       color: #aaaaaa;
       margin-top: 10px;
       font-weight: 700;
-    }
-
-    /* CONTENEDOR CON SCROLL HORIZONTAL PARA LA TABLA DE INTERÉS COMPUESTO */
-    .table-scroll-wrapper {
-      width: 100%;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      margin-bottom: 20px;
-      border-radius: 16px;
-      border: 1px solid var(--skin-border);
     }
 
     table { width: 100%; border-collapse: collapse; min-width: 1100px; }
@@ -1919,31 +1910,30 @@
       </div>
     </div>
 
-    <!-- VISTA ACADEMY SUBMENÚ (ORGANIZACIÓN POR CATEGORÍAS Y TODO A LA IZQUIERDA) -->
-    <div id="academy-view" style="text-align: left;">
-      <div class="toolbar-buttons" style="justify-content: flex-start;">
+    <!-- VISTA ACADEMY SUBMENÚ (ORGANIZADO POR CATEGORÍAS A LA IZQUIERDA) -->
+    <div id="academy-view">
+      <div class="toolbar-buttons">
         <button class="btn-action" onclick="mostrarVista('menu')">
           <i class="fa-solid fa-house"></i> Inicio
         </button>
       </div>
 
-      <div class="section-title" style="justify-content: flex-start;">
+      <div class="section-title">
         <i class="fa-solid fa-graduation-cap"></i> Investep Academy
       </div>
 
-      <!-- Formación -->
+      <!-- Formacion -->
       <div class="checklist-sub-section" style="margin-top: 20px;">
-        <div class="checklist-sub-title"><i class="fa-solid fa-book-open"></i> Formación:</div>
+        <div class="checklist-sub-title"><i class="fa-solid fa-book-open"></i> Formacion:</div>
         <div class="buttons-grid" style="justify-content: flex-start; gap: 15px; margin-top: 15px;">
           <a href="http://localhost:8096/web/index.html#!/videos?serverId=537c33e77d6843d29faa7105adf44514&parentId=9287&tab=folders" target="_blank" class="btn-card" style="width: 210px; height: 140px;">
-            <svg class="emby-logo-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <svg class="emby-logo-svg" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" style="width: 45px; height: 45px; margin-bottom: 8px;">
               <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/>
             </svg>
-            <span style="font-size: 0.85rem;">Formacion EMBY</span>
+            <span style="font-size: 0.82rem;">Formacion EMBY</span>
           </a>
-
           <a href="https://comunidad-sai.mykajabi.com/library" target="_blank" class="btn-card" style="width: 210px; height: 140px;">
-            <svg class="investep-logo-svg" viewBox="0 0 450 380" xmlns="http://www.w3.org/2000/svg" style="width: 75px; margin-bottom: 5px;">
+            <svg class="investep-logo-svg" viewBox="0 0 450 380" xmlns="http://www.w3.org/2000/svg" style="width: 75px; margin-bottom: 4px;">
               <path d="M 225 240 C 200 230, 160 215, 105 210 C 95 209, 85 212, 80 217 C 75 222, 70 230, 75 238 C 130 242, 185 282, 225 305 C 265 282, 320 262, 375 256 C 385 250, 388 242, 385 235 C 382 228, 375 224, 365 225 C 300 230, 255 248, 225 260 Z" />
               <rect x="150" y="125" width="16" height="85" rx="8" />
               <rect x="180" y="85" width="16" height="135" rx="8" />
@@ -1963,18 +1953,16 @@
         <div class="checklist-sub-title"><i class="fa-brands fa-youtube"></i> Canales de Youtube de Yoel Sardiñas:</div>
         <div class="buttons-grid" style="justify-content: flex-start; gap: 15px; margin-top: 15px;">
           <a href="https://www.youtube.com/@InvestepTestimonios" target="_blank" class="btn-card" style="width: 210px; height: 140px;">
-            <i class="fa-solid fa-users-rectangle"></i>
+            <i class="fa-solid fa-users-rectangle" style="font-size: 2.4rem; margin-bottom: 8px;"></i>
             <span style="font-size: 0.78rem;">INVESTEP ACADEMY TESTIMONIOS</span>
           </a>
-
           <a href="https://www.youtube.com/@YoelSardinasVlogs" target="_blank" class="btn-card" style="width: 210px; height: 140px;">
-            <i class="fa-solid fa-video"></i>
+            <i class="fa-solid fa-video" style="font-size: 2.4rem; margin-bottom: 8px;"></i>
             <span style="font-size: 0.78rem;">YOEL SARDIÑAS VLOGS</span>
           </a>
-
           <a href="https://www.youtube.com/@ConversacionesenlasAlturas" target="_blank" class="btn-card" style="width: 210px; height: 140px;">
-            <i class="fa-solid fa-rocket"></i>
-            <span style="font-size: 0.78rem;">CONVERSACIONES EN LAS ALTURAS</span>
+            <i class="fa-solid fa-rocket" style="font-size: 2.4rem; margin-bottom: 8px;"></i>
+            <span style="font-size: 0.75rem;">CONVERSACIONES EN LAS ALTURAS</span>
           </a>
         </div>
       </div>
@@ -2564,15 +2552,12 @@
           </div>
         </div>
 
-        <!-- CONTENEDOR CON SCROLL HORIZONTAL PARA LA TABLA -->
-        <div class="table-scroll-wrapper">
-          <table>
-            <thead id="investmentsTableHead">
-            </thead>
-            <tbody id="investmentsTableBody">
-            </tbody>
-          </table>
-        </div>
+        <table>
+          <thead id="investmentsTableHead">
+          </thead>
+          <tbody id="investmentsTableBody">
+          </tbody>
+        </table>
 
         <div style="margin-top: 20px; text-align: left;">
           <button class="btn-action" onclick="agregarFilaInversionConUltimoCapital()">
@@ -2689,7 +2674,7 @@
     cambiarSkin(currentSkin);
 
     function dispararAutosaveVisual() {
-      // Función mantenida por compatibilidad aunque el icono esté oculto
+      // Función mantenida intacta de autoguardado en segundo plano
     }
 
     function activarAutoguardadoGlobalListener() {
