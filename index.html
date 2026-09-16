@@ -76,7 +76,7 @@
       position: relative;
     }
 
-    #canvas-candlesticks {
+    #canvas-background {
       position: fixed;
       top: 0;
       left: 0;
@@ -1503,8 +1503,8 @@
 </head>
 <body>
 
-  <!-- Canvas Estilizado TC2000 Completamente Centrado y Fijo -->
-  <canvas id="canvas-candlesticks"></canvas>
+  <!-- Canvas Estilizado para Fondos Dinámicos Independientes -->
+  <canvas id="canvas-background"></canvas>
 
   <div class="overlay-vignette"></div>
   <div class="glow-bg"></div>
@@ -1562,7 +1562,7 @@
   <div id="configModal" class="modal-overlay">
     <div class="modal-card" style="max-width: 540px;">
       <div class="modal-header">
-        <h3><i class="fa-solid fa-gear" style="color: var(--skin-primary);"></i> Configuración, Skins y Salvas</h3>
+        <h3><i class="fa-solid fa-gear" style="color: var(--skin-primary);"></i> Configuración, Skins, Fondos y Salvas</h3>
         <button class="btn-close-modal" onclick="cerrarModalConfig()"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
@@ -1570,7 +1570,7 @@
       <div class="quick-calc-modal-box" style="border-color: rgba(var(--skin-primary-rgb), 0.5); margin-bottom: 12px;">
         <div class="quick-calc-title" style="color: var(--skin-primary);"><i class="fa-solid fa-palette"></i> Selección de Skin / Tema Visual</div>
         <p style="font-size: 0.78rem; color: #bbb; line-height: 1.4; margin-bottom: 12px;">
-          Elige tu estilo visual favorito en el desplegable. Se aplicará instantáneamente en toda la interfaz.
+          Elige tu estilo visual favorito en el desplegable. Se aplicará instantáneamente en toda la interfaz y en el fondo animado.
         </p>
         <div class="form-field" style="margin-bottom: 0;">
           <select id="skinSelectDropdown" class="form-select" onchange="cambiarSkinDesdeSelect(this.value)" style="border-color: rgba(var(--skin-primary-rgb), 0.5); font-weight: 900; width: 100%;">
@@ -1580,6 +1580,22 @@
             <option value="moradoMistico">🟣 Tonos Morados</option>
             <option value="plateado">🪙 Tema Plateado</option>
             <option value="oroYBlanco">⚜️ Oro y Blanco</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- SECCIÓN DE SELECCIÓN DE FONDO DINÁMICO -->
+      <div class="quick-calc-modal-box" style="border-color: rgba(var(--skin-primary-rgb), 0.5); margin-bottom: 12px;">
+        <div class="quick-calc-title" style="color: var(--skin-primary);"><i class="fa-solid fa-wand-magic-sparkles"></i> Selección de Fondo Animado</div>
+        <p style="font-size: 0.78rem; color: #bbb; line-height: 1.4; margin-bottom: 12px;">
+          Elige qué animación deseas de fondo. El fondo se adaptará automáticamente a los colores de tu tema seleccionado.
+        </p>
+        <div class="form-field" style="margin-bottom: 0;">
+          <select id="bgSelectDropdown" class="form-select" onchange="cambiarFondoDesdeSelect(this.value)" style="border-color: rgba(var(--skin-primary-rgb), 0.5); font-weight: 900; width: 100%;">
+            <option value="velas">📈 Velas Japonesas y Medias Móviles</option>
+            <option value="matrix">💻 Lluvia Matrix de Mercado (Números y Tickers)</option>
+            <option value="particulas">✨ Partículas de Liquidez Flotantes</option>
+            <option value="toroOsoEstrellas">🐂🐻 Toro Verde Neón y Oso Rojo Neón Estelares</option>
           </select>
         </div>
       </div>
@@ -1910,7 +1926,7 @@
       </div>
     </div>
 
-    <!-- VISTA ACADEMY SUBMENÚ (ORGANIZADO POR CATEGORÍAS A LA IZQUIERDA) -->
+    <!-- VISTA ACADEMY SUBMENÚ -->
     <div id="academy-view">
       <div class="toolbar-buttons">
         <button class="btn-action" onclick="mostrarVista('menu')">
@@ -2618,6 +2634,7 @@
 
     let configActiva = localStorage.getItem('yasma_active_config') || 'config1';
     let currentSkin = localStorage.getItem('yasma_active_skin') || 'rojoNeon';
+    let currentBackground = localStorage.getItem('yasma_active_bg') || 'velas';
 
     let neonToggleState = {
       newsEffect: null, pmDia: null, bandsOpen: null, maSr: null, hLines: null, gapOpen: null, gapMaintains: null
@@ -2670,7 +2687,19 @@
       cambiarSkin(skinKey);
     }
 
-    // Aplicar skin guardado al cargar
+    function cambiarFondo(bgKey) {
+      currentBackground = bgKey;
+      localStorage.setItem('yasma_active_bg', bgKey);
+      const bgDropdown = document.getElementById('bgSelectDropdown');
+      if (bgDropdown) bgDropdown.value = bgKey;
+    }
+
+    function cambiarFondoDesdeSelect(bgKey) {
+      cambiarFondo(bgKey);
+      initBackgroundAnimation();
+    }
+
+    // Aplicar skin y fondo guardados al cargar
     cambiarSkin(currentSkin);
 
     function dispararAutosaveVisual() {
@@ -2786,6 +2815,8 @@
       actualizarNombreUsuarioHeader();
       const selectDropdown = document.getElementById('skinSelectDropdown');
       if (selectDropdown) selectDropdown.value = currentSkin;
+      const bgDropdown = document.getElementById('bgSelectDropdown');
+      if (bgDropdown) bgDropdown.value = currentBackground;
     }
 
     function crearNuevoUsuarioLocal() {
@@ -4160,6 +4191,7 @@
         nombreEspacio: nombreEspacio,
         createdUserName: createdUserName,
         activeSkin: currentSkin,
+        activeBg: currentBackground,
         pcProfilesList: obtenerListaPerfilesPC(),
         fechaExportacion: new Date().toISOString(),
         configsData: {
@@ -4215,6 +4247,10 @@
               cambiarSkin(importedObj.activeSkin);
             }
 
+            if (importedObj.activeBg) {
+              cambiarFondo(importedObj.activeBg);
+            }
+
             if (importedObj.createdUserName) {
               localStorage.setItem('yasma_created_user_name', importedObj.createdUserName);
             }
@@ -4251,6 +4287,7 @@
             cargarDatosInversiones(false);
             cargarOpcionesEstrategias();
             cargarChecklistState();
+            initBackgroundAnimation();
             
             alert(`¡Salva global restaurada con éxito con todas sus funciones!`);
           }
@@ -4283,28 +4320,141 @@
     activarAutoguardadoGlobalListener();
 
     /* ==========================================================================
-       ANIMACIÓN DEL CANVAS - CURVAS BEZIER SUAVES Y COMPORTAMIENTO REAL DE MERCADO
+       MOTOR MULTI-FONDO DINÁMICO (VELAS, MATRIX, PARTÍCULAS Y TORO/OSO)
        ========================================================================== */
-    const canvas = document.getElementById('canvas-candlesticks');
+    const canvas = document.getElementById('canvas-background');
     const ctx = canvas.getContext('2d');
     let width, height;
+    let animationFrameId = null;
+
+    // Variables Fondo Velas
     let candles = [];
     const candleWidth = 14;
     const candleGap = 12;
     let shiftOffset = 0;
     let centerOffsetY = 0;
 
+    // Variables Fondo Matrix de Mercado (Estático y Uniforme)
+    let matrixColumns = [];
+    const tickersList = ["SPY", "QQQ", "AAPL", "NVDA", "TSLA", "MSFT", "AMZN", "BTC", "ETH", "AMD", "META"];
+
+    // Variables Fondo Partículas
+    let particles = [];
+
+    // Variables Fondo Toro y Oso Estelares
+    let toroStars = [];
+    let osoStars = [];
+    let toroRunPhase = 0;
+    let osoRunPhase = 0;
+
     function resizeCanvas() {
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
       centerOffsetY = height / 2;
-      initMarketData();
+      initBackgroundData();
+    }
+
+    function initBackgroundData() {
+      // Inicializar Velas
+      candles = [];
+      const totalCandles = Math.ceil(width / (candleWidth + candleGap)) + 40;
+      for (let i = 0; i < totalCandles; i++) {
+        candles.push(generarPuntosMercado(i));
+      }
+
+      // Inicializar Matrix
+      matrixColumns = [];
+      const cols = Math.floor(width / 75);
+      for (let i = 0; i < cols; i++) {
+        let itemsInCol = [];
+        let numRows = 10;
+        let startY = Math.random() * height - height;
+
+        for (let r = 0; r < numRows; r++) {
+          let isPositive = Math.random() > 0.45;
+          let textItem = "";
+          let typeRand = Math.random();
+          if (typeRand < 0.25) {
+            textItem = tickersList[Math.floor(Math.random() * tickersList.length)];
+          } else if (typeRand < 0.6) {
+            textItem = (isPositive ? "+$" : "-$") + (Math.random() * 450 + 10).toFixed(2);
+          } else if (typeRand < 0.85) {
+            textItem = (isPositive ? "+" : "-") + (Math.random() * 6.5).toFixed(2) + "%";
+          } else {
+            textItem = Math.floor(Math.random() * 9999).toString();
+          }
+
+          itemsInCol.push({
+            text: textItem,
+            isPositive: isPositive
+          });
+        }
+
+        matrixColumns.push({
+          x: i * 75 + (Math.random() * 20),
+          y: startY,
+          speed: 0.65,
+          items: itemsInCol
+        });
+      }
+
+      // Inicializar Partículas
+      particles = [];
+      for (let i = 0; i < 65; i++) {
+        particles.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          radius: Math.random() * 2 + 1,
+          speedX: (Math.random() - 0.5) * 1.2,
+          speedY: (Math.random() - 0.5) * 1.2
+        });
+      }
+
+      // Inicializar Estrellas Toro y Oso (Formas vectoriales estelares)
+      // Toro a la izquierda
+      toroStars = [
+        // Cabeza y Cuernos
+        {ox: -80, oy: -50, size: 2.2}, {ox: -65, oy: -60, size: 2.5}, {ox: -45, oy: -75, size: 2.8}, // Cuerno izq
+        {ox: -30, oy: -50, size: 2.2}, {ox: -55, oy: -35, size: 2.5}, {ox: -40, oy: -25, size: 2.0}, // Cabeza frente
+        {ox: -15, oy: -65, size: 2.8}, {ox: 0, oy: -75, size: 2.6}, {ox: 15, oy: -60, size: 2.4},     // Cuerno der
+        {ox: -25, oy: -15, size: 2.5}, {ox: -40, oy: -5, size: 2.2}, {ox: -55, oy: 0, size: 2.0},     // Hocico / Rostro
+        // Cuerpo y Pecho
+        {ox: -30, oy: 10, size: 3.0}, {ox: -10, oy: 5, size: 2.8}, {ox: 10, oy: 10, size: 3.0},
+        {ox: -20, oy: 30, size: 3.2}, {ox: 0, oy: 35, size: 3.0}, {ox: 20, oy: 25, size: 2.8},
+        // Patas Delanteras (con puntos para animación de corrida en el lugar)
+        {ox: -25, oy: 50, size: 2.5, isLeg: true, legId: 1}, {ox: -20, oy: 70, size: 2.2, isLeg: true, legId: 1}, {ox: -15, oy: 85, size: 2.0, isLeg: true, legId: 1},
+        {ox: 10, oy: 45, size: 2.5, isLeg: true, legId: 2}, {ox: 15, oy: 65, size: 2.2, isLeg: true, legId: 2}, {ox: 20, oy: 80, size: 2.0, isLeg: true, legId: 2},
+        // Cuerpo trasero y ancas
+        {ox: 40, oy: 15, size: 3.0}, {ox: 55, oy: 25, size: 2.8}, {ox: 45, oy: 40, size: 2.6},
+        // Patas Traseras
+        {ox: 35, oy: 55, size: 2.5, isLeg: true, legId: 3}, {ox: 40, oy: 75, size: 2.2, isLeg: true, legId: 3},
+        {ox: 50, oy: 50, size: 2.5, isLeg: true, legId: 4}, {ox: 55, oy: 70, size: 2.2, isLeg: true, legId: 4},
+        // Cola
+        {ox: 70, oy: 20, size: 2.0}, {ox: 80, oy: 35, size: 1.8}, {ox: 85, oy: 50, size: 1.5}
+      ];
+
+      // Oso a la derecha
+      osoStars = [
+        // Cabeza y Orejas
+        {ox: 40, oy: -60, size: 2.5}, {ox: 55, oy: -75, size: 2.3}, // Oreja izq
+        {ox: 75, oy: -60, size: 2.5}, {ox: 65, oy: -75, size: 2.3}, // Oreja der
+        {ox: 50, oy: -45, size: 2.8}, {ox: 65, oy: -45, size: 2.8}, {ox: 57, oy: -35, size: 2.5}, // Cabeza
+        // Cuerpo robusto
+        {ox: 35, oy: -15, size: 3.2}, {ox: 55, oy: -20, size: 3.5}, {ox: 75, oy: -15, size: 3.2},
+        {ox: 30, oy: 10, size: 3.5}, {ox: 55, oy: 15, size: 3.8}, {ox: 80, oy: 10, size: 3.5},
+        {ox: 35, oy: 35, size: 3.2}, {ox: 55, oy: 40, size: 3.5}, {ox: 75, oy: 35, size: 3.2},
+        // Patas Delanteras (con animación de corrida en el lugar)
+        {ox: 35, oy: 55, size: 2.6, isLeg: true, legId: 1}, {ox: 30, oy: 75, size: 2.3, isLeg: true, legId: 1}, {ox: 25, oy: 90, size: 2.0, isLeg: true, legId: 1},
+        {ox: 50, oy: 55, size: 2.6, isLeg: true, legId: 2}, {ox: 55, oy: 75, size: 2.3, isLeg: true, legId: 2}, {ox: 60, oy: 90, size: 2.0, isLeg: true, legId: 2},
+        // Patas Traseras
+        {ox: 70, oy: 55, size: 2.6, isLeg: true, legId: 3}, {ox: 75, oy: 75, size: 2.3, isLeg: true, legId: 3},
+        {ox: 85, oy: 55, size: 2.6, isLeg: true, legId: 4}, {ox: 90, oy: 75, size: 2.3, isLeg: true, legId: 4}
+      ];
     }
 
     function generarPuntosMercado(nIndex) {
       const t = nIndex;
       const baseTrend = Math.sin(t * 0.015) * 140 + Math.cos(t * 0.007) * 90;
-      
       const cNoise = Math.sin(t * 0.25) * 35 + Math.cos(t * 0.12) * 20;
       const close = centerOffsetY + baseTrend + cNoise;
       const open = close + (Math.sin(t * 0.8) * 40 - 5);
@@ -4323,17 +4473,8 @@
       return { open, close, high, low, ma20, ma40, ma100, ma200, bb_upper, bb_lower, index: t };
     }
 
-    function initMarketData() {
-      candles = [];
-      const totalCandles = Math.ceil(width / (candleWidth + candleGap)) + 40;
-      for (let i = 0; i < totalCandles; i++) {
-        candles.push(generarPuntosMercado(i));
-      }
-    }
-
     function drawSmoothCurve(key, color, lineWidth, dashed = false) {
       if (candles.length < 2) return;
-
       ctx.beginPath();
       ctx.lineWidth = lineWidth;
       ctx.strokeStyle = color;
@@ -4342,31 +4483,24 @@
 
       let firstX = 0 * (candleWidth + candleGap) - shiftOffset + candleWidth / 2;
       let firstY = candles[0][key];
-
       ctx.moveTo(firstX, firstY);
 
       for (let i = 0; i < candles.length - 1; i++) {
         let xCurrent = i * (candleWidth + candleGap) - shiftOffset + candleWidth / 2;
         let yCurrent = candles[i][key];
-        
         let xNext = (i + 1) * (candleWidth + candleGap) - shiftOffset + candleWidth / 2;
         let yNext = candles[i + 1][key];
-
         let xc = (xCurrent + xNext) / 2;
         let yc = (yCurrent + yNext) / 2;
-
         ctx.quadraticCurveTo(xCurrent, yCurrent, xc, yc);
       }
-
       ctx.stroke();
       ctx.setLineDash([]);
     }
 
     function drawSmoothBollingerGlow() {
       if (candles.length < 2) return;
-
       const activeSkinObj = skinThemes[currentSkin] || skinThemes.rojoNeon;
-
       ctx.beginPath();
       let firstX = 0 * (candleWidth + candleGap) - shiftOffset + candleWidth / 2;
       ctx.moveTo(firstX, candles[0].bb_upper);
@@ -4396,11 +4530,8 @@
       ctx.fill();
     }
 
-    function renderCanvasFrame() {
-      ctx.clearRect(0, 0, width, height);
-
+    function renderVelasBackground() {
       drawSmoothBollingerGlow();
-
       const activeSkinObj = skinThemes[currentSkin] || skinThemes.rojoNeon;
       drawSmoothCurve('bb_upper', `rgba(${activeSkinObj.rgb}, 0.45)`, 1.5, true);
       drawSmoothCurve('bb_lower', `rgba(${activeSkinObj.rgb}, 0.45)`, 1.5, true);
@@ -4432,26 +4563,207 @@
       }
     }
 
-    function animateSmoothLoop() {
-      shiftOffset += 0.95;
+    function renderMatrixBackground() {
+      const activeSkinObj = skinThemes[currentSkin] || skinThemes.rojoNeon;
+      ctx.font = '800 14px Montserrat, monospace';
 
-      if (shiftOffset >= (candleWidth + candleGap)) {
-        shiftOffset = 0;
-        candles.shift();
+      matrixColumns.forEach(col => {
+        col.y += col.speed;
+        let totalHeightBlock = col.items.length * 35;
+        if (col.y > height) {
+          col.y = -totalHeightBlock;
+        }
 
-        if (candles.length > 0) {
-          const nextIdx = candles[candles.length - 1].index + 1;
-          candles.push(generarPuntosMercado(nextIdx));
+        let currentY = col.y;
+        col.items.forEach((item) => {
+          let colorText = "#ffffff";
+          if (item.text.includes("+") || (!item.text.includes("$") && !item.text.includes("%") && !tickersList.includes(item.text) && item.isPositive)) {
+            colorText = "#00ff88";
+          } else if (item.text.includes("-") || (!item.text.includes("$") && !item.text.includes("%") && !tickersList.includes(item.text) && !item.isPositive)) {
+            colorText = activeSkinObj.primary;
+          } else if (tickersList.includes(item.text)) {
+            colorText = "#ffffff";
+          } else {
+            colorText = item.isPositive ? "#00ff88" : activeSkinObj.primary;
+          }
+
+          ctx.fillStyle = colorText;
+          ctx.shadowColor = colorText;
+          ctx.shadowBlur = 6;
+          ctx.fillText(item.text, col.x, currentY);
+          ctx.shadowBlur = 0;
+
+          currentY += 35;
+        });
+      });
+    }
+
+    function renderParticulasBackground() {
+      const activeSkinObj = skinThemes[currentSkin] || skinThemes.rojoNeon;
+
+      particles.forEach(p => {
+        p.x += p.speedX;
+        p.y += p.speedY;
+
+        if (p.x < 0) p.x = width;
+        if (p.x > width) p.x = 0;
+        if (p.y < 0) p.y = height;
+        if (p.y > height) p.y = 0;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+        ctx.fillStyle = activeSkinObj.primary;
+        ctx.shadowColor = activeSkinObj.primary;
+        ctx.shadowBlur = 10;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      });
+
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          let dx = particles[i].x - particles[j].x;
+          let dy = particles[i].y - particles[j].y;
+          let dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 110) {
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(${activeSkinObj.rgb}, ${0.25 * (1 - dist / 110)})`;
+            ctx.lineWidth = 0.8;
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    function renderToroOsoEstrellasBackground() {
+      toroRunPhase += 0.12;
+      osoRunPhase += 0.12;
+
+      // Posición fija: Toro a la izquierda, Oso a la derecha
+      const toroCenterX = width * 0.22;
+      const toroCenterY = height * 0.55;
+      const osoCenterX = width * 0.78;
+      const osoCenterY = height * 0.55;
+
+      // --- DIBUJAR TORO (Verde Neón) ---
+      const toroColor = '#00ff88';
+      let toroCoords = [];
+
+      toroStars.forEach((star, index) => {
+        let drawX = toroCenterX + star.ox;
+        let drawY = toroCenterY + star.oy;
+
+        if (star.isLeg) {
+          let legFactor = Math.sin(toroRunPhase + (star.legId * 1.5)) * 12;
+          drawY += legFactor;
+        }
+
+        toroCoords.push({ x: drawX, y: drawY });
+
+        // Dibujar estrella brillante
+        ctx.beginPath();
+        ctx.arc(drawX, drawY, star.size, 0, Math.PI * 2);
+        ctx.fillStyle = toroColor;
+        ctx.shadowColor = toroColor;
+        ctx.shadowBlur = 12;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      });
+
+      // Conectar constelación del Toro con líneas tenues
+      ctx.strokeStyle = 'rgba(0, 255, 136, 0.2)';
+      ctx.lineWidth = 1;
+      for (let i = 0; i < toroCoords.length; i++) {
+        for (let j = i + 1; j < toroCoords.length; j++) {
+          let dx = toroCoords[i].x - toroCoords[j].x;
+          let dy = toroCoords[i].y - toroCoords[j].y;
+          let dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 45) {
+            ctx.beginPath();
+            ctx.moveTo(toroCoords[i].x, toroCoords[i].y);
+            ctx.lineTo(toroCoords[j].x, toroCoords[j].y);
+            ctx.stroke();
+          }
         }
       }
 
-      renderCanvasFrame();
-      requestAnimationFrame(animateSmoothLoop);
+      // --- DIBUJAR OSO (Rojo Neón) ---
+      const osoColor = '#ff0037';
+      let osoCoords = [];
+
+      osoStars.forEach((star, index) => {
+        let drawX = osoCenterX + star.ox;
+        let drawY = osoCenterY + star.oy;
+
+        if (star.isLeg) {
+          let legFactor = Math.sin(osoRunPhase + (star.legId * 1.5)) * 12;
+          drawY += legFactor;
+        }
+
+        osoCoords.push({ x: drawX, y: drawY });
+
+        // Dibujar estrella brillante
+        ctx.beginPath();
+        ctx.arc(drawX, drawY, star.size, 0, Math.PI * 2);
+        ctx.fillStyle = osoColor;
+        ctx.shadowColor = osoColor;
+        ctx.shadowBlur = 12;
+        ctx.fill();
+        ctx.shadowBlur = 0;
+      });
+
+      // Conectar constelación del Oso con líneas tenues
+      ctx.strokeStyle = 'rgba(255, 0, 55, 0.2)';
+      ctx.lineWidth = 1;
+      for (let i = 0; i < osoCoords.length; i++) {
+        for (let j = i + 1; j < osoCoords.length; j++) {
+          let dx = osoCoords[i].x - osoCoords[j].x;
+          let dy = osoCoords[i].y - osoCoords[j].y;
+          let dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 45) {
+            ctx.beginPath();
+            ctx.moveTo(osoCoords[i].x, osoCoords[i].y);
+            ctx.lineTo(osoCoords[j].x, osoCoords[j].y);
+            ctx.stroke();
+          }
+        }
+      }
+    }
+
+    function animateBackgroundLoop() {
+      ctx.clearRect(0, 0, width, height);
+
+      if (currentBackground === 'velas') {
+        shiftOffset += 0.95;
+        if (shiftOffset >= (candleWidth + candleGap)) {
+          shiftOffset = 0;
+          candles.shift();
+          if (candles.length > 0) {
+            const nextIdx = candles[candles.length - 1].index + 1;
+            candles.push(generarPuntosMercado(nextIdx));
+          }
+        }
+        renderVelasBackground();
+      } else if (currentBackground === 'matrix') {
+        renderMatrixBackground();
+      } else if (currentBackground === 'particulas') {
+        renderParticulasBackground();
+      } else if (currentBackground === 'toroOsoEstrellas') {
+        renderToroOsoEstrellasBackground();
+      }
+
+      animationFrameId = requestAnimationFrame(animateBackgroundLoop);
+    }
+
+    function initBackgroundAnimation() {
+      if (animationFrameId) cancelAnimationFrame(animationFrameId);
+      resizeCanvas();
+      animateBackgroundLoop();
     }
 
     window.addEventListener('resize', resizeCanvas);
-    resizeCanvas();
-    animateSmoothLoop();
+    initBackgroundAnimation();
   </script>
 </body>
 </html>
