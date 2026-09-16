@@ -1558,102 +1558,127 @@
     </button>
   </aside>
 
-  <!-- MODAL DE CONFIGURACIÓN DE PERFILES / ESPACIO, SKINS Y SALVAS -->
+  <!-- MODAL DE CONFIGURACIÓN DE PERFILES / ESPACIO, SKINS Y SALVAS (DIVIDIDO POR PESTAÑAS INDEPENDIENTES) -->
   <div id="configModal" class="modal-overlay">
-    <div class="modal-card" style="max-width: 540px;">
+    <div class="modal-card" style="max-width: 580px;">
       <div class="modal-header">
-        <h3><i class="fa-solid fa-gear" style="color: var(--skin-primary);"></i> Configuración, Skins, Fondos y Salvas</h3>
+        <h3><i class="fa-solid fa-gear" style="color: var(--skin-primary);"></i> Configuración</h3>
         <button class="btn-close-modal" onclick="cerrarModalConfig()"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
-      <!-- SECCIÓN DE SELECCIÓN DE SKINS CON MENÚ DESPLEGABLE -->
-      <div class="quick-calc-modal-box" style="border-color: rgba(var(--skin-primary-rgb), 0.5); margin-bottom: 12px;">
-        <div class="quick-calc-title" style="color: var(--skin-primary);"><i class="fa-solid fa-palette"></i> Selección de Skin / Tema Visual</div>
-        <p style="font-size: 0.78rem; color: #bbb; line-height: 1.4; margin-bottom: 12px;">
-          Elige tu estilo visual favorito en el desplegable. Se aplicará instantáneamente en toda la interfaz y en el fondo animado.
-        </p>
-        <div class="form-field" style="margin-bottom: 0;">
-          <select id="skinSelectDropdown" class="form-select" onchange="cambiarSkinDesdeSelect(this.value)" style="border-color: rgba(var(--skin-primary-rgb), 0.5); font-weight: 900; width: 100%;">
-            <option value="rojoNeon">🔴 Rojo Neón Clásico</option>
-            <option value="verdeEmarald">🟢 Tonos Verdes</option>
-            <option value="rosaFucsia">🩷 Tonos Rosas</option>
-            <option value="moradoMistico">🟣 Tonos Morados</option>
-            <option value="plateado">🪙 Tema Plateado</option>
-            <option value="oroYBlanco">⚜️ Oro y Blanco</option>
-          </select>
-        </div>
+      <!-- BOTONES DE PESTAÑAS INDEPENDIENTES -->
+      <div style="display: flex; gap: 8px; margin-bottom: 20px; border-bottom: 1px solid rgba(var(--skin-primary-rgb), 0.3); padding-bottom: 12px; overflow-x: auto;">
+        <button id="tabBtnSkins" class="btn-action" style="flex: 1; justify-content: center; font-size: 0.82rem; padding: 8px 10px;" onclick="cambiarPestanaConfig('skins')">
+          <i class="fa-solid fa-palette"></i> Skins Visuales
+        </button>
+        <button id="tabBtnFondos" class="btn-action btn-secondary" style="flex: 1; justify-content: center; font-size: 0.82rem; padding: 8px 10px;" onclick="cambiarPestanaConfig('fondos')">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> Fondos Animados
+        </button>
+        <button id="tabBtnPerfiles" class="btn-action btn-secondary" style="flex: 1; justify-content: center; font-size: 0.82rem; padding: 8px 10px;" onclick="cambiarPestanaConfig('perfiles')">
+          <i class="fa-solid fa-users"></i> Perfiles y Cuentas
+        </button>
+        <button id="tabBtnSalvas" class="btn-action btn-secondary" style="flex: 1; justify-content: center; font-size: 0.82rem; padding: 8px 10px;" onclick="cambiarPestanaConfig('salvas')">
+          <i class="fa-solid fa-folder-open"></i> Respaldos (Salvas)
+        </button>
       </div>
 
-      <!-- SECCIÓN DE SELECCIÓN DE FONDO DINÁMICO -->
-      <div class="quick-calc-modal-box" style="border-color: rgba(var(--skin-primary-rgb), 0.5); margin-bottom: 12px;">
-        <div class="quick-calc-title" style="color: var(--skin-primary);"><i class="fa-solid fa-wand-magic-sparkles"></i> Selección de Fondo Animado</div>
-        <p style="font-size: 0.78rem; color: #bbb; line-height: 1.4; margin-bottom: 12px;">
-          Elige qué animación deseas de fondo. El fondo se adaptará automáticamente a los colores de tu tema seleccionado.
-        </p>
-        <div class="form-field" style="margin-bottom: 0;">
-          <select id="bgSelectDropdown" class="form-select" onchange="cambiarFondoDesdeSelect(this.value)" style="border-color: rgba(var(--skin-primary-rgb), 0.5); font-weight: 900; width: 100%;">
-            <option value="velas">📈 Velas Japonesas y Medias Móviles</option>
-            <option value="matrix">💻 Lluvia Matrix de Mercado (Números y Tickers)</option>
-            <option value="particulas">✨ Partículas de Liquidez Flotantes</option>
-            <option value="toroOsoEstrellas">🐂🐻 Toro Verde Neón y Oso Rojo Neón Estelares</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="quick-calc-modal-box" style="border-color: rgba(var(--skin-primary-rgb), 0.5);">
-        <!-- LISTA DESPLEGABLE DE PERFILES CREADOS EN LA PC CON BOTÓN DE ELIMINAR -->
-        <div class="form-field">
-          <label style="font-size: 0.8rem; color: var(--skin-primary);"><i class="fa-solid fa-users"></i> Perfiles Creados en esta PC:</label>
-          <div style="display: flex; gap: 8px;">
-            <select id="pcProfilesSelect" class="form-select" onchange="seleccionarPerfilPC(this.value)" style="border-color: rgba(var(--skin-primary-rgb), 0.5); font-weight: 900; flex: 1;">
-              <option value="">-- Seleccionar Perfil --</option>
+      <!-- CONTENIDO PESTAÑA 1: SKINS VISUALES -->
+      <div id="configTabSkins" class="config-tab-content">
+        <div class="quick-calc-modal-box" style="border-color: rgba(var(--skin-primary-rgb), 0.5); margin-bottom: 0;">
+          <div class="quick-calc-title" style="color: var(--skin-primary);"><i class="fa-solid fa-palette"></i> Selección de Skin / Tema Visual</div>
+          <p style="font-size: 0.78rem; color: #bbb; line-height: 1.4; margin-bottom: 12px;">
+            Elige tu estilo visual favorito en el desplegable. Se aplicará instantáneamente en toda la interfaz y en el fondo animado.
+          </p>
+          <div class="form-field" style="margin-bottom: 0;">
+            <select id="skinSelectDropdown" class="form-select" onchange="cambiarSkinDesdeSelect(this.value)" style="border-color: rgba(var(--skin-primary-rgb), 0.5); font-weight: 900; width: 100%;">
+              <option value="rojoNeon">🔴 Rojo Neón Clásico</option>
+              <option value="verdeEmarald">🟢 Tonos Verdes</option>
+              <option value="rosaFucsia">🩷 Tonos Rosas</option>
+              <option value="moradoMistico">🟣 Tonos Morados</option>
+              <option value="plateado">🪙 Tema Plateado</option>
+              <option value="oroYBlanco">⚜️ Oro y Blanco</option>
             </select>
-            <button class="btn-action btn-secondary" style="border-color: var(--skin-primary); color: var(--skin-primary); font-size: 0.8rem; padding: 8px 12px;" onclick="eliminarPerfilSeleccionadoPC()" title="Eliminar Perfil Seleccionado">
-              <i class="fa-solid fa-trash-can"></i> Eliminar
-            </button>
           </div>
         </div>
+      </div>
 
-        <!-- SECCIÓN CREAR NUEVO USUARIO LOCAL -->
-        <div style="margin-top: 15px; border-top: 1px dashed rgba(var(--skin-primary-rgb), 0.3); padding-top: 12px;">
-          <div style="font-size: 0.8rem; font-weight: 800; color: #00ff88; margin-bottom: 6px;"><i class="fa-solid fa-user-plus"></i> Crear Nuevo Usuario Local (Solo en esta PC)</div>
-          <div style="display: flex; gap: 8px; flex-direction: column;">
-            <input type="text" id="nuevoUsuarioInput" class="form-input" placeholder="Nombre del usuario..." style="width: 100%; font-size: 0.85rem; padding: 8px;">
-            <div style="display: flex; gap: 8px; align-items: center;">
-              <label style="font-size: 0.75rem; color: var(--skin-primary); margin: 0; white-space: nowrap;">Config. Tabla:</label>
-              <select id="nuevoUsuarioConfigSelect" class="form-select" style="font-size: 0.8rem; padding: 6px; border-color: rgba(var(--skin-primary-rgb), 0.5);">
-                <option value="config1">Configuración 1</option>
-                <option value="config2">Configuración 2</option>
+      <!-- CONTENIDO PESTAÑA 2: FONDOS ANIMADOS -->
+      <div id="configTabFondos" class="config-tab-content" style="display: none;">
+        <div class="quick-calc-modal-box" style="border-color: rgba(var(--skin-primary-rgb), 0.5); margin-bottom: 0;">
+          <div class="quick-calc-title" style="color: var(--skin-primary);"><i class="fa-solid fa-wand-magic-sparkles"></i> Selección de Fondo Animado</div>
+          <p style="font-size: 0.78rem; color: #bbb; line-height: 1.4; margin-bottom: 12px;">
+            Elige qué animación deseas de fondo. El fondo se adaptará automáticamente a los colores de tu tema seleccionado.
+          </p>
+          <div class="form-field" style="margin-bottom: 0;">
+            <select id="bgSelectDropdown" class="form-select" onchange="cambiarFondoDesdeSelect(this.value)" style="border-color: rgba(var(--skin-primary-rgb), 0.5); font-weight: 900; width: 100%;">
+              <option value="velas">📈 Velas Japonesas y Medias Móviles</option>
+              <option value="wallstreet">🏢 Pantalla Wall Street (Números y Tickers Procedurales)</option>
+              <option value="particulas">✨ Partículas de Liquidez Flotantes</option>
+              <option value="toroOsoEstrellas">🐂🐻 Toro Verde Neón y Oso Rojo Neón Estelares</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTENIDO PESTAÑA 3: PERFILES Y CUENTAS -->
+      <div id="configTabPerfiles" class="config-tab-content" style="display: none;">
+        <div class="quick-calc-modal-box" style="border-color: rgba(var(--skin-primary-rgb), 0.5); margin-bottom: 0;">
+          <!-- LISTA DESPLEGABLE DE PERFILES CREADOS EN LA PC CON BOTÓN DE ELIMINAR -->
+          <div class="form-field">
+            <label style="font-size: 0.8rem; color: var(--skin-primary);"><i class="fa-solid fa-users"></i> Perfiles Creados en esta PC:</label>
+            <div style="display: flex; gap: 8px;">
+              <select id="pcProfilesSelect" class="form-select" onchange="seleccionarPerfilPC(this.value)" style="border-color: rgba(var(--skin-primary-rgb), 0.5); font-weight: 900; flex: 1;">
+                <option value="">-- Seleccionar Perfil --</option>
               </select>
-              <button class="btn-action btn-success" style="font-size: 0.8rem; padding: 8px 14px;" onclick="crearNuevoUsuarioLocal()">
-                <i class="fa-solid fa-plus"></i> Crear
+              <button class="btn-action btn-secondary" style="border-color: var(--skin-primary); color: var(--skin-primary); font-size: 0.8rem; padding: 8px 12px;" onclick="eliminarPerfilSeleccionadoPC()" title="Eliminar Perfil Seleccionado">
+                <i class="fa-solid fa-trash-can"></i> Eliminar
+              </button>
+            </div>
+          </div>
+
+          <!-- SECCIÓN CREAR NUEVO USUARIO LOCAL -->
+          <div style="margin-top: 15px; border-top: 1px dashed rgba(var(--skin-primary-rgb), 0.3); padding-top: 12px;">
+            <div style="font-size: 0.8rem; font-weight: 800; color: #00ff88; margin-bottom: 6px;"><i class="fa-solid fa-user-plus"></i> Crear Nuevo Usuario Local (Solo en esta PC)</div>
+            <div style="display: flex; gap: 8px; flex-direction: column;">
+              <input type="text" id="nuevoUsuarioInput" class="form-input" placeholder="Nombre del usuario..." style="width: 100%; font-size: 0.85rem; padding: 8px;">
+              <div style="display: flex; gap: 8px; align-items: center;">
+                <label style="font-size: 0.75rem; color: var(--skin-primary); margin: 0; white-space: nowrap;">Config. Tabla:</label>
+                <select id="nuevoUsuarioConfigSelect" class="form-select" style="font-size: 0.8rem; padding: 6px; border-color: rgba(var(--skin-primary-rgb), 0.5);">
+                  <option value="config1">Configuración 1</option>
+                  <option value="config2">Configuración 2</option>
+                </select>
+                <button class="btn-action btn-success" style="font-size: 0.8rem; padding: 8px 14px;" onclick="crearNuevoUsuarioLocal()">
+                  <i class="fa-solid fa-plus"></i> Crear
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTENIDO PESTAÑA 4: RESPALDOS (SALVAS) -->
+      <div id="configTabSalvas" class="config-tab-content" style="display: none;">
+        <div class="quick-calc-modal-box" style="border-color: rgba(var(--skin-primary-rgb), 0.5); margin-bottom: 0;">
+          <div class="quick-calc-title" style="color: var(--skin-primary);"><i class="fa-solid fa-folder-open"></i> Gestión de Respaldos (Salvas)</div>
+          <p style="font-size: 0.78rem; color: #bbb; line-height: 1.4; margin-bottom: 15px;">
+            Selecciona la opción deseada. Tu navegador te pedirá la ubicación exacta donde quieres almacenar o cargar el archivo.
+          </p>
+
+          <!-- Botones Salvas Globales -->
+          <div style="margin-bottom: 0;">
+            <div style="display: flex; gap: 10px;">
+              <button class="btn-action btn-export" style="flex: 1; justify-content: center; font-size:0.85rem;" onclick="exportarSalvaGlobal()">
+                <i class="fa-solid fa-file-export"></i> Salvar
+              </button>
+              <button class="btn-action btn-import" style="flex: 1; justify-content: center; font-size:0.85rem;" onclick="activarSelectorGlobal()">
+                <i class="fa-solid fa-file-import"></i> Importar Salva
               </button>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- SECCIÓN DE CONFIGURACIÓN DE SALVAS -->
-      <div class="quick-calc-modal-box" style="border-color: rgba(var(--skin-primary-rgb), 0.5); margin-top: 12px;">
-        <div class="quick-calc-title" style="color: var(--skin-primary);"><i class="fa-solid fa-folder-open"></i> Gestión de Respaldos (Salvas)</div>
-        <p style="font-size: 0.78rem; color: #bbb; line-height: 1.4; margin-bottom: 15px;">
-          Selecciona la opción deseada. Tu navegador te pedirá la ubicación exacta donde quieres almacenar o cargar el archivo.
-        </p>
-
-        <!-- Botones Salvas Globales -->
-        <div style="margin-bottom: 12px;">
-          <div style="display: flex; gap: 10px;">
-            <button class="btn-action btn-export" style="flex: 1; justify-content: center; font-size:0.85rem;" onclick="exportarSalvaGlobal()">
-              <i class="fa-solid fa-file-export"></i> Salvar
-            </button>
-            <button class="btn-action btn-import" style="flex: 1; justify-content: center; font-size:0.85rem;" onclick="activarSelectorGlobal()">
-              <i class="fa-solid fa-file-import"></i> Importar Salva
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="modal-footer" style="margin-top: 5px;">
+      <div class="modal-footer" style="margin-top: 20px;">
         <button class="btn-action btn-success" style="width: 100%; justify-content: center;" onclick="cerrarModalConfig()"><i class="fa-solid fa-check"></i> Aceptar</button>
       </div>
     </div>
@@ -2648,6 +2673,46 @@
     ];
 
     // ==========================================
+    // SISTEMA DE PESTAÑAS EN MODAL DE CONFIGURACIÓN
+    // ==========================================
+    function cambiarPestanaConfig(nombrePestana) {
+      const tabSkins = document.getElementById('configTabSkins');
+      const tabFondos = document.getElementById('configTabFondos');
+      const tabPerfiles = document.getElementById('configTabPerfiles');
+      const tabSalvas = document.getElementById('configTabSalvas');
+
+      const btnSkins = document.getElementById('tabBtnSkins');
+      const btnFondos = document.getElementById('tabBtnFondos');
+      const btnPerfiles = document.getElementById('tabBtnPerfiles');
+      const btnSalvas = document.getElementById('tabBtnSalvas');
+
+      // Ocultar todas las pestañas y quitar clase active a los botones
+      tabSkins.style.display = 'none';
+      tabFondos.style.display = 'none';
+      tabPerfiles.style.display = 'none';
+      tabSalvas.style.display = 'none';
+
+      btnSkins.className = 'btn-action btn-secondary';
+      btnFondos.className = 'btn-action btn-secondary';
+      btnPerfiles.className = 'btn-action btn-secondary';
+      btnSalvas.className = 'btn-action btn-secondary';
+
+      if (nombrePestana === 'skins') {
+        tabSkins.style.display = 'block';
+        btnSkins.className = 'btn-action';
+      } else if (nombrePestana === 'fondos') {
+        tabFondos.style.display = 'block';
+        btnFondos.className = 'btn-action';
+      } else if (nombrePestana === 'perfiles') {
+        tabPerfiles.style.display = 'block';
+        btnPerfiles.className = 'btn-action';
+      } else if (nombrePestana === 'salvas') {
+        tabSalvas.style.display = 'block';
+        btnSalvas.className = 'btn-action';
+      }
+    }
+
+    // ==========================================
     // SISTEMA DE SKINS DINÁMICOS
     // ==========================================
     const skinThemes = {
@@ -2910,6 +2975,7 @@
 
     function abrirModalConfig() {
       actualizarBadgeConfigUI();
+      cambiarPestanaConfig('skins'); // Pestaña inicial por defecto al abrir
       document.getElementById('configModal').style.display = 'flex';
     }
 
@@ -4320,7 +4386,7 @@
     activarAutoguardadoGlobalListener();
 
     /* ==========================================================================
-       MOTOR MULTI-FONDO DINÁMICO (VELAS, MATRIX, PARTÍCULAS Y TORO/OSO)
+       MOTOR MULTI-FONDO DINÁMICO (VELAS, WALL STREET, PARTÍCULAS Y TORO/OSO)
        ========================================================================== */
     const canvas = document.getElementById('canvas-background');
     const ctx = canvas.getContext('2d');
@@ -4334,9 +4400,10 @@
     let shiftOffset = 0;
     let centerOffsetY = 0;
 
-    // Variables Fondo Matrix de Mercado (Estático y Uniforme)
-    let matrixColumns = [];
-    const tickersList = ["SPY", "QQQ", "AAPL", "NVDA", "TSLA", "MSFT", "AMZN", "BTC", "ETH", "AMD", "META"];
+    // Variables Fondo Pantalla Wall Street (Procedural adaptado a scroll y tamaño de pantalla)
+    let wallStreetColumns = [];
+    let scrollYOffset = 0;
+    const wsTickersList = ["SPY", "QQQ", "AAPL", "NVDA", "TSLA", "MSFT", "AMZN", "BTC", "ETH", "AMD", "META", "GOOGL", "NFLX", "DIS", "BA"];
 
     // Variables Fondo Partículas
     let particles = [];
@@ -4362,39 +4429,35 @@
         candles.push(generarPuntosMercado(i));
       }
 
-      // Inicializar Matrix
-      matrixColumns = [];
-      const cols = Math.floor(width / 75);
-      for (let i = 0; i < cols; i++) {
-        let itemsInCol = [];
-        let numRows = 10;
-        let startY = Math.random() * height - height;
+      // Inicializar Pantalla Wall Street Procedural
+      wallStreetColumns = [];
+      const colWidth = 150; // Ancho por columna de tablas de números
+      const totalCols = Math.ceil(width / colWidth) + 3;
+      
+      for (let i = 0; i < totalCols; i++) {
+        let rowsData = [];
+        let numRowsPerCol = Math.floor(height / 28) + 8;
+        let startY = (Math.random() - 0.5) * height;
 
-        for (let r = 0; r < numRows; r++) {
-          let isPositive = Math.random() > 0.45;
-          let textItem = "";
-          let typeRand = Math.random();
-          if (typeRand < 0.25) {
-            textItem = tickersList[Math.floor(Math.random() * tickersList.length)];
-          } else if (typeRand < 0.6) {
-            textItem = (isPositive ? "+$" : "-$") + (Math.random() * 450 + 10).toFixed(2);
-          } else if (typeRand < 0.85) {
-            textItem = (isPositive ? "+" : "-") + (Math.random() * 6.5).toFixed(2) + "%";
-          } else {
-            textItem = Math.floor(Math.random() * 9999).toString();
-          }
+        for (let r = 0; r < numRowsPerCol; r++) {
+          let isUp = Math.random() > 0.5;
+          let ticker = wsTickersList[Math.floor(Math.random() * wsTickersList.length)];
+          let valNum = (Math.random() * 450 + 10).toFixed(2);
+          let varNum = (Math.random() * 8.5).toFixed(2);
 
-          itemsInCol.push({
-            text: textItem,
-            isPositive: isPositive
+          rowsData.push({
+            ticker: ticker,
+            price: `$${valNum}`,
+            isUp: isUp,
+            variation: `${isUp ? '+' : '-'}${varNum}%`
           });
         }
 
-        matrixColumns.push({
-          x: i * 75 + (Math.random() * 20),
-          y: startY,
-          speed: 0.65,
-          items: itemsInCol
+        wallStreetColumns.push({
+          x: i * colWidth + (Math.random() * 30 - 15),
+          baseY: startY,
+          speed: 0.45 + (Math.random() * 0.4),
+          rows: rowsData
         });
       }
 
@@ -4411,46 +4474,38 @@
       }
 
       // Inicializar Estrellas Toro y Oso (Formas vectoriales estelares)
-      // Toro a la izquierda
       toroStars = [
-        // Cabeza y Cuernos
-        {ox: -80, oy: -50, size: 2.2}, {ox: -65, oy: -60, size: 2.5}, {ox: -45, oy: -75, size: 2.8}, // Cuerno izq
-        {ox: -30, oy: -50, size: 2.2}, {ox: -55, oy: -35, size: 2.5}, {ox: -40, oy: -25, size: 2.0}, // Cabeza frente
-        {ox: -15, oy: -65, size: 2.8}, {ox: 0, oy: -75, size: 2.6}, {ox: 15, oy: -60, size: 2.4},     // Cuerno der
-        {ox: -25, oy: -15, size: 2.5}, {ox: -40, oy: -5, size: 2.2}, {ox: -55, oy: 0, size: 2.0},     // Hocico / Rostro
-        // Cuerpo y Pecho
+        {ox: -80, oy: -50, size: 2.2}, {ox: -65, oy: -60, size: 2.5}, {ox: -45, oy: -75, size: 2.8},
+        {ox: -30, oy: -50, size: 2.2}, {ox: -55, oy: -35, size: 2.5}, {ox: -40, oy: -25, size: 2.0},
+        {ox: -15, oy: -65, size: 2.8}, {ox: 0, oy: -75, size: 2.6}, {ox: 15, oy: -60, size: 2.4},
+        {ox: -25, oy: -15, size: 2.5}, {ox: -40, oy: -5, size: 2.2}, {ox: -55, oy: 0, size: 2.0},
         {ox: -30, oy: 10, size: 3.0}, {ox: -10, oy: 5, size: 2.8}, {ox: 10, oy: 10, size: 3.0},
         {ox: -20, oy: 30, size: 3.2}, {ox: 0, oy: 35, size: 3.0}, {ox: 20, oy: 25, size: 2.8},
-        // Patas Delanteras (con puntos para animación de corrida en el lugar)
         {ox: -25, oy: 50, size: 2.5, isLeg: true, legId: 1}, {ox: -20, oy: 70, size: 2.2, isLeg: true, legId: 1}, {ox: -15, oy: 85, size: 2.0, isLeg: true, legId: 1},
         {ox: 10, oy: 45, size: 2.5, isLeg: true, legId: 2}, {ox: 15, oy: 65, size: 2.2, isLeg: true, legId: 2}, {ox: 20, oy: 80, size: 2.0, isLeg: true, legId: 2},
-        // Cuerpo trasero y ancas
         {ox: 40, oy: 15, size: 3.0}, {ox: 55, oy: 25, size: 2.8}, {ox: 45, oy: 40, size: 2.6},
-        // Patas Traseras
         {ox: 35, oy: 55, size: 2.5, isLeg: true, legId: 3}, {ox: 40, oy: 75, size: 2.2, isLeg: true, legId: 3},
         {ox: 50, oy: 50, size: 2.5, isLeg: true, legId: 4}, {ox: 55, oy: 70, size: 2.2, isLeg: true, legId: 4},
-        // Cola
         {ox: 70, oy: 20, size: 2.0}, {ox: 80, oy: 35, size: 1.8}, {ox: 85, oy: 50, size: 1.5}
       ];
 
-      // Oso a la derecha
       osoStars = [
-        // Cabeza y Orejas
-        {ox: 40, oy: -60, size: 2.5}, {ox: 55, oy: -75, size: 2.3}, // Oreja izq
-        {ox: 75, oy: -60, size: 2.5}, {ox: 65, oy: -75, size: 2.3}, // Oreja der
-        {ox: 50, oy: -45, size: 2.8}, {ox: 65, oy: -45, size: 2.8}, {ox: 57, oy: -35, size: 2.5}, // Cabeza
-        // Cuerpo robusto
+        {ox: 40, oy: -60, size: 2.5}, {ox: 55, oy: -75, size: 2.3},
+        {ox: 75, oy: -60, size: 2.5}, {ox: 65, oy: -75, size: 2.3},
+        {ox: 50, oy: -45, size: 2.8}, {ox: 65, oy: -45, size: 2.8}, {ox: 57, oy: -35, size: 2.5},
         {ox: 35, oy: -15, size: 3.2}, {ox: 55, oy: -20, size: 3.5}, {ox: 75, oy: -15, size: 3.2},
         {ox: 30, oy: 10, size: 3.5}, {ox: 55, oy: 15, size: 3.8}, {ox: 80, oy: 10, size: 3.5},
         {ox: 35, oy: 35, size: 3.2}, {ox: 55, oy: 40, size: 3.5}, {ox: 75, oy: 35, size: 3.2},
-        // Patas Delanteras (con animación de corrida en el lugar)
         {ox: 35, oy: 55, size: 2.6, isLeg: true, legId: 1}, {ox: 30, oy: 75, size: 2.3, isLeg: true, legId: 1}, {ox: 25, oy: 90, size: 2.0, isLeg: true, legId: 1},
         {ox: 50, oy: 55, size: 2.6, isLeg: true, legId: 2}, {ox: 55, oy: 75, size: 2.3, isLeg: true, legId: 2}, {ox: 60, oy: 90, size: 2.0, isLeg: true, legId: 2},
-        // Patas Traseras
         {ox: 70, oy: 55, size: 2.6, isLeg: true, legId: 3}, {ox: 75, oy: 75, size: 2.3, isLeg: true, legId: 3},
         {ox: 85, oy: 55, size: 2.6, isLeg: true, legId: 4}, {ox: 90, oy: 75, size: 2.3, isLeg: true, legId: 4}
       ];
     }
+
+    window.addEventListener('scroll', () => {
+      scrollYOffset = window.scrollY * 0.35;
+    });
 
     function generarPuntosMercado(nIndex) {
       const t = nIndex;
@@ -4563,37 +4618,50 @@
       }
     }
 
-    function renderMatrixBackground() {
+    function renderWallStreetBackground() {
       const activeSkinObj = skinThemes[currentSkin] || skinThemes.rojoNeon;
-      ctx.font = '800 14px Montserrat, monospace';
+      ctx.font = '700 12.5px Montserrat, monospace';
 
-      matrixColumns.forEach(col => {
-        col.y += col.speed;
-        let totalHeightBlock = col.items.length * 35;
-        if (col.y > height) {
-          col.y = -totalHeightBlock;
+      wallStreetColumns.forEach((col, colIdx) => {
+        col.baseY += col.speed;
+        let totalBlockHeight = col.rows.length * 28;
+        if (col.baseY > height + 50) {
+          col.baseY = -totalBlockHeight;
         }
 
-        let currentY = col.y;
-        col.items.forEach((item) => {
-          let colorText = "#ffffff";
-          if (item.text.includes("+") || (!item.text.includes("$") && !item.text.includes("%") && !tickersList.includes(item.text) && item.isPositive)) {
-            colorText = "#00ff88";
-          } else if (item.text.includes("-") || (!item.text.includes("$") && !item.text.includes("%") && !tickersList.includes(item.text) && !item.isPositive)) {
-            colorText = activeSkinObj.primary;
-          } else if (tickersList.includes(item.text)) {
-            colorText = "#ffffff";
-          } else {
-            colorText = item.isPositive ? "#00ff88" : activeSkinObj.primary;
+        let renderY = col.baseY - scrollYOffset;
+
+        col.rows.forEach((rowItem) => {
+          if (renderY > -40 && renderY < height + 40) {
+            let tickerX = col.x;
+            let priceX = col.x + 62;
+            let arrowX = col.x + 112;
+            let varX = col.x + 124;
+
+            // Ticker
+            ctx.fillStyle = "#dddddd";
+            ctx.shadowColor = "rgba(255,255,255,0.2)";
+            ctx.shadowBlur = 4;
+            ctx.fillText(rowItem.ticker, tickerX, renderY);
+
+            // Precio
+            ctx.fillStyle = "#ffffff";
+            ctx.fillText(rowItem.price, priceX, renderY);
+
+            // Flecha Neón y Variación (Verde si sube, Rojo Neón si baja)
+            let colorNeon = rowItem.isUp ? "#00ff88" : activeSkinObj.primary;
+            ctx.fillStyle = colorNeon;
+            ctx.shadowColor = colorNeon;
+            ctx.shadowBlur = 10;
+
+            // Dibujar flecha (▲ o ▼)
+            let arrowSymbol = rowItem.isUp ? "▲" : "▼";
+            ctx.fillText(arrowSymbol, arrowX, renderY);
+            ctx.fillText(rowItem.variation, varX, renderY);
+
+            ctx.shadowBlur = 0;
           }
-
-          ctx.fillStyle = colorText;
-          ctx.shadowColor = colorText;
-          ctx.shadowBlur = 6;
-          ctx.fillText(item.text, col.x, currentY);
-          ctx.shadowBlur = 0;
-
-          currentY += 35;
+          renderY += 28;
         });
       });
     }
@@ -4640,17 +4708,15 @@
       toroRunPhase += 0.12;
       osoRunPhase += 0.12;
 
-      // Posición fija: Toro a la izquierda, Oso a la derecha
       const toroCenterX = width * 0.22;
       const toroCenterY = height * 0.55;
       const osoCenterX = width * 0.78;
       const osoCenterY = height * 0.55;
 
-      // --- DIBUJAR TORO (Verde Neón) ---
       const toroColor = '#00ff88';
       let toroCoords = [];
 
-      toroStars.forEach((star, index) => {
+      toroStars.forEach((star) => {
         let drawX = toroCenterX + star.ox;
         let drawY = toroCenterY + star.oy;
 
@@ -4661,7 +4727,6 @@
 
         toroCoords.push({ x: drawX, y: drawY });
 
-        // Dibujar estrella brillante
         ctx.beginPath();
         ctx.arc(drawX, drawY, star.size, 0, Math.PI * 2);
         ctx.fillStyle = toroColor;
@@ -4671,7 +4736,6 @@
         ctx.shadowBlur = 0;
       });
 
-      // Conectar constelación del Toro con líneas tenues
       ctx.strokeStyle = 'rgba(0, 255, 136, 0.2)';
       ctx.lineWidth = 1;
       for (let i = 0; i < toroCoords.length; i++) {
@@ -4688,11 +4752,10 @@
         }
       }
 
-      // --- DIBUJAR OSO (Rojo Neón) ---
       const osoColor = '#ff0037';
       let osoCoords = [];
 
-      osoStars.forEach((star, index) => {
+      osoStars.forEach((star) => {
         let drawX = osoCenterX + star.ox;
         let drawY = osoCenterY + star.oy;
 
@@ -4703,7 +4766,6 @@
 
         osoCoords.push({ x: drawX, y: drawY });
 
-        // Dibujar estrella brillante
         ctx.beginPath();
         ctx.arc(drawX, drawY, star.size, 0, Math.PI * 2);
         ctx.fillStyle = osoColor;
@@ -4713,7 +4775,6 @@
         ctx.shadowBlur = 0;
       });
 
-      // Conectar constelación del Oso con líneas tenues
       ctx.strokeStyle = 'rgba(255, 0, 55, 0.2)';
       ctx.lineWidth = 1;
       for (let i = 0; i < osoCoords.length; i++) {
@@ -4745,8 +4806,8 @@
           }
         }
         renderVelasBackground();
-      } else if (currentBackground === 'matrix') {
-        renderMatrixBackground();
+      } else if (currentBackground === 'wallstreet') {
+        renderWallStreetBackground();
       } else if (currentBackground === 'particulas') {
         renderParticulasBackground();
       } else if (currentBackground === 'toroOsoEstrellas') {
