@@ -389,7 +389,6 @@
       align-items: center;
       gap: 8px;
       font-size: 0.95rem;
-      text-decoration: none;
     }
 
     .btn-action:hover {
@@ -1755,6 +1754,29 @@
         </div>
       </div>
 
+      <!-- NUEVOS CAMPOS DE DETALLES DEL TRADE DEL DÍA -->
+      <div class="form-group-row">
+        <div class="form-field">
+          <label><i class="fa-solid fa-tag"></i> Ticker:</label>
+          <input type="text" id="tradeTickerField" class="form-input" placeholder="Ej: SPY, AAPL..." oninput="autoGuardarNotaEnVivo()">
+        </div>
+        <div class="form-field">
+          <label><i class="fa-solid fa-layer-group"></i> Contratos Comprados:</label>
+          <input type="number" id="tradeContractsField" class="form-input" step="1" placeholder="Ej: 5" oninput="autoGuardarNotaEnVivo()">
+        </div>
+      </div>
+
+      <div class="form-group-row">
+        <div class="form-field">
+          <label><i class="fa-solid fa-crosshairs"></i> Strike Escogido:</label>
+          <input type="text" id="tradeStrikeField" class="form-input" placeholder="Ej: 450 Call / 420 Put" oninput="autoGuardarNotaEnVivo()">
+        </div>
+        <div class="form-field">
+          <label><i class="fa-solid fa-arrows-split-up-and-left"></i> Distancia al Spot Price ($):</label>
+          <input type="text" id="tradeDistanceField" class="form-input" placeholder="Ej: $1.50 OTM" oninput="autoGuardarNotaEnVivo()">
+        </div>
+      </div>
+
       <div class="form-field">
         <label><i class="fa-solid fa-cart-shopping"></i> Tipo de Compra:</label>
         <div class="tags-wrapper" id="buyTypeContainer">
@@ -2563,9 +2585,6 @@
         <button class="btn-action btn-secondary" onclick="limpiarTabla()">
           <i class="fa-solid fa-trash-can"></i> Limpiar Tabla
         </button>
-        <a href="https://calculadora-de-interes-compuesto-ivory.vercel.app/" target="_blank" class="btn-action btn-success">
-          <i class="fa-solid fa-calculator"></i> Calculadora
-        </a>
       </div>
 
       <div class="section-title">
@@ -3605,7 +3624,7 @@
           <td class="cell-capital-total-val cell-capital-result cell-neutral" data-capital-num="0">$0.00</td>
           <td>
             <div class="row-actions-group">
-              <button class="btn-row-action btn-note-action ${hasNoteClass}" onclick="abrirModalComentario(this)" title="Abrir Bitácora del Día">
+              <button class="btn-row-action btn-note-action ${hasNoteClass}" onclick="abrirModalComentario(this)" title="Abrir Bitácora y Detalles del Trade">
                 <i class="fa-regular fa-comment-dots"></i>
               </button>
             </div>
@@ -3701,6 +3720,12 @@
       document.getElementById('noteDateField').value = noteData.date || defaultDate;
       document.getElementById('noteTimeField').value = noteData.time || defaultTime;
       
+      // Asignar valores a los nuevos campos de detalles del trade
+      document.getElementById('tradeTickerField').value = noteData.tradeTicker || '';
+      document.getElementById('tradeContractsField').value = noteData.tradeContracts || '';
+      document.getElementById('tradeStrikeField').value = noteData.tradeStrike || '';
+      document.getElementById('tradeDistanceField').value = noteData.tradeDistance || '';
+
       cargarOpcionesEstrategias(noteData.strategy || '');
       document.getElementById('feelingCommentField').value = noteData.feelingComment || '';
 
@@ -3753,6 +3778,10 @@
       const noteObject = {
         date: document.getElementById('noteDateField').value,
         time: document.getElementById('noteTimeField').value,
+        tradeTicker: document.getElementById('tradeTickerField').value,
+        tradeContracts: document.getElementById('tradeContractsField').value,
+        tradeStrike: document.getElementById('tradeStrikeField').value,
+        tradeDistance: document.getElementById('tradeDistanceField').value,
         buyType: selectedBuyType,
         strategy: document.getElementById('strategySelectField').value,
         feelingComment: document.getElementById('feelingCommentField').value
@@ -3760,7 +3789,7 @@
 
       filaSeleccionadaParaNota.setAttribute('data-note-obj', JSON.stringify(noteObject));
 
-      const hasContent = noteObject.buyType || noteObject.strategy || noteObject.feelingComment;
+      const hasContent = noteObject.buyType || noteObject.strategy || noteObject.feelingComment || noteObject.tradeTicker || noteObject.tradeContracts || noteObject.tradeStrike || noteObject.tradeDistance;
       const btnIcon = filaSeleccionadaParaNota.querySelector('.btn-note-action');
 
       if (hasContent && btnIcon) {
@@ -3783,6 +3812,10 @@
     function limpiarComentarioActual() {
       document.getElementById('noteDateField').value = '';
       document.getElementById('noteTimeField').value = '';
+      document.getElementById('tradeTickerField').value = '';
+      document.getElementById('tradeContractsField').value = '';
+      document.getElementById('tradeStrikeField').value = '';
+      document.getElementById('tradeDistanceField').value = '';
       document.getElementById('strategySelectField').value = '';
       document.getElementById('feelingCommentField').value = '';
       selectedBuyType = '';
