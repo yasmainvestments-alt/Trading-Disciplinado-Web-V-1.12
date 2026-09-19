@@ -31,7 +31,6 @@
     }
 
     /* ==================== SCROLLBARS ÉPICAS Y PERSONALIZADAS ==================== */
-    /* Scrollbar Vertical */
     ::-webkit-scrollbar {
       width: 10px;
       height: 10px;
@@ -51,7 +50,6 @@
       box-shadow: 0 0 20px var(--skin-primary), 0 0 30px rgba(var(--skin-primary-rgb), 0.8);
     }
 
-    /* Soporte para Firefox */
     * {
       scrollbar-width: thin;
       scrollbar-color: var(--skin-primary) rgba(5, 5, 5, 0.95);
@@ -72,7 +70,7 @@
       display: flex;
       justify-content: center;
       align-items: flex-start;
-      overflow-x: auto; /* Permite desplazamiento horizontal fluido en pantallas pequeñas */
+      overflow-x: auto;
       position: relative;
     }
 
@@ -120,9 +118,9 @@
       position: relative;
       z-index: 3;
       text-align: center;
-      max-width: 1650px;
+      max-width: 1750px;
       width: 98%;
-      min-width: 320px; /* Asegura contenedor estable en móviles */
+      min-width: 320px;
       padding: 40px 10px;
       margin: 0 auto;
     }
@@ -182,7 +180,6 @@
       margin-bottom: 12px;
     }
 
-    /* ==================== ANIMACIÓN BIENVENIDA USUARIO ==================== */
     .welcome-user-container {
       margin-top: 8px;
       font-family: 'Montserrat', sans-serif;
@@ -201,21 +198,9 @@
     }
 
     @keyframes epicWelcomeAnim {
-      0% {
-        transform: scale(0.97);
-        opacity: 0.85;
-        text-shadow: 0 0 8px rgba(var(--skin-primary-rgb), 0.4);
-      }
-      50% {
-        transform: scale(1.03);
-        opacity: 1;
-        text-shadow: 0 0 18px var(--skin-primary), 0 0 30px rgba(var(--skin-primary-rgb), 0.8);
-      }
-      100% {
-        transform: scale(0.97);
-        opacity: 0.85;
-        text-shadow: 0 0 8px rgba(var(--skin-primary-rgb), 0.4);
-      }
+      0% { transform: scale(0.97); opacity: 0.85; text-shadow: 0 0 8px rgba(var(--skin-primary-rgb), 0.4); }
+      50% { transform: scale(1.03); opacity: 1; text-shadow: 0 0 18px var(--skin-primary), 0 0 30px rgba(var(--skin-primary-rgb), 0.8); }
+      100% { transform: scale(0.97); opacity: 0.85; text-shadow: 0 0 8px rgba(var(--skin-primary-rgb), 0.4); }
     }
 
     .home-config-btn {
@@ -476,7 +461,6 @@
       cursor: pointer;
     }
 
-    /* Icono de autoguardado oculto por completo */
     .autosave-icon-fixed {
       display: none !important;
     }
@@ -498,7 +482,6 @@
       max-width: 1100px;
     }
 
-    /* TARJETAS CON CONTENIDO PERFECTAMENTE CENTRADO */
     .btn-card {
       position: relative;
       width: 210px;
@@ -573,7 +556,7 @@
     #academy-view, #webs-importantes-view, #news-view, #checklist-view, #calculator-view, #investments-view, #chart-view {
       display: none;
       animation: fadeIn 0.6s forwards;
-      max-width: 1650px;
+      max-width: 1750px;
       margin: 0 auto;
     }
 
@@ -1078,7 +1061,6 @@
       text-align: center;
     }
 
-    /* TAMAÑO UNIFORME PARA TODAS LAS CASILLAS DE LA TABLA */
     .table-input {
       background: #000;
       border: 1px solid rgba(var(--skin-primary-rgb), 0.4);
@@ -1088,7 +1070,7 @@
       font-size: 0.82rem;
       font-weight: 700;
       height: 32px;
-      width: 95px;
+      width: 110px;
       margin: 0 auto;
       text-align: center;
       outline: none;
@@ -1116,7 +1098,6 @@
       color: #ffffff !important;
     }
 
-    /* ESTILOS NUEVOS PARA CAPITAL FINAL DINÁMICO EN LA BARRA SUPERIOR */
     #finalCapital.capital-neon-green {
       color: #00ff88 !important;
       text-shadow: 0 0 12px rgba(0, 255, 136, 0.8), 0 0 25px rgba(0, 255, 136, 0.5) !important;
@@ -1137,42 +1118,6 @@
     .input-rent-pct:focus {
       border-color: #ffcc00 !important;
       box-shadow: 0 0 10px rgba(255, 204, 0, 0.6) !important;
-    }
-
-    .input-ask {
-      border-color: rgba(0, 204, 255, 0.5) !important;
-      color: #00ccff !important;
-    }
-    .input-ask:focus {
-      border-color: #00ccff !important;
-      box-shadow: 0 0 10px rgba(0, 204, 255, 0.6) !important;
-    }
-
-    .input-qty {
-      border-color: rgba(168, 85, 247, 0.5) !important;
-      color: #a855f7 !important;
-    }
-    .input-qty:focus {
-      border-color: #a855f7 !important;
-      box-shadow: 0 0 10px rgba(168, 85, 247, 0.6) !important;
-    }
-
-    .input-limite {
-      border-color: rgba(255, 150, 0, 0.5) !important;
-      color: #ff9600 !important;
-    }
-    .input-limite:focus {
-      border-color: #ff9600 !important;
-      box-shadow: 0 0 10px rgba(255, 150, 0, 0.6) !important;
-    }
-
-    .input-bid {
-      border-color: rgba(0, 255, 136, 0.5) !important;
-      color: #00ff88 !important;
-    }
-    .input-bid:focus {
-      border-color: #00ff88 !important;
-      box-shadow: 0 0 10px rgba(0, 255, 136, 0.6) !important;
     }
 
     .cell-color-box {
@@ -1559,7 +1504,7 @@
     </button>
   </aside>
 
-  <!-- MODAL DE CONFIGURACIÓN DE PERFILES / ESPACIO, SKINS Y SALVAS (DIVIDIDO POR PESTAÑAS INDEPENDIENTES) -->
+  <!-- MODAL DE CONFIGURACIÓN DE PERFILES / ESPACIO, SKINS Y SALVAS -->
   <div id="configModal" class="modal-overlay">
     <div class="modal-card" style="max-width: 580px;">
       <div class="modal-header">
@@ -1624,7 +1569,6 @@
       <!-- CONTENIDO PESTAÑA 3: PERFILES Y CUENTAS -->
       <div id="configTabPerfiles" class="config-tab-content" style="display: none;">
         <div class="quick-calc-modal-box" style="border-color: rgba(var(--skin-primary-rgb), 0.5); margin-bottom: 0;">
-          <!-- LISTA DESPLEGABLE DE PERFILES CREADOS EN LA PC CON BOTÓN DE ELIMINAR -->
           <div class="form-field">
             <label style="font-size: 0.8rem; color: var(--skin-primary);"><i class="fa-solid fa-users"></i> Perfiles Creados en esta PC:</label>
             <div style="display: flex; gap: 8px;">
@@ -1637,7 +1581,7 @@
             </div>
           </div>
 
-          <!-- SECCIÓN CREAR NUEVO USUARIO LOCAL -->
+          <!-- SECCIÓN CREAR NUEVO USUARIO LOCAL CON CONFIGURACIÓN DE TABLA (CONFIG 1 Y CONFIG 2) -->
           <div style="margin-top: 15px; border-top: 1px dashed rgba(var(--skin-primary-rgb), 0.3); padding-top: 12px;">
             <div style="font-size: 0.8rem; font-weight: 800; color: #00ff88; margin-bottom: 6px;"><i class="fa-solid fa-user-plus"></i> Crear Nuevo Usuario Local (Solo en esta PC)</div>
             <div style="display: flex; gap: 8px; flex-direction: column;">
@@ -1645,8 +1589,8 @@
               <div style="display: flex; gap: 8px; align-items: center;">
                 <label style="font-size: 0.75rem; color: var(--skin-primary); margin: 0; white-space: nowrap;">Config. Tabla:</label>
                 <select id="nuevoUsuarioConfigSelect" class="form-select" style="font-size: 0.8rem; padding: 6px; border-color: rgba(var(--skin-primary-rgb), 0.5);">
-                  <option value="config1">Configuración 1</option>
-                  <option value="config2">Configuración 2</option>
+                  <option value="config1">Configuración 1 (Predeterminada)</option>
+                  <option value="config2">Configuración 2 (Interés Compuesto Avanzado)</option>
                 </select>
                 <button class="btn-action btn-success" style="font-size: 0.8rem; padding: 8px 14px;" onclick="crearNuevoUsuarioLocal()">
                   <i class="fa-solid fa-plus"></i> Crear
@@ -1665,7 +1609,6 @@
             Selecciona la opción deseada. Tu navegador te pedirá la ubicación exacta donde quieres almacenar o cargar el archivo.
           </p>
 
-          <!-- Botones Salvas Globales -->
           <div style="margin-bottom: 0;">
             <div style="display: flex; gap: 10px;">
               <button class="btn-action btn-export" style="flex: 1; justify-content: center; font-size:0.85rem;" onclick="exportarSalvaGlobal()">
@@ -1725,9 +1668,7 @@
         <button class="btn-close-modal" onclick="cerrarModalChecklistTabla()"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
-      <div id="tableChecklistModalContent" style="font-size: 0.9rem; line-height: 1.6; max-height: 65vh; overflow-y: auto; padding-right: 5px;">
-        <!-- Se inyecta dinámicamente -->
-      </div>
+      <div id="tableChecklistModalContent" style="font-size: 0.9rem; line-height: 1.6; max-height: 65vh; overflow-y: auto; padding-right: 5px;"></div>
 
       <div class="modal-footer" style="margin-top: 20px;">
         <button class="btn-action btn-success" style="width: 100%; justify-content: center;" onclick="cerrarModalChecklistTabla()"><i class="fa-solid fa-check"></i> Cerrar</button>
@@ -1755,7 +1696,6 @@
         </div>
       </div>
 
-      <!-- NUEVOS CAMPOS DE DETALLES DEL TRADE DEL DÍA -->
       <div class="form-group-row">
         <div class="form-field">
           <label><i class="fa-solid fa-tag"></i> Ticker:</label>
@@ -1891,7 +1831,6 @@
         <i class="fa-solid fa-folder-open"></i> Webs Importantes
       </div>
 
-      <!-- Brokers -->
       <div class="checklist-sub-section" style="margin-top: 20px;">
         <div class="checklist-sub-title"><i class="fa-solid fa-building-columns"></i> Brokers</div>
         <div class="buttons-grid" style="justify-content: flex-start; gap: 15px; margin-top: 15px;">
@@ -1906,7 +1845,6 @@
         </div>
       </div>
 
-      <!-- Pre - market -->
       <div class="checklist-sub-section" style="margin-top: 30px;">
         <div class="checklist-sub-title"><i class="fa-solid fa-clock"></i> Pre - market</div>
         <div class="buttons-grid" style="justify-content: flex-start; gap: 15px; margin-top: 15px;">
@@ -1917,7 +1855,6 @@
         </div>
       </div>
 
-      <!-- Mapa de Finbiz -->
       <div class="checklist-sub-section" style="margin-top: 30px;">
         <div class="checklist-sub-title"><i class="fa-solid fa-map"></i> Mapa de Finbiz</div>
         <div class="buttons-grid" style="justify-content: flex-start; gap: 15px; margin-top: 15px;">
@@ -1928,7 +1865,6 @@
         </div>
       </div>
 
-      <!-- FED -->
       <div class="checklist-sub-section" style="margin-top: 30px;">
         <div class="checklist-sub-title"><i class="fa-solid fa-landmark"></i> FED</div>
         <div class="buttons-grid" style="justify-content: flex-start; gap: 15px; margin-top: 15px;">
@@ -1939,7 +1875,6 @@
         </div>
       </div>
 
-      <!-- Noticias -->
       <div class="checklist-sub-section" style="margin-top: 30px; margin-bottom: 40px;">
         <div class="checklist-sub-title"><i class="fa-solid fa-newspaper"></i> Noticias</div>
         <div class="buttons-grid" style="justify-content: flex-start; gap: 15px; margin-top: 15px;">
@@ -1991,7 +1926,6 @@
         <i class="fa-solid fa-graduation-cap"></i> Investep Academy
       </div>
 
-      <!-- Formacion -->
       <div class="checklist-sub-section" style="margin-top: 20px;">
         <div class="checklist-sub-title"><i class="fa-solid fa-book-open"></i> Formacion:</div>
         <div class="buttons-grid" style="justify-content: flex-start; gap: 15px; margin-top: 15px;">
@@ -2021,7 +1955,6 @@
         </div>
       </div>
 
-      <!-- Canales de Youtube de Yoel Sardiñas -->
       <div class="checklist-sub-section" style="margin-top: 30px; margin-bottom: 40px;">
         <div class="checklist-sub-title"><i class="fa-brands fa-youtube"></i> Canales de Youtube de Yoel Sardiñas:</div>
         <div class="buttons-grid" style="justify-content: flex-start; gap: 15px; margin-top: 15px;">
@@ -2053,13 +1986,11 @@
         <i class="fa-solid fa-newspaper"></i> Noticias Importantes
       </div>
 
-      <!-- SECCIÓN 1: NOTICIAS GENERALES DEL MERCADO -->
       <div class="news-card-box">
         <div class="news-box-header">
           <i class="fa-solid fa-circle-exclamation"></i> Noticias Importantes del Mercado
         </div>
         <ul class="news-list-items">
-
           <li class="news-item-container">
             <div class="news-item-row-header">
               <div class="news-title-group"><i class="fa-solid fa-circle-right"></i> Nuevas peticiones de subsidio por desempleo</div>
@@ -2067,12 +1998,10 @@
             </div>
             <div class="news-desc-panel">
               <strong>¿Qué mide?:</strong> Número de personas que solicitan subsidio por desempleo estatal por primera vez en la semana.<br>
-              <strong>Impacto Positivo (+):</strong> Datos bajos indican un mercado laboral fuerte y estable, respaldando el crecimiento económico.<br>
-              <strong>Impacto Negativo (-):</strong> Un aumento drástico alerta sobre despidos masivos y posibles síntomas de recesión.<br>
-              <strong>Precedente histórico:</strong> En marzo de 2020 alcanzaron récords históricos de 6 millones en una semana, provocando desplomes bursátiles inmediatos.
+              <strong>Impacto Positivo (+):</strong> Datos bajos indican un mercado laboral fuerte y estable.<br>
+              <strong>Impacto Negativo (-):</strong> Un aumento drástico alerta sobre despidos masivos.
             </div>
           </li>
-
           <li class="news-item-container">
             <div class="news-item-row-header">
               <div class="news-title-group"><i class="fa-solid fa-circle-right"></i> Inflación / IPC (Índice de Precios al Consumidor)</div>
@@ -2080,178 +2009,126 @@
             </div>
             <div class="news-desc-panel">
               <strong>¿Qué mide?:</strong> La variación de precios en la canasta básica de bienes y servicios del consumidor.<br>
-              <strong>Impacto Positivo (+):</strong> Si el IPC cae (desinflación), baja la presión sobre los tipos de interés y sube la bolsa.<br>
-              <strong>Impacto Negativo (-):</strong> Si el IPC sube inesperadamente, obliga a la FED a endurecer los tipos, causando caídas fuertes.<br>
-              <strong>Precedente histórico:</strong> En 2022, inflaciones superiores al 9% provocaron caídas diarias de 2% al 4% en los índices en cada día de publicación.
+              <strong>Impacto Positivo (+):</strong> Si el IPC cae, baja la presión sobre los tipos de interés y sube la bolsa.<br>
+              <strong>Impacto Negativo (-):</strong> Si el IPC sube inesperadamente, obliga a la FED a endurecer los tipos.
             </div>
           </li>
-
           <li class="news-item-container">
             <div class="news-item-row-header">
               <div class="news-title-group"><i class="fa-solid fa-circle-right"></i> PMI de servicios (Índice de Gestores de Compras)</div>
               <button class="btn-news-info" onclick="toggleNewsDesc(this)">?</button>
             </div>
             <div class="news-desc-panel">
-              <strong>¿Qué mide?:</strong> Nivel de actividad económica en el sector servicios (+70% de la economía de EE. UU.). (&gt;50 expansión / &lt;50 contracción).<br>
-              <strong>Impacto Positivo (+):</strong> Lecturas superiores a 50 confirman crecimiento saludable en la demanda comercial.<br>
-              <strong>Impacto Negativo (-):</strong> Caídas por debajo de 50 indican contracción del sector y peligro de recesión.<br>
-              <strong>Precedente histórico:</strong> Caídas por debajo de 50 en períodos de incertidumbre provocan ventas masivas en acciones de consumo y bancos.
+              <strong>¿Qué mide?:</strong> Nivel de actividad económica en el sector servicios (&gt;50 expansión / &lt;50 contracción).
             </div>
           </li>
-
           <li class="news-item-container">
             <div class="news-item-row-header">
               <div class="news-title-group"><i class="fa-solid fa-circle-right"></i> PIB (Producto Interno Bruto)</div>
               <button class="btn-news-info" onclick="toggleNewsDesc(this)">?</button>
             </div>
             <div class="news-desc-panel">
-              <strong>¿Qué mide?:</strong> El valor monetario total de todos los bienes y servicios producidos en el país trimestralmente.<br>
-              <strong>Impacto Positivo (+):</strong> Un PIB fuerte demuestra expansión sustaineda y estimula la compra institucional de acciones.<br>
-              <strong>Impacto Negativo (-):</strong> Dos trimestres consecutivos en negativo confirman una Recesión Económica Técnica.<br>
-              <strong>Precedente histórico:</strong> Confirmaciones de PIB negativo en 2008 y 2020 dieron paso a caídas prolongadas (Bear Markets).
+              <strong>¿Qué mide?:</strong> El valor monetario total de todos los bienes y servicios producidos trimestralmente.
             </div>
           </li>
-
           <li class="news-item-container">
             <div class="news-item-row-header">
               <div class="news-title-group"><i class="fa-solid fa-circle-right"></i> Ventas minoristas y subyacentes</div>
               <button class="btn-news-info" onclick="toggleNewsDesc(this)">?</button>
             </div>
             <div class="news-desc-panel">
-              <strong>¿Qué mide?:</strong> El gasto total del consumidor en establecimientos minoristas y tiendas online.<br>
-              <strong>Impacto Positivo (+):</strong> Ventas fuertes demuestran la buena salud financiera del consumidor estadounidense.<br>
-              <strong>Impacto Negativo (-):</strong> Caídas en las ventas sugieren un consumidor ahogado, afectando los ingresos corporativos.<br>
-              <strong>Precedente histórico:</strong> Reportes débiles tras la época navideña desencadenan ventas en cadenas como Target, Walmart y Amazon.
+              <strong>¿Qué mide?:</strong> El gasto total del consumidor en establecimientos minoristas y tiendas online.
             </div>
           </li>
-
           <li class="news-item-container">
             <div class="news-item-row-header">
               <div class="news-title-group"><i class="fa-solid fa-circle-right"></i> Encuesta JOLTS de ofertas de empleo</div>
               <button class="btn-news-info" onclick="toggleNewsDesc(this)">?</button>
             </div>
             <div class="news-desc-panel">
-              <strong>¿Qué mide?:</strong> La cantidad de puestos de trabajo vacantes que las empresas están buscando cubrir.<br>
-              <strong>Impacto Positivo (+):</strong> Un número moderado refleja un mercado laboral equilibrado y sostenible.<br>
-              <strong>Impacto Negativo (-):</strong> Si caen bruscamente indican congelación de contrataciones por desaceleración económica.<br>
-              <strong>Precedente histórico:</strong> Durante 2022-2023, ofertas extremadamente altas alarmaban a la FED sobre presiones salariales inflacionarias.
+              <strong>¿Qué mide?:</strong> La cantidad de puestos de trabajo vacantes que las empresas buscan cubrir.
             </div>
           </li>
-
           <li class="news-item-container">
             <div class="news-item-row-header">
               <div class="news-title-group"><i class="fa-solid fa-circle-right"></i> Nóminas no agrícolas (NFP - Non-Farm Payrolls)</div>
               <button class="btn-news-info" onclick="toggleNewsDesc(this)">?</button>
             </div>
             <div class="news-desc-panel">
-              <strong>¿Qué mide?:</strong> Empleos creados o destruidos durante el último mes (excluyendo el sector agrícola).<br>
-              <strong>Impacto Positivo (+):</strong> Creación constante de empleo confirma la solidez de la economía.<br>
-              <strong>Impacto Negativo (-):</strong> Cifras por debajo de lo estimado causan pánico sobre un frenazo económico.<br>
-              <strong>Precedente histórico:</strong> Es el dato de mayor volatilidad mensual a las 8:30 AM EST, generando giros bruscos en el S&P 500 y opciones.
+              <strong>¿Qué mide?:</strong> Empleos creados o destruidos durante el último mes.
             </div>
           </li>
-
           <li class="news-item-container">
             <div class="news-item-row-header">
               <div class="news-title-group"><i class="fa-solid fa-circle-right"></i> Tasa de desempleo</div>
               <button class="btn-news-info" onclick="toggleNewsDesc(this)">?</button>
             </div>
             <div class="news-desc-panel">
-              <strong>¿Qué mide?:</strong> El porcentaje de la población activa que está desempleada y buscando trabajo.<br>
-              <strong>Impacto Positivo (+):</strong> Tasas bajas y estables (3.5% - 4.0%) aseguran flujo de dinero e inversión constante.<br>
-              <strong>Impacto Negativo (-):</strong> Un repunte por encima del 4.5% enciende señales de alarma por recesión.<br>
-              <strong>Precedente histórico:</strong> Según la "Regla de Sahm", aumentos acelerados del desempleo preceden históricamente correcciones de más del 10% en bolsa.
+              <strong>¿Qué mide?:</strong> El porcentaje de la población activa que está desempleada y buscando trabajo.
             </div>
           </li>
-
           <li class="news-item-container">
             <div class="news-item-row-header">
               <div class="news-title-group"><i class="fa-solid fa-circle-right"></i> IPP (Índice de Precios al Productor)</div>
               <button class="btn-news-info" onclick="toggleNewsDesc(this)">?</button>
             </div>
             <div class="news-desc-panel">
-              <strong>¿Qué mide?:</strong> La variación en los precios de venta recibidos por los fabricantes y productores.<br>
-              <strong>Impacto Positivo (+):</strong> Un IPP bajo reduce costos de producción, mejorando márgenes y anticipando menor IPC futuro.<br>
-              <strong>Impacto Negativo (-):</strong> Aumentos en el IPP se trasmiten semanas después al consumidor en forma de inflación.<br>
-              <strong>Precedente histórico:</strong> Sirve como indicador adelantado del IPC; sorpresas al alza generan caídas anticipadas en los índices.
+              <strong>¿Qué mide?:</strong> La variación en los precios de venta recibidos por los fabricantes.
             </div>
           </li>
-
           <li class="news-item-container">
             <div class="news-item-row-header">
               <div class="news-title-group"><i class="fa-solid fa-circle-right"></i> Noticias de la Empresa (Earnings / Resultados)</div>
               <button class="btn-news-info" onclick="toggleNewsDesc(this)">?</button>
             </div>
             <div class="news-desc-panel">
-              <strong>¿Qué mide?:</strong> Reportes trimestrales de ganancias, ingresos y proyecciones futuras (Guidance) de empresas públicas.<br>
-              <strong>Impacto Positivo (+):</strong> Superar ingresos y dar proyecciones optimistas dispara el precio de la acción.<br>
-              <strong>Impacto Negativo (-):</strong> No alcanzar las metas fijadas por Wall Street genera caídas masivas en la acción.<br>
-              <strong>Precedente histórico:</strong> Ocasiona aperturas con saltos de precio (Gaps) de 5% a 15% en acciones líderes como Apple, NVDA o Meta.
+              <strong>¿Qué mide?:</strong> Reportes trimestrales de ganancias, ingresos y proyecciones futuras (Guidance).
             </div>
           </li>
-
         </ul>
       </div>
 
-      <!-- SECCIÓN 2: EVENTOS Y NOTICIAS DE LA FED -->
       <div class="news-card-box">
         <div class="news-box-header fed-header">
           <i class="fa-solid fa-building-columns"></i> Eventos y Declaraciones de la FED
         </div>
         <ul class="news-list-items fed-list">
-
           <li class="news-item-container">
             <div class="news-item-row-header">
               <div class="news-title-group"><i class="fa-solid fa-check"></i> Declaraciones del presidente de la Fed (Jerome Powell)</div>
               <button class="btn-news-info" onclick="toggleNewsDesc(this)">?</button>
             </div>
             <div class="news-desc-panel">
-              <strong>¿Qué mide?:</strong> Ruedas de prensa y discursos en vivo del máximo responsable de la política monetaria en EE. UU.<br>
-              <strong>Impacto Positivo (+):</strong> Tono "Dovish" (suave/flexibilización): Promesa de mantener o bajar tasas dispara el mercado.<br>
-              <strong>Impacto Negativo (-):</strong> Tono "Hawkish" (agresivo): Advertencias de mantener tipos altos produce caídas en directo.<br>
-              <strong>Precedente histórico:</strong> Genera la mayor volatilidad intradía; el S&P 500 suele oscilar drásticamente durante los 45 minutos que dura su rueda de prensa.
+              <strong>¿Qué mide?:</strong> Ruedas de prensa y discursos en vivo del máximo responsable de la política monetaria.
             </div>
           </li>
-
           <li class="news-item-container">
             <div class="news-item-row-header">
               <div class="news-title-group"><i class="fa-solid fa-check"></i> Decisiones de tipo de interés (FOMC)</div>
               <button class="btn-news-info" onclick="toggleNewsDesc(this)">?</button>
             </div>
             <div class="news-desc-panel">
-              <strong>¿Qué mide?:</strong> La tasa oficial a la que los bancos se prestan dinero entre sí (costo base del crédito nacional).<br>
-              <strong>Impacto Positivo (+):</strong> Recortes de tasa abaratan el crédito, estimulan la economía y disparan las acciones.<br>
-              <strong>Impacto Negativo (-):</strong> Subidas de tasa encarecen el crédito, congelan el consumo y hacen caer la bolsa.<br>
-              <strong>Precedente histórico:</strong> El ciclo de subidas de tipos más rápido en 40 años realizado durante 2022 causó un Bear Market prolongado en Wall Street.
+              <strong>¿Qué mide?:</strong> La tasa oficial a la que los bancos se prestan dinero entre sí.
             </div>
           </li>
-
           <li class="news-item-container">
             <div class="news-item-row-header">
               <div class="news-title-group"><i class="fa-solid fa-check"></i> Minutas de la Fed (FOMC Minutes)</div>
               <button class="btn-news-info" onclick="toggleNewsDesc(this)">?</button>
             </div>
             <div class="news-desc-panel">
-              <strong>¿Qué mide?:</strong> Publicación detallada de las discusiones y discrepancias internas mantenidas en la última reunión del comité.<br>
-              <strong>Impacto Positivo (+):</strong> Mostrar que miembros votantes abogan por recortes de tipos impulsa las compras a las 2:00 PM EST.<br>
-              <strong>Impacto Negativo (-):</strong> Revelar preocupaciones por inflation persistent provoca correcciones en los índices.<br>
-              <strong>Precedente histórico:</strong> Sirve a los grandes fondos de inversión para medir qué tan dividido o unido está el comité directivo de la FED.
+              <strong>¿Qué mide?:</strong> Publicación detallada de las discusiones mantenidas en la última reunión.
             </div>
           </li>
-
           <li class="news-item-container">
             <div class="news-item-row-header">
               <div class="news-title-group"><i class="fa-solid fa-check"></i> Comparecencias de miembros del FOMC</div>
               <button class="btn-news-info" onclick="toggleNewsDesc(this)">?</button>
             </div>
             <div class="news-desc-panel">
-              <strong>¿Qué mide?:</strong> Discursos públicos semanales de los presidentes de los bancos regionales de la Reserva Federal.<br>
-              <strong>Impacto Positivo (+):</strong> Comentarios alineados con la estabilidad económica y fin de ajustes monetarios dan tranquilidad.<br>
-              <strong>Impacto Negativo (-):</strong> Declaraciones sorpresivas pidiendo tipos más altos generan pequeñas caídas fuera de hora.<br>
-              <strong>Precedente histórico:</strong> Wall Street utiliza cada discurso para ajustar las probabilidades en tiempo real de la herramienta FedWatch.
+              <strong>¿Qué mide?:</strong> Discursos públicos semanales de los presidentes de los bancos regionales.
             </div>
           </li>
-
         </ul>
       </div>
     </div>
@@ -2604,7 +2481,6 @@
       </div>
 
       <div class="table-container">
-        <!-- BARRA SUPERIOR FIJA / STICKY CON EL FILTRO DE MESES, DÍAS, DINERO TOTAL Y CAPITAL FINAL -->
         <div class="table-top-bar">
           <div class="month-filter-box" style="margin-bottom: 0;">
             <label for="monthFilter"><i class="fa-solid fa-calendar-days"></i> Filtrar por Mes:</label>
@@ -2707,9 +2583,6 @@
       "Cambio de tendencia en 15 Mins"
     ];
 
-    // ==========================================
-    // SISTEMA DE PESTAÑAS EN MODAL DE CONFIGURACIÓN
-    // ==========================================
     function cambiarPestanaConfig(nombrePestana) {
       const tabSkins = document.getElementById('configTabSkins');
       const tabFondos = document.getElementById('configTabFondos');
@@ -2721,7 +2594,6 @@
       const btnPerfiles = document.getElementById('tabBtnPerfiles');
       const btnSalvas = document.getElementById('tabBtnSalvas');
 
-      // Ocultar todas las pestañas y quitar clase active a los botones
       tabSkins.style.display = 'none';
       tabFondos.style.display = 'none';
       tabPerfiles.style.display = 'none';
@@ -2747,9 +2619,6 @@
       }
     }
 
-    // ==========================================
-    // SISTEMA DE SKINS DINÁMICOS
-    // ==========================================
     const skinThemes = {
       rojoNeon: { primary: '#ff0037', rgb: '255, 0, 55', glow: 'rgba(255, 0, 55, 0.6)', border: 'rgba(255, 0, 55, 0.4)', bg: '#030303' },
       verdeEmarald: { primary: '#00ff88', rgb: '0, 255, 136', glow: 'rgba(0, 255, 136, 0.6)', border: 'rgba(0, 255, 136, 0.4)', bg: '#020804' },
@@ -2799,12 +2668,7 @@
       initBackgroundAnimation();
     }
 
-    // Aplicar skin y fondo guardados al cargar
     cambiarSkin(currentSkin);
-
-    function dispararAutosaveVisual() {
-      // Función mantenida intacta de autoguardado en segundo plano
-    }
 
     function activarAutoguardadoGlobalListener() {
       document.addEventListener('input', (e) => {
@@ -2824,7 +2688,6 @@
       globalAutosaveDebounce = setTimeout(() => {
         guardarDatosInversiones(false);
         guardarChecklistState();
-        dispararAutosaveVisual();
       }, 600);
     }
 
@@ -2837,9 +2700,11 @@
         }
       } catch(e) {}
       
-      const activoActual = localStorage.getItem('yasma_created_user_name') || '';
-      if (activoActual && !lista.some(p => p.name === activoActual)) {
-        lista.push({ name: activoActual, config: configActiva });
+      if (lista.length === 0) {
+        lista = [
+          { name: "Configuración 1", config: "config1" },
+          { name: "Configuración 2", config: "config2" }
+        ];
       }
       return lista;
     }
@@ -2853,7 +2718,7 @@
       if (!select) return;
 
       const lista = obtenerListaPerfilesPC();
-      const activoActual = localStorage.getItem('yasma_created_user_name') || '';
+      const activoActual = localStorage.getItem('yasma_created_user_name') || (configActiva === 'config2' ? 'Configuración 2' : 'Configuración 1');
 
       select.innerHTML = '<option value="">-- Seleccionar Perfil --</option>';
       lista.forEach(item => {
@@ -2874,10 +2739,16 @@
       
       const lista = obtenerListaPerfilesPC();
       const encontrado = lista.find(p => (typeof p === 'object' ? p.name : p) === nombrePerfil);
+      
       if (encontrado && typeof encontrado === 'object' && encontrado.config) {
         configActiva = encontrado.config;
-        localStorage.setItem('yasma_active_config', configActiva);
+      } else if (nombrePerfil.toLowerCase().includes('configuración 2') || nombrePerfil.toLowerCase().includes('config 2')) {
+        configActiva = 'config2';
+      } else {
+        configActiva = 'config1';
       }
+      
+      localStorage.setItem('yasma_active_config', configActiva);
 
       actualizarBadgeConfigUI();
       cargarDatosInversiones(false);
@@ -2902,9 +2773,12 @@
         const activoActual = localStorage.getItem('yasma_created_user_name') || '';
         if (activoActual === perfilAEliminar) {
           localStorage.removeItem('yasma_created_user_name');
+          configActiva = 'config1';
+          localStorage.setItem('yasma_active_config', 'config1');
         }
 
         actualizarBadgeConfigUI();
+        cargarDatosInversiones(false);
         alert(`¡Perfil "${perfilAEliminar}" eliminado correctamente!`);
       }
     }
@@ -2921,9 +2795,9 @@
 
     function crearNuevoUsuarioLocal() {
       const input = document.getElementById('nuevoUsuarioInput');
-      const configSelect = document.getElementById('nuevoUsuarioConfigSelect');
       const nombre = input.value.trim();
-      const configAsociada = configSelect ? configSelect.value : 'config1';
+      const configSelect = document.getElementById('nuevoUsuarioConfigSelect');
+      const configElegida = configSelect ? configSelect.value : 'config1';
 
       if (!nombre) {
         alert('Por favor, ingresa un nombre para el nuevo usuario.');
@@ -2932,11 +2806,11 @@
       
       let lista = obtenerListaPerfilesPC();
       lista = lista.filter(p => (typeof p === 'object' ? p.name : p) !== nombre);
-      lista.push({ name: nombre, config: configAsociada });
+      lista.push({ name: nombre, config: configElegida });
       guardarListaPerfilesPC(lista);
 
       localStorage.setItem('yasma_created_user_name', nombre);
-      configActiva = configAsociada;
+      configActiva = configElegida;
       localStorage.setItem('yasma_active_config', configActiva);
 
       input.value = '';
@@ -2945,7 +2819,7 @@
       cargarOpcionesEstrategias();
       cargarChecklistState();
 
-      alert(`¡Usuario "${nombre}" creado correctamente con la configuración ${configAsociada === 'config2' ? 'Configuración 2' : 'Configuración 1'}!`);
+      alert(`¡Usuario o perfil "${nombre}" creado con éxito bajo ${configElegida === 'config2' ? 'Configuración 2' : 'Configuración 1'}!`);
     }
 
     function actualizarNombreUsuarioHeader() {
@@ -2953,15 +2827,10 @@
       const nameDisplay = document.getElementById('activeUserNameDisplay');
       if (!prefixSpan || !nameDisplay) return;
 
-      const createdUser = localStorage.getItem('yasma_created_user_name') || '';
+      const createdUser = localStorage.getItem('yasma_created_user_name') || (configActiva === 'config2' ? 'Configuración 2' : 'Configuración 1');
 
-      if (createdUser) {
-        prefixSpan.textContent = 'Welcome: ';
-        nameDisplay.textContent = createdUser;
-      } else {
-        prefixSpan.textContent = '';
-        nameDisplay.textContent = '';
-      }
+      prefixSpan.textContent = 'Perfil: ';
+      nameDisplay.textContent = createdUser;
     }
 
     function actualizarCabeceraTablaSegunPerfil() {
@@ -2969,21 +2838,22 @@
       if (!thead) return;
 
       if (configActiva === 'config2') {
+        // Tarea 3: Aplicación de la orden 2 (Dinero obtenido con respecto al dinero que comenzó la cuenta en la fila 1) también para Configuración 1 y Configuración 2
         thead.innerHTML = `
           <tr>
             <th style="width: 4%;">CHK</th>
             <th style="width: 5%;">DIA</th>
-            <th style="width: 13%;">Fecha / Hora</th>
-            <th style="width: 12%;">$ TOTAL</th>
-            <th style="width: 10%;">% a usar</th>
-            <th style="width: 12%;">Monto sugerido</th>
-            <th style="width: 9%;">ASK</th>
-            <th style="width: 8%;">QTY</th>
-            <th style="width: 10%;">LIMITE</th>
-            <th style="width: 9%;">BID</th>
+            <th style="width: 12%;">Fecha</th>
+            <th style="width: 9%;">$ TOTAL</th>
+            <th style="width: 7%;">% a usar</th>
+            <th style="width: 10%;">Monto sugerido</th>
+            <th style="width: 8%;">ASK</th>
+            <th style="width: 7%;">QTY</th>
+            <th style="width: 8%;">LIMITE</th>
+            <th style="width: 8%;">BID</th>
             <th style="width: 11%;">% de Ganancia</th>
-            <th style="width: 13%;">CAPITAL TOTAL ($)</th>
-            <th style="width: 8%;">Color</th>
+            <th style="width: 12%;">CAPITAL TOTAL ($)</th>
+            <th style="width: 5%;">Color</th>
             <th style="width: 4%;"></th>
           </tr>
         `;
@@ -3010,7 +2880,7 @@
 
     function abrirModalConfig() {
       actualizarBadgeConfigUI();
-      cambiarPestanaConfig('skins'); // Pestaña inicial por defecto al abrir
+      cambiarPestanaConfig('skins');
       document.getElementById('configModal').style.display = 'flex';
     }
 
@@ -3232,7 +3102,7 @@
 
     function abrirModalChecklistTabla(btn) {
       const row = btn.closest('tr');
-      const dayIndexCell = configActiva === 'config2' ? row.children[1] : row.children[2];
+      const dayIndexCell = row.children[configActiva === 'config2' ? 1 : 2];
       const dayNum = dayIndexCell ? dayIndexCell.textContent : '1';
       document.getElementById('tableChecklistModalDayTitle').textContent = `Día ${dayNum}`;
 
@@ -3490,18 +3360,16 @@
         return;
       }
 
-      const inputMonto = filaCoincidente.querySelector('.input-monto-inicial');
-      const inputPct = filaCoincidente.querySelector('.input-pct-uso');
-
-      if (inputMonto && accountStr) inputMonto.value = accountStr;
-      if (inputPct && riskPercentStr) inputPct.value = riskPercentStr;
-
-      if (!filaCoincidente.getAttribute('data-timestamp')) {
-        const ahora = new Date();
-        filaCoincidente.setAttribute('data-timestamp', ahora.toISOString());
-        const fechaStr = ahora.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
-        const horaStr = ahora.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
-        filaCoincidente.querySelector('.cell-datetime').innerHTML = `${fechaStr}<br><span style="color:#888;">${horaStr}</span>`;
+      if (configActiva === 'config2') {
+        const inputTotal = filaCoincidente.querySelector('.input-c2-total');
+        const inputPct = filaCoincidente.querySelector('.input-c2-pct');
+        if (inputTotal && accountStr) inputTotal.value = accountStr;
+        if (inputPct && riskPercentStr) inputPct.value = riskPercentStr;
+      } else {
+        const inputMonto = filaCoincidente.querySelector('.input-monto-inicial');
+        const inputPct = filaCoincidente.querySelector('.input-pct-uso');
+        if (inputMonto && accountStr) inputMonto.value = accountStr;
+        if (inputPct && riskPercentStr) inputPct.value = riskPercentStr;
       }
 
       recalcularTabla();
@@ -3519,29 +3387,33 @@
       if (rows.length > 0) {
         const ultimaFila = rows[rows.length - 1];
         if (configActiva === 'config2') {
-          const inputCapTotal = ultimaFila.querySelector('.input-capital-total');
-          if (inputCapTotal && inputCapTotal.value.trim() !== '') {
-            ultimoCapitalSugerido = inputCapTotal.value.trim();
+          const cellCap = ultimaFila.querySelector('.cell-c2-capital');
+          if (cellCap) {
+            const valNum = parseFloat(cellCap.getAttribute('data-capital-num')) || 0;
+            if (valNum > 0) ultimoCapitalSugerido = valNum.toFixed(2);
           }
         } else {
           const cellCap = ultimaFila.querySelector('.cell-capital-result');
           if (cellCap) {
             const valNum = parseFloat(cellCap.getAttribute('data-capital-num')) || 0;
-            if (valNum > 0) {
-              ultimoCapitalSugerido = valNum.toFixed(2);
-            }
+            if (valNum > 0) ultimoCapitalSugerido = valNum.toFixed(2);
           }
         }
       }
 
       if (configActiva === 'config2') {
-        agregarFilaInversion(ultimoCapitalSugerido, '', '', '', '', '', '', null, '', '');
+        agregarFilaInversionConfig2(ultimoCapitalSugerido, '', '', '', '', '', '', '', null, '', '');
       } else {
-        agregarFilaInversion(ultimoCapitalSugerido, '', '', '', '', null, '', null, '', '');
+        agregarFilaInversion(ultimoCapitalSugerido, '', '', '', null, '', '');
       }
     }
 
-    function agregarFilaInversion(val1 = '', val2 = '', val3 = '', val4 = '', val5 = '', val6 = '', val7 = '', fechaGuardada = null, comentarioData = '', checklistData = '') {
+    function agregarFilaInversion(val1 = '', val2 = '', val3 = '', val4 = '', fechaGuardada = null, comentarioData = '', checklistData = '') {
+      if (configActiva === 'config2') {
+        agregarFilaInversionConfig2(val1, val2, '', '', '', '', '', '', fechaGuardada, comentarioData, checklistData);
+        return;
+      }
+
       const tbody = document.getElementById('investmentsTableBody');
       const rows = tbody.querySelectorAll('tr');
 
@@ -3569,81 +3441,43 @@
       const hasChecklistClass = hasChecklist ? 'has-checklist' : '';
       const hasNoteClass = (comentarioData && (typeof comentarioData === 'object' ? Object.keys(comentarioData).length > 0 : comentarioData.trim() !== '')) ? 'has-note' : '';
 
-      if (configActiva === 'config2') {
-        const totalVal = val1;
-        const pctAusar = val2;
-        const askVal = val3;
-        const qtyVal = val4;
-        const limiteVal = val5;
-        const bidVal = val6;
-        const capitalTotalManual = val7;
+      const montoInicial = val1;
+      const pctUso = val2;
+      const montoReal = val3;
+      const pctRent = val4;
 
-        tr.innerHTML = `
-          <td>
-            <button class="btn-table-checklist-icon ${hasChecklistClass}" onclick="abrirModalChecklistTabla(this)" title="Ver Checklist del Día">
-              <i class="fa-solid fa-file-invoice"></i>
+      tr.innerHTML = `
+        <td><div class="cell-color-box color-neutral"></div></td>
+        <td>
+          <button class="btn-table-checklist-icon ${hasChecklistClass}" onclick="abrirModalChecklistTabla(this)" title="Ver Checklist del Día">
+            <i class="fa-solid fa-file-invoice"></i>
+          </button>
+        </td>
+        <td><span class="cell-value">${dayIndex}</span></td>
+        <td class="cell-datetime">${fechaHtml}</td>
+        <td><input type="number" class="table-input input-monto-inicial" step="0.01" placeholder="0.00" value="${montoInicial}" oninput="manejarEntradaValor(this)"></td>
+        <td><input type="number" class="table-input input-pct-uso" step="0.1" placeholder="Ej: 10" value="${pctUso}" oninput="manejarEntradaValor(this)"></td>
+        <td class="cell-value cell-used monto-sugerido-val">$0.00</td>
+        <td><input type="number" class="table-input input-monto-real" step="0.01" placeholder="0.00" value="${montoReal}" oninput="manejarEntradaValor(this)"></td>
+        <td>
+          <div style="display: flex; gap: 3px; align-items: center; justify-content: center;">
+            <input type="text" class="table-input input-rent-pct" placeholder="Ej: 35" value="${pctRent}" oninput="manejarEntradaValor(this)">
+            <button class="btn-row-action btn-calc-action" onclick="abrirModalCalculadoraRapida(this)" title="Calculadora Rápida de Salto">
+              <i class="fa-solid fa-calculator"></i>
             </button>
-          </td>
-          <td class="cell-value">${dayIndex}</td>
-          <td class="cell-datetime">${fechaHtml}</td>
-          <td><input type="number" class="table-input input-monto-inicial" step="0.01" placeholder="0.00" value="${totalVal}" oninput="manejarEntradaValor(this)"></td>
-          <td><input type="number" class="table-input input-pct-uso" step="0.1" placeholder="Ej: 20" value="${pctAusar}" oninput="manejarEntradaValor(this)"></td>
-          <td class="cell-value cell-used monto-sugerido-val">$0.00</td>
-          <td><input type="number" class="table-input input-ask" step="0.01" placeholder="0.00" value="${askVal}" oninput="manejarEntradaValor(this)"></td>
-          <td><input type="number" class="table-input input-qty" step="1" placeholder="0" value="${qtyVal}" oninput="manejarEntradaValor(this)"></td>
-          <td><input type="number" class="table-input input-limite" step="0.01" placeholder="0.00" value="${limiteVal}" oninput="manejarEntradaValor(this)"></td>
-          <td><input type="number" class="table-input input-bid" step="0.01" placeholder="0.00" value="${bidVal}" oninput="manejarEntradaValor(this)"></td>
-          <td>
-            <div style="display: flex; gap: 3px; align-items: center; justify-content: center;">
-              <input type="text" class="table-input input-rent-pct" placeholder="%" value="" oninput="manejarEntradaValor(this)">
-              <button class="btn-row-action btn-calc-action" onclick="abrirModalCalculadoraRapida(this)" title="Calculadora Rápida de Salto">
-                <i class="fa-solid fa-calculator"></i>
-              </button>
-            </div>
-          </td>
-          <td><input type="number" class="table-input input-capital-total" step="0.01" placeholder="0.00" value="${capitalTotalManual}" oninput="manejarEntradaValor(this)" style="border-color: rgba(0, 255, 136, 0.5); color: #00ff88;"></td>
-          <td><div class="cell-color-box color-neutral"></div></td>
-          <td><button class="btn-delete" onclick="eliminarFila(this)" title="Eliminar fila"><i class="fa-solid fa-xmark"></i></button></td>
-        `;
-      } else {
-        const montoInicial = val1;
-        const pctUso = val2;
-        const montoReal = val3;
-        const pctRent = val4;
-
-        tr.innerHTML = `
-          <td><div class="cell-color-box color-neutral"></div></td>
-          <td>
-            <button class="btn-table-checklist-icon ${hasChecklistClass}" onclick="abrirModalChecklistTabla(this)" title="Ver Checklist del Día">
-              <i class="fa-solid fa-file-invoice"></i>
+          </div>
+        </td>
+        <td class="cell-value cell-profit-usd cell-neutral">$0.00</td>
+        <td class="cell-capital-total-val cell-capital-result cell-neutral" data-capital-num="0">$0.00</td>
+        <td>
+          <div class="row-actions-group">
+            <button class="btn-row-action btn-note-action ${hasNoteClass}" onclick="abrirModalComentario(this)" title="Abrir Bitácora y Detalles del Trade">
+              <i class="fa-regular fa-comment-dots"></i>
             </button>
-          </td>
-          <td><span class="cell-value">${dayIndex}</span></td>
-          <td class="cell-datetime">${fechaHtml}</td>
-          <td><input type="number" class="table-input input-monto-inicial" step="0.01" placeholder="0.00" value="${montoInicial}" oninput="manejarEntradaValor(this)"></td>
-          <td><input type="number" class="table-input input-pct-uso" step="0.1" placeholder="Ej: 10" value="${pctUso}" oninput="manejarEntradaValor(this)"></td>
-          <td class="cell-value cell-used monto-sugerido-val">$0.00</td>
-          <td><input type="number" class="table-input input-monto-real" step="0.01" placeholder="0.00" value="${montoReal}" oninput="manejarEntradaValor(this)"></td>
-          <td>
-            <div style="display: flex; gap: 3px; align-items: center; justify-content: center;">
-              <input type="text" class="table-input input-rent-pct" placeholder="Ej: 35" value="${pctRent}" oninput="manejarEntradaValor(this)">
-              <button class="btn-row-action btn-calc-action" onclick="abrirModalCalculadoraRapida(this)" title="Calculadora Rápida de Salto">
-                <i class="fa-solid fa-calculator"></i>
-              </button>
-            </div>
-          </td>
-          <td class="cell-value cell-profit-usd cell-neutral">$0.00</td>
-          <td class="cell-capital-total-val cell-capital-result cell-neutral" data-capital-num="0">$0.00</td>
-          <td>
-            <div class="row-actions-group">
-              <button class="btn-row-action btn-note-action ${hasNoteClass}" onclick="abrirModalComentario(this)" title="Abrir Bitácora y Detalles del Trade">
-                <i class="fa-regular fa-comment-dots"></i>
-              </button>
-            </div>
-          </td>
-          <td><button class="btn-delete" onclick="eliminarFila(this)" title="Eliminar fila"><i class="fa-solid fa-xmark"></i></button></td>
-        `;
-      }
+          </div>
+        </td>
+        <td><button class="btn-delete" onclick="eliminarFila(this)" title="Eliminar fila"><i class="fa-solid fa-xmark"></i></button></td>
+      `;
 
       tbody.appendChild(tr);
       recalcularTabla();
@@ -3652,9 +3486,80 @@
       tr.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
 
+    function agregarFilaInversionConfig2(c2Total = '', c2Pct = '', c2Ask = '', c2Qty = '', c2Lim = '', c2Bid = '', c2Ganancia = '', c2Capital = '', fechaGuardada = null, comentarioData = '', checklistData = '') {
+      const tbody = document.getElementById('investmentsTableBody');
+      const rows = tbody.querySelectorAll('tr');
+
+      const dayIndex = rows.length + 1;
+      const tr = document.createElement('tr');
+      
+      // Tarea 1: Fecha exacta del sistema por defecto al agregar fila, pero permitiendo cambiarla manualmente
+      let fechaPorDefectoInput = "";
+      if (fechaGuardada) {
+        if (fechaGuardada.includes('-')) {
+          const partes = fechaGuardada.split('-');
+          if (partes.length === 3) fechaPorDefectoInput = `${partes[2]}/${partes[1]}/${partes[0]}`;
+          else fechaPorDefectoInput = fechaGuardada;
+        } else {
+          fechaPorDefectoInput = fechaGuardada;
+        }
+      } else {
+        const ahora = new Date();
+        const diaStr = String(ahora.getDate()).padStart(2, '0');
+        const mesStr = String(ahora.getMonth() + 1).padStart(2, '0');
+        const anioStr = ahora.getFullYear();
+        fechaPorDefectoInput = `${diaStr}/${mesStr}/${anioStr}`;
+      }
+
+      let isoDate = fechaGuardada || new Date().toISOString().split('T')[0];
+      tr.setAttribute('data-timestamp', isoDate);
+
+      let noteObjStr = typeof comentarioData === 'object' ? JSON.stringify(comentarioData) : comentarioData;
+      tr.setAttribute('data-note-obj', noteObjStr);
+
+      let checklistObjStr = typeof checklistData === 'object' ? JSON.stringify(checklistData) : checklistData;
+      tr.setAttribute('data-checklist-obj', checklistObjStr);
+
+      let hasChecklist = checklistObjStr && checklistObjStr.trim() !== '';
+      const hasChecklistClass = hasChecklist ? 'has-checklist' : '';
+
+      tr.innerHTML = `
+        <td>
+          <button class="btn-table-checklist-icon ${hasChecklistClass}" onclick="abrirModalChecklistTabla(this)" title="Ver Checklist del Día">
+            <i class="fa-solid fa-file-invoice"></i>
+          </button>
+        </td>
+        <td><span class="cell-value">${dayIndex}</span></td>
+        <td><input type="text" class="table-input input-c2-fecha" placeholder="DD/MM/AAAA" value="${fechaPorDefectoInput}" oninput="manejarEntradaValor(this)"></td>
+        <td><input type="number" class="table-input input-c2-total" step="0.01" placeholder="0.00" value="${c2Total}" oninput="manejarEntradaValor(this)"></td>
+        <td><input type="number" class="table-input input-c2-pct" step="0.1" placeholder="Ej: 20" value="${c2Pct}" oninput="manejarEntradaValor(this)"></td>
+        <td class="cell-value cell-used c2-monto-sugerido">$0.00</td>
+        <td><input type="number" class="table-input input-c2-ask" step="0.01" placeholder="0.00" value="${c2Ask}" oninput="manejarEntradaValor(this)"></td>
+        <td><input type="number" class="table-input input-c2-qty" step="1" placeholder="0" value="${c2Qty}" oninput="manejarEntradaValor(this)"></td>
+        <td><input type="text" class="table-input input-c2-limite" placeholder="Límite" value="${c2Lim}" oninput="manejarEntradaValor(this)"></td>
+        <td><input type="number" class="table-input input-c2-bid" step="0.01" placeholder="0.00" value="${c2Bid}" oninput="manejarEntradaValor(this)"></td>
+        <td>
+          <div style="display: flex; gap: 3px; align-items: center; justify-content: center;">
+            <input type="text" class="table-input input-rent-pct input-c2-ganancia" placeholder="Ej: 35" value="${c2Ganancia}" oninput="manejarEntradaValor(this)">
+            <button class="btn-row-action btn-calc-action" onclick="abrirModalCalculadoraRapida(this)" title="Calculadora Rápida de Salto">
+              <i class="fa-solid fa-calculator"></i>
+            </button>
+          </div>
+        </td>
+        <td><input type="number" class="table-input cell-c2-capital" step="0.01" placeholder="0.00" value="${c2Capital}" oninput="manejarEntradaValor(this)" data-capital-num="0"></td>
+        <td><div class="cell-color-box color-neutral"></div></td>
+        <td><button class="btn-delete" onclick="eliminarFila(this)" title="Eliminar fila"><i class="fa-solid fa-xmark"></i></button></td>
+      `;
+
+      tbody.appendChild(tr);
+      recalcularTabla();
+      actualizarSelectorMeses();
+      tr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
     function abrirModalCalculadoraRapida(btn) {
       filaSeleccionadaParaCalculadora = btn.closest('tr');
-      const dayIndexCell = configActiva === 'config2' ? filaSeleccionadaParaCalculadora.querySelectorAll('td')[1] : filaSeleccionadaParaCalculadora.querySelectorAll('td')[2];
+      const dayIndexCell = filaSeleccionadaParaCalculadora.querySelectorAll('td')[configActiva === 'config2' ? 1 : 2];
       const dayNum = dayIndexCell ? dayIndexCell.textContent : '1';
       document.getElementById('calcModalDayTitle').textContent = `Día ${dayNum}`;
 
@@ -3673,35 +3578,46 @@
 
     function calcularSaltoRapido() {
       if (!filaSeleccionadaParaCalculadora) return;
-      const montoInicial = parseFloat(filaSeleccionadaParaCalculadora.querySelector('.input-monto-inicial').value) || 0;
-      let refReal = 0;
-
+      
       if (configActiva === 'config2') {
-        const ask = parseFloat(filaSeleccionadaParaCalculadora.querySelector('.input-ask').value) || 0;
-        const qty = parseFloat(filaSeleccionadaParaCalculadora.querySelector('.input-qty').value) || 0;
-        refReal = ask * qty * 100;
-        if (refReal <= 0) refReal = parseFloat(filaSeleccionadaParaCalculadora.querySelector('.monto-sugerido-val').textContent.replace('$', '').replace(/,/g, '')) || 0;
-      } else {
-        refReal = parseFloat(filaSeleccionadaParaCalculadora.querySelector('.input-monto-real').value) || 0;
-      }
+        const montoTotal = parseFloat(filaSeleccionadaParaCalculadora.querySelector('.input-c2-total').value) || 0;
+        const saldoFinalInput = parseFloat(document.getElementById('quickModalSaldoFinal').value);
 
-      const saldoFinalInput = parseFloat(document.getElementById('quickModalSaldoFinal').value);
-
-      if (!isNaN(saldoFinalInput) && refReal > 0) {
-        const diffDollar = saldoFinalInput - montoInicial;
-        const pctCalculado = (diffDollar / refReal) * 100;
-        calculatedQuickPct = pctCalculado;
-        document.getElementById('quickModalDisplayPct').textContent = pctCalculado.toFixed(1) + '%';
+        if (!isNaN(saldoFinalInput) && montoTotal > 0) {
+          const diffDollar = saldoFinalInput - montoTotal;
+          const pctCalculado = (diffDollar / montoTotal) * 100;
+          calculatedQuickPct = pctCalculado;
+          document.getElementById('quickModalDisplayPct').textContent = pctCalculado.toFixed(1) + '%';
+        } else {
+          document.getElementById('quickModalDisplayPct').textContent = '0.0%';
+          calculatedQuickPct = null;
+        }
       } else {
-        document.getElementById('quickModalDisplayPct').textContent = '0.0%';
-        calculatedQuickPct = null;
+        const montoInicial = parseFloat(filaSeleccionadaParaCalculadora.querySelector('.input-monto-inicial').value) || 0;
+        let refReal = parseFloat(filaSeleccionadaParaCalculadora.querySelector('.input-monto-real').value) || 0;
+        const saldoFinalInput = parseFloat(document.getElementById('quickModalSaldoFinal').value);
+
+        if (!isNaN(saldoFinalInput) && refReal > 0) {
+          const diffDollar = saldoFinalInput - montoInicial;
+          const pctCalculado = (diffDollar / refReal) * 100;
+          calculatedQuickPct = pctCalculado;
+          document.getElementById('quickModalDisplayPct').textContent = pctCalculado.toFixed(1) + '%';
+        } else {
+          document.getElementById('quickModalDisplayPct').textContent = '0.0%';
+          calculatedQuickPct = null;
+        }
       }
     }
 
     function aplicarCalculoRapidoEnTabla() {
       if (calculatedQuickPct !== null && filaSeleccionadaParaCalculadora) {
-        const inputRent = filaSeleccionadaParaCalculadora.querySelector('.input-rent-pct');
-        inputRent.value = calculatedQuickPct.toFixed(1);
+        if (configActiva === 'config2') {
+          const inputGanancia = filaSeleccionadaParaCalculadora.querySelector('.input-c2-ganancia');
+          if (inputGanancia) inputGanancia.value = calculatedQuickPct.toFixed(1);
+        } else {
+          const inputRent = filaSeleccionadaParaCalculadora.querySelector('.input-rent-pct');
+          if (inputRent) inputRent.value = calculatedQuickPct.toFixed(1);
+        }
         recalcularTabla();
         cerrarModalCalculadoraRapida();
       } else {
@@ -3711,7 +3627,7 @@
 
     function abrirModalComentario(btn) {
       filaSeleccionadaParaNota = btn.closest('tr');
-      const dayIndexCell = configActiva === 'config2' ? filaSeleccionadaParaNota.querySelectorAll('td')[1] : filaSeleccionadaParaNota.querySelectorAll('td')[2];
+      const dayIndexCell = filaSeleccionadaParaNota.querySelectorAll('td')[2];
       const dayNum = dayIndexCell ? dayIndexCell.textContent : '1';
       document.getElementById('modalDayTitle').textContent = `Día ${dayNum}`;
 
@@ -3732,7 +3648,6 @@
       document.getElementById('noteDateField').value = noteData.date || defaultDate;
       document.getElementById('noteTimeField').value = noteData.time || defaultTime;
       
-      // Asignar valores a los nuevos campos de detalles del trade
       document.getElementById('tradeTickerField').value = noteData.tradeTicker || '';
       document.getElementById('tradeContractsField').value = noteData.tradeContracts || '';
       document.getElementById('tradeStrikeField').value = noteData.tradeStrike || '';
@@ -3838,7 +3753,7 @@
 
     function manejarEntradaValor(input) {
       const row = input.closest('tr');
-      if (!row.getAttribute('data-timestamp')) {
+      if (configActiva !== 'config2' && !row.getAttribute('data-timestamp')) {
         const ahora = new Date();
         const fechaStr = ahora.toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: 'numeric' });
         const horaStr = ahora.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
@@ -3862,7 +3777,7 @@
     function actualizarIndicesDias() {
       const rows = document.querySelectorAll('#investmentsTableBody tr');
       rows.forEach((row, index) => {
-        const idxCell = configActiva === 'config2' ? row.children[1] : row.children[2];
+        const idxCell = row.children[configActiva === 'config2' ? 1 : 2];
         if (idxCell) idxCell.textContent = index + 1;
       });
     }
@@ -3872,62 +3787,99 @@
       let ultimoCapitalTotal = 0;
       let acumuladoDineroObtenido = 0;
 
+      // Tarea 2: "Dinero obtenido" refleja el dinero ganado o perdido con respecto al dinero que comenzó la cuenta desde la fila 1
+      let capitalInicialFila1 = 0;
+      if (rows.length > 0) {
+        const primeraFila = rows[0];
+        if (configActiva === 'config2') {
+          const inputTotalF1 = primeraFila.querySelector('.input-c2-total');
+          capitalInicialFila1 = parseFloat(inputTotalF1?.value) || 0;
+        } else {
+          const inputMontoF1 = primeraFila.querySelector('.input-monto-inicial');
+          capitalInicialFila1 = parseFloat(inputMontoF1?.value) || 0;
+        }
+      }
+
       const mesFiltroSelected = document.getElementById('monthFilter').value;
       let filasMostradasCount = 0;
+      let capitalAnteriorFila = null;
 
       rows.forEach((row, index) => {
-        const inputMontoInicial = row.querySelector('.input-monto-inicial');
-        const inputPctUso = row.querySelector('.input-pct-uso');
-        const cellMontoSugerido = row.querySelector('.monto-sugerido-val');
-        const inputRentPct = row.querySelector('.input-rent-pct');
-
-        const montoInicial = parseFloat(inputMontoInicial.value) || 0;
-        const pctUso = parseFloat(inputPctUso.value) || 0;
-
-        let montoSugerido = 0;
-        let diffDollar = 0;
-        let capitalCalculado = 0;
-
         if (configActiva === 'config2') {
-          montoSugerido = montoInicial * (pctUso / 100);
+          const inputTotal = row.querySelector('.input-c2-total');
+          const inputPct = row.querySelector('.input-c2-pct');
+          const cellMontoSugerido = row.querySelector('.c2-monto-sugerido');
+          const inputGanancia = row.querySelector('.input-c2-ganancia');
+          const inputCapitalTotal = row.querySelector('.cell-c2-capital');
+          const colorBox = row.querySelector('.cell-color-box');
+
+          const totalVal = parseFloat(inputTotal.value) || 0;
+          const pctVal = parseFloat(inputPct.value) || 0;
+
+          const montoSugerido = totalVal * (pctVal / 100);
           cellMontoSugerido.textContent = '$' + montoSugerido.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
-          const inputCapTotal = row.querySelector('.input-capital-total');
-          capitalCalculado = parseFloat(inputCapTotal.value) || 0;
-          diffDollar = capitalCalculado - montoInicial;
+          const gananciaRawStr = inputGanancia.value.trim();
+          let diffDollar = 0;
 
-          const colorBox = row.querySelector('.cell-color-box');
-          if (colorBox) {
-            colorBox.className = 'cell-color-box';
-            if (inputCapTotal.value.trim() === '') {
-              colorBox.classList.add('color-neutral');
-              inputCapTotal.className = 'table-input input-capital-total cell-neutral';
-            } else if (capitalCalculado > montoInicial) {
-              colorBox.classList.add('color-green');
-              inputCapTotal.className = 'table-input input-capital-total cell-gain';
-            } else if (capitalCalculado < montoInicial) {
-              colorBox.classList.add('color-red');
-              inputCapTotal.className = 'table-input input-capital-total cell-loss';
+          if (gananciaRawStr !== '') {
+            if (gananciaRawStr.includes('$')) {
+              diffDollar = parseFloat(gananciaRawStr.replace('$', '')) || 0;
             } else {
-              colorBox.classList.add('color-neutral');
-              inputCapTotal.className = 'table-input input-capital-total cell-neutral';
+              const gananciaNum = parseFloat(gananciaRawStr);
+              if (!isNaN(gananciaNum)) {
+                diffDollar = montoSugerido * (gananciaNum / 100);
+              }
             }
           }
 
-          if (capitalCalculado > 0) {
-            ultimoCapitalTotal = capitalCalculado;
+          let capitalManualVal = parseFloat(inputCapitalTotal.value);
+          if (isNaN(capitalManualVal) || inputCapitalTotal.value.trim() === '') {
+            capitalManualVal = totalVal + diffDollar;
           }
+
+          inputCapitalTotal.setAttribute('data-capital-num', capitalManualVal);
+          ultimoCapitalTotal = capitalManualVal;
+
+          if (colorBox) {
+            colorBox.className = 'cell-color-box';
+            if (capitalAnteriorFila !== null) {
+              if (capitalManualVal > capitalAnteriorFila) {
+                colorBox.classList.add('color-green');
+              } else if (capitalManualVal < capitalAnteriorFila) {
+                colorBox.classList.add('color-red');
+              } else {
+                colorBox.classList.add('color-neutral');
+              }
+            } else {
+              colorBox.classList.add(capitalManualVal > totalVal ? 'color-green' : 'color-neutral');
+            }
+          }
+
+          capitalAnteriorFila = capitalManualVal;
+          filasMostradasCount++;
+          row.style.display = '';
+
         } else {
+          // Lógica Configuración 1 original
+          const inputMontoInicial = row.querySelector('.input-monto-inicial');
+          const inputPctUso = row.querySelector('.input-pct-uso');
+          const cellMontoSugerido = row.querySelector('.monto-sugerido-val');
+          const inputRentPct = row.querySelector('.input-rent-pct');
           const cellProfitUsd = row.querySelector('.cell-profit-usd');
           const cellCapitalResult = row.querySelector('.cell-capital-result');
 
-          montoSugerido = montoInicial * (pctUso / 100);
+          const montoInicial = parseFloat(inputMontoInicial.value) || 0;
+          const pctUso = parseFloat(inputPctUso.value) || 0;
+
+          let montoSugerido = montoInicial * (pctUso / 100);
           cellMontoSugerido.textContent = '$' + montoSugerido.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
           const inputMontoReal = row.querySelector('.input-monto-real');
           const montoReal = parseFloat(inputMontoReal.value) || 0;
           const rentRawStr = inputRentPct.value.trim();
 
+          let diffDollar = 0;
           if (rentRawStr !== '') {
             if (rentRawStr.includes('$')) {
               diffDollar = parseFloat(rentRawStr.replace('$', '')) || 0;
@@ -3939,7 +3891,7 @@
             }
           }
 
-          capitalCalculado = montoInicial + diffDollar;
+          let capitalCalculado = montoInicial + diffDollar;
 
           if (inputRentPct.value.trim() === '') {
             cellProfitUsd.textContent = '$0.00';
@@ -3982,27 +3934,32 @@
             cellCapitalResult.setAttribute('data-capital-num', 0);
             cellCapitalResult.className = 'cell-capital-total-val cell-capital-result cell-neutral';
           }
-        }
 
-        acumuladoDineroObtenido += diffDollar;
+          const isoTs = row.getAttribute('data-timestamp');
+          let mesClave = 'all';
 
-        const isoTs = row.getAttribute('data-timestamp');
-        let mesClave = 'all';
+          if (isoTs) {
+            const d = new Date(isoTs);
+            mesClave = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+          }
 
-        if (isoTs) {
-          const d = new Date(isoTs);
-          mesClave = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-        }
-
-        if (mesFiltroSelected === 'all' || mesFiltroSelected === mesClave) {
-          row.style.display = '';
-          filasMostradasCount++;
-        } else {
-          row.style.display = 'none';
+          if (mesFiltroSelected === 'all' || mesFiltroSelected === mesClave) {
+            row.style.display = '';
+            filasMostradasCount++;
+          } else {
+            row.style.display = 'none';
+          }
         }
       });
 
-      document.getElementById('totalDays').textContent = filasMostradasCount;
+      // Cálculo exacto del Dinero Obtenido con respecto a la fila 1
+      if (capitalInicialFila1 > 0 && ultimoCapitalTotal > 0) {
+        acumuladoDineroObtenido = ultimoCapitalTotal - capitalInicialFila1;
+      } else {
+        acumuladoDineroObtenido = 0;
+      }
+
+      document.getElementById('totalDays').textContent = configActiva === 'config2' ? rows.length : filasMostradasCount;
       
       const totalMoneyElem = document.getElementById('totalMoneyEarned');
       const signTotal = acumuladoDineroObtenido >= 0 ? '+' : '';
@@ -4074,23 +4031,22 @@
       rows.forEach((row, index) => {
         let capitalRow = 0;
         if (configActiva === 'config2') {
-          const inputCap = row.querySelector('.input-capital-total');
-          capitalRow = parseFloat(inputCap ? inputCap.value : 0) || parseFloat(row.querySelector('.input-monto-inicial').value) || 0;
+          const cellCap = row.querySelector('.cell-c2-capital');
+          capitalRow = parseFloat(cellCap?.value) || parseFloat(cellCap?.getAttribute('data-capital-num')) || 0;
         } else {
           const cellCap = row.querySelector('.cell-capital-result');
           capitalRow = parseFloat(cellCap.getAttribute('data-capital-num')) || parseFloat(row.querySelector('.input-monto-inicial').value) || 0;
         }
 
         const isoTs = row.getAttribute('data-timestamp');
-        
         let fechaLabel = `Día ${index + 1}`;
-        if (isoTs) {
+        if (isoTs && !isoTs.includes('/')) {
           const d = new Date(isoTs);
           fechaLabel = `${d.getDate()}/${d.getMonth()+1}`;
         }
 
         if (index === 0) {
-          inicialGlobal = parseFloat(row.querySelector('.input-monto-inicial').value) || capitalRow;
+          inicialGlobal = capitalRow > 0 ? capitalRow : 1000;
           dataCapital.push(capitalRow);
         }
 
@@ -4181,25 +4137,30 @@
       const data = [];
 
       rows.forEach(row => {
-        const val1 = row.querySelector('.input-monto-inicial').value;
-        const val2 = row.querySelector('.input-pct-uso').value;
-        let val3 = '', val4 = '', val5 = '', val6 = '', val7 = '';
-
         if (configActiva === 'config2') {
-          val3 = row.querySelector('.input-ask') ? row.querySelector('.input-ask').value : '';
-          val4 = row.querySelector('.input-qty') ? row.querySelector('.input-qty').value : '';
-          val5 = row.querySelector('.input-limite') ? row.querySelector('.input-limite').value : '';
-          val6 = row.querySelector('.input-bid') ? row.querySelector('.input-bid').value : '';
-          val7 = row.querySelector('.input-capital-total') ? row.querySelector('.input-capital-total').value : '';
+          const val1 = row.querySelector('.input-c2-fecha') ? row.querySelector('.input-c2-fecha').value : '';
+          const val2 = row.querySelector('.input-c2-total') ? row.querySelector('.input-c2-total').value : '';
+          const val3 = row.querySelector('.input-c2-pct') ? row.querySelector('.input-c2-pct').value : '';
+          const val4 = row.querySelector('.input-c2-ask') ? row.querySelector('.input-c2-ask').value : '';
+          const val5 = row.querySelector('.input-c2-qty') ? row.querySelector('.input-c2-qty').value : '';
+          const val6 = row.querySelector('.input-c2-limite') ? row.querySelector('.input-c2-limite').value : '';
+          const val7 = row.querySelector('.input-c2-bid') ? row.querySelector('.input-c2-bid').value : '';
+          const val8 = row.querySelector('.input-c2-ganancia') ? row.querySelector('.input-c2-ganancia').value : '';
+          const val9 = row.querySelector('.cell-c2-capital') ? row.querySelector('.cell-c2-capital').value : '';
+          const comentario = row.getAttribute('data-note-obj') || '';
+          const checklistObj = row.getAttribute('data-checklist-obj') || '';
+          const fechaHora = row.getAttribute('data-timestamp') || "";
+          data.push({ configType: 'config2', val1, val2, val3, val4, val5, val6, val7, val8, val9, comentario, checklistObj, fechaHora });
         } else {
-          val3 = row.querySelector('.input-monto-real') ? row.querySelector('.input-monto-real').value : '';
-          val4 = row.querySelector('.input-rent-pct') ? row.querySelector('.input-rent-pct').value : '';
+          const val1 = row.querySelector('.input-monto-inicial').value;
+          const val2 = row.querySelector('.input-pct-uso').value;
+          const val3 = row.querySelector('.input-monto-real') ? row.querySelector('.input-monto-real').value : '';
+          const val4 = row.querySelector('.input-rent-pct') ? row.querySelector('.input-rent-pct').value : '';
+          const comentario = row.getAttribute('data-note-obj') || '';
+          const checklistObj = row.getAttribute('data-checklist-obj') || '';
+          const fechaHora = row.getAttribute('data-timestamp') || "";
+          data.push({ configType: 'config1', val1, val2, val3, val4, comentario, checklistObj, fechaHora });
         }
-
-        const comentario = row.getAttribute('data-note-obj') || '';
-        const checklistObj = row.getAttribute('data-checklist-obj') || '';
-        const fechaHora = row.getAttribute('data-timestamp') || "";
-        data.push({ val1, val2, val3, val4, val5, val6, val7, comentario, checklistObj, fechaHora });
       });
 
       const keyName = `yasma_investments_data_${configActiva}`;
@@ -4214,36 +4175,44 @@
       tbody.innerHTML = '';
 
       if (!savedData) {
-        agregarFilaInversion();
+        if (configActiva === 'config2') {
+          agregarFilaInversionConfig2();
+        } else {
+          agregarFilaInversion();
+        }
         return;
       }
 
       const data = JSON.parse(savedData);
       if (data.length === 0) {
-        agregarFilaInversion();
+        if (configActiva === 'config2') {
+          agregarFilaInversionConfig2();
+        } else {
+          agregarFilaInversion();
+        }
       } else {
         data.forEach(item => {
-          if (item.val1 !== undefined) {
-            agregarFilaInversion(
-              item.val1 || '', 
-              item.val2 || '', 
-              item.val3 || '', 
-              item.val4 || '', 
-              item.val5 || '', 
-              item.val6 || '', 
-              item.val7 || '', 
-              item.fechaHora, 
+          if (configActiva === 'config2') {
+            agregarFilaInversionConfig2(
+              item.val2 || '',
+              item.val3 || '',
+              item.val4 || '',
+              item.val5 || '',
+              item.val6 || '',
+              item.val7 || '',
+              item.val8 || '',
+              item.val9 || '',
+              item.val1 || item.fechaHora,
               item.comentario || '',
               item.checklistObj || ''
             );
           } else {
             agregarFilaInversion(
-              item.montoInicial || item.monto || '', 
-              item.pctUso || '', 
-              item.montoReal || '', 
-              item.pctRent || '', 
-              '', '', '',
-              item.fechaHora,
+              item.val1 || '', 
+              item.val2 || '', 
+              item.val3 || '', 
+              item.val4 || '', 
+              item.fechaHora, 
               item.comentario || '',
               item.checklistObj || ''
             );
@@ -4253,57 +4222,51 @@
       actualizarSelectorMeses();
     }
 
-    // ==========================================
-    // SISTEMA DE SALVAS GLOBALES UNIFICADAS
-    // ==========================================
-    function obtenerNombreEspacioActual() {
-      if (configActiva === 'config1') return 'Configuracion_1';
-      if (configActiva === 'config2') return 'Configuracion_2';
-      return 'Configuracion_Custom';
-    }
-
     function exportarSalvaGlobal() {
       const rows = document.querySelectorAll('#investmentsTableBody tr');
       const tablaData = [];
 
       rows.forEach(row => {
-        const val1 = row.querySelector('.input-monto-inicial').value;
-        const val2 = row.querySelector('.input-pct-uso').value;
-        let val3 = '', val4 = '', val5 = '', val6 = '', val7 = '';
-
         if (configActiva === 'config2') {
-          val3 = row.querySelector('.input-ask') ? row.querySelector('.input-ask').value : '';
-          val4 = row.querySelector('.input-qty') ? row.querySelector('.input-qty').value : '';
-          val5 = row.querySelector('.input-limite') ? row.querySelector('.input-limite').value : '';
-          val6 = row.querySelector('.input-bid') ? row.querySelector('.input-bid').value : '';
-          val7 = row.querySelector('.input-capital-total') ? row.querySelector('.input-capital-total').value : '';
+          const val1 = row.querySelector('.input-c2-fecha') ? row.querySelector('.input-c2-fecha').value : '';
+          const val2 = row.querySelector('.input-c2-total') ? row.querySelector('.input-c2-total').value : '';
+          const val3 = row.querySelector('.input-c2-pct') ? row.querySelector('.input-c2-pct').value : '';
+          const val4 = row.querySelector('.input-c2-ask') ? row.querySelector('.input-c2-ask').value : '';
+          const val5 = row.querySelector('.input-c2-qty') ? row.querySelector('.input-c2-qty').value : '';
+          const val6 = row.querySelector('.input-c2-limite') ? row.querySelector('.input-c2-limite').value : '';
+          const val7 = row.querySelector('.input-c2-bid') ? row.querySelector('.input-c2-bid').value : '';
+          const val8 = row.querySelector('.input-c2-ganancia') ? row.querySelector('.input-c2-ganancia').value : '';
+          const val9 = row.querySelector('.cell-c2-capital') ? row.querySelector('.cell-c2-capital').value : '';
+          const comentario = row.getAttribute('data-note-obj') || '';
+          const checklistObj = row.getAttribute('data-checklist-obj') || '';
+          const fechaHora = row.getAttribute('data-timestamp') || "";
+          tablaData.push({ configType: 'config2', val1, val2, val3, val4, val5, val6, val7, val8, val9, comentario, checklistObj, fechaHora });
         } else {
-          val3 = row.querySelector('.input-monto-real') ? row.querySelector('.input-monto-real').value : '';
-          val4 = row.querySelector('.input-rent-pct') ? row.querySelector('.input-rent-pct').value : '';
+          const val1 = row.querySelector('.input-monto-inicial').value;
+          const val2 = row.querySelector('.input-pct-uso').value;
+          const val3 = row.querySelector('.input-monto-real') ? row.querySelector('.input-monto-real').value : '';
+          const val4 = row.querySelector('.input-rent-pct') ? row.querySelector('.input-rent-pct').value : '';
+          const comentario = row.getAttribute('data-note-obj') || '';
+          const checklistObj = row.getAttribute('data-checklist-obj') || '';
+          const fechaHora = row.getAttribute('data-timestamp') || "";
+          tablaData.push({ configType: 'config1', val1, val2, val3, val4, comentario, checklistObj, fechaHora });
         }
-
-        const comentario = row.getAttribute('data-note-obj') || '';
-        const checklistObj = row.getAttribute('data-checklist-obj') || '';
-        const fechaHora = row.getAttribute('data-timestamp') || "";
-        tablaData.push({ val1, val2, val3, val4, val5, val6, val7, comentario, checklistObj, fechaHora });
       });
 
-      const estrategiasData = obtenerEstrategiasGuardadas();
       const checklistKey1 = `yasma_checklist_analysis_data_config1`;
-      const checklistKey2 = `yasma_checklist_analysis_data_config2`;
       const invKey1 = `yasma_investments_data_config1`;
-      const invKey2 = `yasma_investments_data_config2`;
       const stratKey1 = `yasma_custom_strategies_config1`;
+
+      const checklistKey2 = `yasma_checklist_analysis_data_config2`;
+      const invKey2 = `yasma_investments_data_config2`;
       const stratKey2 = `yasma_custom_strategies_config2`;
 
-      const nombreEspacio = obtenerNombreEspacioActual();
       const createdUserName = localStorage.getItem('yasma_created_user_name') || '';
 
       const backupPackage = {
         tipoSalva: "GLOBAL_TOTAL",
-        version: "6.0",
+        version: "6.2",
         configuracionActiva: configActiva,
-        nombreEspacio: nombreEspacio,
         createdUserName: createdUserName,
         activeSkin: currentSkin,
         activeBg: currentBackground,
@@ -4330,7 +4293,7 @@
       const ahora = new Date();
       const timeStampStr = `${ahora.getFullYear()}-${String(ahora.getMonth() + 1).padStart(2, '0')}-${String(ahora.getDate()).padStart(2, '0')}_${String(ahora.getHours()).padStart(2, '0')}-${String(ahora.getMinutes()).padStart(2, '0')}-${String(ahora.getSeconds()).padStart(2, '0')}`;
       
-      const filePrefix = createdUserName ? createdUserName.replace(/\s+/g, '_') : nombreEspacio;
+      const filePrefix = createdUserName ? createdUserName.replace(/\s+/g, '_') : configActiva;
       const a = document.createElement('a');
       a.href = urlObj;
       a.download = `Respaldo_Global_${filePrefix}_${timeStampStr}.json`;
@@ -4387,15 +4350,6 @@
                   localStorage.setItem(`yasma_checklist_analysis_data_${cfgName}`, cfgObj.checklistAnalysisData);
                 }
               }
-            } else if (importedObj.investmentsData) {
-              const targetConfig = importedObj.configuracion || configActiva;
-              localStorage.setItem(`yasma_investments_data_${targetConfig}`, JSON.stringify(importedObj.investmentsData));
-              if (importedObj.customStrategies) {
-                localStorage.setItem(`yasma_custom_strategies_${targetConfig}`, JSON.stringify(importedObj.customStrategies));
-              }
-              if (importedObj.checklistAnalysisData) {
-                localStorage.setItem(`yasma_checklist_analysis_data_${targetConfig}`, importedObj.checklistAnalysisData);
-              }
             }
 
             actualizarBadgeConfigUI();
@@ -4404,7 +4358,7 @@
             cargarChecklistState();
             initBackgroundAnimation();
             
-            alert(`¡Salva global restaurada con éxito con todas sus funciones!`);
+            alert(`¡Salva global restaurada con éxito!`);
           }
         } catch (err) {
           alert('Error al procesar archivo JSON global: ' + err.message);
@@ -4415,12 +4369,15 @@
     }
 
     function limpiarTabla() {
-      const nombreConfigStr = obtenerNombreEspacioActual();
-      if (confirm(`¿Deseas vaciar por completo la tabla para "${nombreConfigStr}"?`)) {
+      if (confirm(`¿Deseas vaciar por completo la tabla de interés compuesto de este perfil?`)) {
         document.getElementById('investmentsTableBody').innerHTML = '';
         const invKey = `yasma_investments_data_${configActiva}`;
         localStorage.removeItem(invKey);
-        agregarFilaInversion();
+        if (configActiva === 'config2') {
+          agregarFilaInversionConfig2();
+        } else {
+          agregarFilaInversion();
+        }
         actualizarSelectorMeses();
         if (document.getElementById('chart-view').style.display === 'block') {
           renderizarGrafico();
@@ -4442,22 +4399,17 @@
     let width, height;
     let animationFrameId = null;
 
-    // Variables Fondo Velas
     let candles = [];
     const candleWidth = 14;
     const candleGap = 12;
     let shiftOffset = 0;
     let centerOffsetY = 0;
 
-    // Variables Fondo Pantalla Wall Street (Procedural adaptado a scroll y tamaño de pantalla)
     let wallStreetColumns = [];
     let scrollYOffset = 0;
     const wsTickersList = ["SPY", "QQQ", "AAPL", "NVDA", "TSLA", "MSFT", "AMZN", "BTC", "ETH", "AMD", "META", "GOOGL", "NFLX", "DIS", "BA"];
 
-    // Variables Fondo Partículas
     let particles = [];
-
-    // Variables Fondo Toro y Oso Estelares
     let toroStars = [];
     let osoStars = [];
     let toroRunPhase = 0;
@@ -4471,16 +4423,14 @@
     }
 
     function initBackgroundData() {
-      // Inicializar Velas
       candles = [];
       const totalCandles = Math.ceil(width / (candleWidth + candleGap)) + 40;
       for (let i = 0; i < totalCandles; i++) {
         candles.push(generarPuntosMercado(i));
       }
 
-      // Inicializar Pantalla Wall Street Procedural
       wallStreetColumns = [];
-      const colWidth = 150; // Ancho por columna de tablas de números
+      const colWidth = 150;
       const totalCols = Math.ceil(width / colWidth) + 3;
       
       for (let i = 0; i < totalCols; i++) {
@@ -4510,7 +4460,6 @@
         });
       }
 
-      // Inicializar Partículas
       particles = [];
       for (let i = 0; i < 65; i++) {
         particles.push({
@@ -4522,7 +4471,6 @@
         });
       }
 
-      // Inicializar Estrellas Toro y Oso (Formas vectoriales estelares)
       toroStars = [
         {ox: -80, oy: -50, size: 2.2}, {ox: -65, oy: -60, size: 2.5}, {ox: -45, oy: -75, size: 2.8},
         {ox: -30, oy: -50, size: 2.2}, {ox: -55, oy: -35, size: 2.5}, {ox: -40, oy: -25, size: 2.0},
@@ -4671,7 +4619,7 @@
       const activeSkinObj = skinThemes[currentSkin] || skinThemes.rojoNeon;
       ctx.font = '700 12.5px Montserrat, monospace';
 
-      wallStreetColumns.forEach((col, colIdx) => {
+      wallStreetColumns.forEach((col) => {
         col.baseY += col.speed;
         let totalBlockHeight = col.rows.length * 28;
         if (col.baseY > height + 50) {
@@ -4687,23 +4635,19 @@
             let arrowX = col.x + 112;
             let varX = col.x + 124;
 
-            // Ticker
             ctx.fillStyle = "#dddddd";
             ctx.shadowColor = "rgba(255,255,255,0.2)";
             ctx.shadowBlur = 4;
             ctx.fillText(rowItem.ticker, tickerX, renderY);
 
-            // Precio
             ctx.fillStyle = "#ffffff";
             ctx.fillText(rowItem.price, priceX, renderY);
 
-            // Flecha Neón y Variación (Verde si sube, Rojo Neón si baja)
             let colorNeon = rowItem.isUp ? "#00ff88" : activeSkinObj.primary;
             ctx.fillStyle = colorNeon;
             ctx.shadowColor = colorNeon;
             ctx.shadowBlur = 10;
 
-            // Dibujar flecha (▲ o ▼)
             let arrowSymbol = rowItem.isUp ? "▲" : "▼";
             ctx.fillText(arrowSymbol, arrowX, renderY);
             ctx.fillText(rowItem.variation, varX, renderY);
